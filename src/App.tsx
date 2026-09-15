@@ -1,7 +1,7 @@
-import './App.css';
-import Footer from './component/Footer/footer';
-import Header from './component/Header/header';
-import RentAndBuy from './component/MichaelComponent/rentBuy';
+import './App.css'
+import Footer from './component/Footer/footer'
+import Header from './component/Header/header'
+import SellService from './component/Juliet/SellService'
 
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
     <>
       <Header />
       <RentAndBuy />
+      <SellService />
       <Footer />
     </>
   )
