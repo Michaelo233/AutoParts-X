@@ -1,4 +1,4 @@
-import logo from '../../assets/logo.png';
+import logo from '../../assets/images/Auto part X.jpg';
 
 function Header() {
   return (
