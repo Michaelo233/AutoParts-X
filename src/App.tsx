@@ -1,10 +1,14 @@
 import './App.css'
+import Footer from './component/Footer/footer'
+import Header from './component/Header/header'
+
 
 function App() {
 
   return (
     <>
-      <span>Hello World!!!</span>
+      <Header />
+      <Footer />
     </>
   )
 }
