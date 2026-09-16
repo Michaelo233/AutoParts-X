@@ -1,7 +1,6 @@
-export type RecyclingProps = {
+export type RecyclingService = {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
   acceptedMaterials: string[];
 };
