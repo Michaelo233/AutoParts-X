@@ -9,8 +9,6 @@ function App() {
   return (
     <>
       <Header />
-        <Registration />
-        <RecycleService />
         <RentAndBuy />
         <SellService />
       <Footer />
