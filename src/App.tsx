@@ -1,10 +1,19 @@
 import './App.css'
+import RecyclingServices from './component/KailineComponents/recycling_service/RecyclingServices'
+import Headers from './component/Header/header'
+import Footer from './component/Footer/footer'
+import SellService from './component/Juliet/SellService'
+import RentAndBuy from './component/MichaelComponent/rentBuy'
 
 function App() {
 
   return (
     <>
-      <span>Hello World!!!</span>
+     <Headers />
+        <RecyclingServices />
+        <SellService />
+        <RentAndBuy />
+      <Footer />
     </>
   )
 }
