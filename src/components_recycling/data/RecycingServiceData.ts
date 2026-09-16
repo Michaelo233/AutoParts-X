@@ -7,7 +7,7 @@ export const recyclingServicesData: RecyclingService[] = [
         description: 'Recycling of old vehicles and their components.',
         acceptedMaterials: ['Door',
             'Auto Parts',
-            'Rubber'],
+            'Motor Oil'],
 
 
     },
@@ -29,6 +29,15 @@ export const recyclingServicesData: RecyclingService[] = [
             'Plastic Bottles',
             'Plastic Containers',
             'Plastic Packaging'],
-
+    },
+    {
+        id: 4,
+        title: 'Tire Recycling',
+        description: 'Recycling of tire materials and products.',
+        acceptedMaterials: [
+            'Tires',
+            'Tire Parts',
+            'Rubber'],
     }
+
 ]

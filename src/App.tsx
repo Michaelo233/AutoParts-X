@@ -6,7 +6,9 @@ function App() {
   return (
     <>
       <span>Hello World!!!</span>
-      <RecyclingServices />
+      <main className="App">
+        <RecyclingServices />
+      </main>
     </>
   )
 }
