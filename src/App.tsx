@@ -6,11 +6,13 @@ import RentAndBuy from './component/MichaelComponent/rentBuy'
 import Layout from './component/KailineComponents/layout/Layout'
 import { Route } from 'react-router-dom'
 import Header from './component/Header/header'
+import Dashboard from './component/KailineComponents/dashboard/dasboard'
 function App() {
 
   return (
       <Layout className="app-content">
         <Route path="/Header" element={<Header />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/SellService" element={<SellService />} />
         <Route path="/RentAndBuy" element={<RentAndBuy />} />
         <Route path="/RecyclingServices" element={<RecyclingServices />} />
