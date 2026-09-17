@@ -1,4 +1,5 @@
 import type { RecyclingService } from '../types/recycing';
+import './recyclingService.css';
 
 interface RecyclingServiceCardProps {
   service: RecyclingService;

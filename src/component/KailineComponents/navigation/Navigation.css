@@ -1,3 +1,24 @@
-nav {
+.navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: #ffffff;
+}
 
+.navigation a {
+  color: #075985;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navigation a:hover {
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+.navigation a.active {
+  color: #0c4a6e;
+  border-bottom: 2px solid #0c4a6e;
 }
