@@ -9,11 +9,11 @@ function App() {
 
   return (
       <Layout className="app-content">
-      <Headers />
-        <RecyclingServices />
-        <SellService />
-        <RentAndBuy />
-      <Footer />
+        <Headers />
+          <RecyclingServices />
+          <SellService />
+          <RentAndBuy />
+        <Footer />
     </Layout>
   )
 }
