@@ -13,7 +13,12 @@ function Layout({ children, className }: LayoutProps) {
     <>
       <Header />
       <Nav />
-      <main className={className}>{children}</main>
+
+      <main className={className}>
+        {children}
+        </main>
+
+        
       <Footer />
     </>
   );
