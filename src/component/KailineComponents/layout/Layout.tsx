@@ -1,21 +1,22 @@
+import type { ReactNode } from "react";
 import Nav from "../navigation/Navigation";
+import Header from "../../Header/header";
+import Footer from "../../Footer/footer";
 
-interface Layout {
-  children: React.ReactNode;
+interface LayoutProps {
+  children: ReactNode;
   className?: string;
 }
 
-const Layout: React.FC<Layout> = ({ children, className }) => {
+function Layout({ children, className }: LayoutProps) {
   return (
-    <div className="layout-container">
-        <Nav />
-        
-        <main className={`layout ${className || ''}`}>
-         {children}
-        </main>
-    </div>
+    <>
+      <Header />
+      <Nav />
+      <main className={className}>{children}</main>
+      <Footer />
+    </>
   );
 }
-   
 
 export default Layout;

@@ -3,7 +3,7 @@ import type { RecyclingService } from '../types/recycing';
 export const recyclingServicesData: RecyclingService[] = [
     {
         id: 1,
-        title: 'Vehicle Recycling',
+        name: 'Vehicle Recycling',
         description: 'Recycling of old vehicles and their components.',
         acceptedMaterials: ['Door',
             'Auto Parts',
@@ -13,7 +13,7 @@ export const recyclingServicesData: RecyclingService[] = [
     },
     {
         id: 2,
-        title: 'Electronic Waste Recycling',
+        name: 'Electronic Waste Recycling',
         description: 'Recycling of electronic devices and components.',
         acceptedMaterials: [
             'Circuit Boards',
@@ -23,16 +23,16 @@ export const recyclingServicesData: RecyclingService[] = [
     },
     {
         id: 3,
-        title: 'Plastic Recycling',
-        description: 'Recycling of plastic materials and products.',
+        name: 'Automotive Battery Recycling',
+        description: 'Recycling of automotive batteries and their components.',
         acceptedMaterials: [
-            'Plastic Bottles',
-            'Plastic Containers',
-            'Plastic Packaging'],
+            'Car Batteries',
+            'Truck Batteries',
+            'Marine Batteries'],
     },
     {
         id: 4,
-        title: 'Tire Recycling',
+        name: 'Tire Recycling',
         description: 'Recycling of tire materials and products.',
         acceptedMaterials: [
             'Tires',

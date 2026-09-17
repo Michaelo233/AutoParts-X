@@ -1,6 +1,6 @@
 export type RecyclingService = {
   id: number;
-  title: string;
+  name: string;
   description: string;
   acceptedMaterials: string[];
 };
