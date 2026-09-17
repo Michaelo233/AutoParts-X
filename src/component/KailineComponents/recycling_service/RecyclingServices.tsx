@@ -6,7 +6,7 @@ const RecyclingServices = () => {
     return (
         <section className="recycling-services">
             <h2>Recycling Services</h2>
-            <p>Here are the recycling services we offer:</p>
+            <p>Here are the recycling services we accept:</p>
             <div className="recycling-services-container">
                 <RecyclingServiceCard service={ recyclingServicesData[0] } />
                 <RecyclingServiceCard service={ recyclingServicesData[1] } />
