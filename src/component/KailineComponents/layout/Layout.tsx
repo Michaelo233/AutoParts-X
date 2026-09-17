@@ -1,4 +1,4 @@
-import Nav from "../Navagation/Navigation";
+import Nav from "../navigation/Navigation";
 
 interface Layout {
   children: React.ReactNode;
