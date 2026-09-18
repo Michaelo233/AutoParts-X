@@ -1,3 +1,5 @@
+import './SellService.css';
+
 function SellService() {
  const sellOptions = [
     "Search auto parts",
