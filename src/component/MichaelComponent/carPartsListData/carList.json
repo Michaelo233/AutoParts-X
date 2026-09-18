@@ -1,0 +1,175 @@
+[
+    {
+        "name": "Michael",
+        "carName": "Toyota Camry",
+        "year": 2020,
+        "carParts": [
+            {
+                "partName": "Engine",
+                "partNumber": "ENG12345",
+                "price": 2500,
+                "description": "Reliable 2.5L engine with smooth performance and strong compression."
+            },
+            {
+                "partName": "Transmission",
+                "partNumber": "TRN67890",
+                "price": 1500,
+                "description": "Tested automatic transmission that shifts cleanly without slipping."
+            },
+            {
+                "partName": "Brake Pads",
+                "partNumber": "BRK54321",
+                "price": 200,
+                "description": "Low-wear ceramic pads that provide quiet, dependable stopping power."
+            },
+            {
+                "partName": "Alternator",
+                "partNumber": "ALT24680",
+                "price": 180,
+                "description": "Fully tested alternator that keeps the battery charged during daily driving."
+            },
+            {
+                "partName": "Headlight Assembly",
+                "partNumber": "LGT11223",
+                "price": 140,
+                "description": "Clear passenger-side assembly with working bulbs and intact mounting points."
+            }
+        ]
+    },
+    {
+        "name": "Michael",
+        "carName": "Honda Accord",
+        "year": 2021,
+        "carParts": [
+            {
+                "partName": "Engine",
+                "partNumber": "ENG98765",
+                "price": 3000,
+                "description": "Well-maintained 1.5L turbo engine with no reported oil or coolant leaks."
+            },
+            {
+                "partName": "Transmission",
+                "partNumber": "TRN54321",
+                "price": 1800,
+                "description": "Smooth CVT assembly inspected for reliable acceleration and cruising."
+            },
+            {
+                "partName": "Brake Pads",
+                "partNumber": "BRK67890",
+                "price": 250,
+                "description": "Front brake pad set with even wear and plenty of service life remaining."
+            },
+            {
+                "partName": "Radiator",
+                "partNumber": "RAD31415",
+                "price": 220,
+                "description": "Leak-free aluminum radiator designed to keep the engine at a stable temperature."
+            },
+            {
+                "partName": "Air Conditioning Compressor",
+                "partNumber": "ACR27182",
+                "price": 420,
+                "description": "Working compressor removed from a vehicle with cold, consistent air conditioning."
+            }
+        ]
+    },
+    {
+        "name": "Michael",
+        "carName": "Ford Mustang",
+        "year": 2019,
+        "carParts": [
+            {
+                "partName": "Tires",
+                "partNumber": "TIR12345",
+                "price": 280,
+                "description": "All-season tires with strong tread depth, good grip, and even wear."
+            },
+            {
+                "partName": "Transmission",
+                "partNumber": "TRN13579",
+                "price": 2000,
+                "description": "Performance automatic transmission tested for quick, consistent gear changes."
+            },
+            {
+                "partName": "Brake Pads",
+                "partNumber": "BRK98765",
+                "price": 300,
+                "description": "Performance-grade pads built for confident braking during spirited driving."
+            },
+            {
+                "partName": "Rear Spoiler",
+                "partNumber": "SPL86420",
+                "price": 350,
+                "description": "Factory-style spoiler with a clean finish and all original mounting hardware."
+            },
+            {
+                "partName": "Exhaust Muffler",
+                "partNumber": "MUF75319",
+                "price": 260,
+                "description": "Sport muffler with a deeper tone and no visible rust-through or damage."
+            }
+        ]
+    },
+    {
+        "name": "Michael",
+        "carName": "Nissan Altima",
+        "year": 2018,
+        "carParts": [
+            {
+                "partName": "Starter Motor",
+                "partNumber": "STR45678",
+                "price": 160,
+                "description": "Bench-tested starter motor that engages quickly for dependable cold starts."
+            },
+            {
+                "partName": "Fuel Pump",
+                "partNumber": "FUL56789",
+                "price": 190,
+                "description": "Clean fuel pump assembly that maintains steady pressure under normal driving."
+            },
+            {
+                "partName": "Side Mirror",
+                "partNumber": "MIR67891",
+                "price": 125,
+                "description": "Power-adjustable driver-side mirror with an undamaged housing and glass."
+            },
+            {
+                "partName": "Wheel Hub Assembly",
+                "partNumber": "WHB78912",
+                "price": 210,
+                "description": "Quiet wheel hub with a smooth bearing and secure wheel mounting surface."
+            }
+        ]
+    },
+    {
+        "name": "Michael",
+        "carName": "BMW 3 Series",
+        "year": 2022,
+        "carParts": [
+            {
+                "partName": "Radiator Fan",
+                "partNumber": "FAN89123",
+                "price": 310,
+                "description": "High-output cooling fan that runs quietly and responds correctly to temperature changes."
+            },
+            {
+                "partName": "Control Arm",
+                "partNumber": "ARM91234",
+                "price": 240,
+                "description": "Straight front control arm with solid bushings for precise steering response."
+            },
+            {
+                "partName": "LED Tail Light",
+                "partNumber": "TLG12389",
+                "price": 290,
+                "description": "Bright, fully functional tail light with a sealed lens and clean connectors."
+            },
+            {
+                "partName": "Cabin Air Filter",
+                "partNumber": "CAF23490",
+                "price": 45,
+                "description": "Fresh replacement filter that helps keep the cabin air clean and odor-free."
+            }
+        ]
+    }
+]
