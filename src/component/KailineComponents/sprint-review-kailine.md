@@ -17,8 +17,4 @@ on my progress.
 ## 3. What can be done in the next sprint to improve my process?
 *(These goals follow the SMART format: Specific, Measurable, Achievable, Relevant, Time-bound)*
 
-* **Goal 1 (Time management):** I will implement a time to complete each ticket in the Sprint Backlog.
-* **Goal 2 (Team communication):** I will improve communication with my team members by providing regular updates on my progress
- and any blockers I encounter.
-* **Goal 3 (Comments):**I will add more detailed comments to my code to make it easier for my teammates to understand my
- implementation.
+
