@@ -15,6 +15,7 @@ I will work on improving my time estimation skills and prioritizing tasks more e
 on my progress.
 
 ## 3. What can be done in the next sprint to improve my process?
-*(These goals follow the SMART format: Specific, Measurable, Achievable, Relevant, Time-bound)*
-
-
+ I will focus on improving my time management skills by setting more realistic deadlines and breaking down tasks into smaller.
+ I also plan to communicate more effectively with my team members by providing regular updates on my progress and seeking 
+ feedback when needed.
+ Finally, I will continue to focus on creating reusable components that can be easily integrated into other parts of the application.
