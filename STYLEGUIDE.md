@@ -10,7 +10,7 @@ Every React component must have its own dedicated stylesheet using the `.module.
     `import styles from './ProductCard.module.css';`
 *   **Applying Classes:** Apply classes using bracket or dot notation: 
     `<div className={styles.cardContainer}>`
-*  **Applying module.css** Applying module.css using the class names.
+*   **Applying module.css** Applying module.css using the class names.
     `.cardContainer {
         border-radius: 25%;
     }`
