@@ -24,7 +24,6 @@ return (
                         setSearchValue(value);
                     }}
                 />
-                <TermListDisplay terms={terms} updateTerms={updateTerms} />
             </section>
         </main>
     </header>
