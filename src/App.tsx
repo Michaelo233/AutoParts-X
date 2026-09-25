@@ -1,21 +1,19 @@
 import './App.css'
-import RecyclingServices from './component/KailineComponents/recycling_service/RecyclingServices'
 import SellService from './component/Juliet/SellService'
 import RentAndBuy from './component/MichaelComponent/rentBuy'
-import Layout from './component/KailineComponents/layout/Layout'
-import { Route , Routes } from 'react-router-dom'
-import Dashboard from './component/KailineComponents/dashboard/Dashboard'
+import { BrowserRouter, Route , Routes } from 'react-router-dom'
+import Layout from './component/Layout/Layout'
 
 function App() {
   return (
-      <Layout>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/recycling" element={<RecyclingServices />} />
-          <Route path="/sell" element={<SellService />} />
-          <Route path="/rent" element={<RentAndBuy />} />
+          <Route path="./" element={<Layout />}>
+            <Route path="/sell" element={<SellService />} />
+            <Route path="/rent" element={<RentAndBuy />} />
+          </Route>
         </Routes>
-      </Layout>
+      </BrowserRouter>
   )
 }
 
