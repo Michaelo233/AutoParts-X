@@ -1,0 +1,18 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.homeTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.homeDescription {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
