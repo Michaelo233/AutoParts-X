@@ -22,7 +22,7 @@ function HeroSection() {
                     <label htmlFor="search" className={styles.searchLabel}>
                         Search for auto parts and services:
                     </label>
-                    <div className={styles.searchContainer}>
+                    <div className={styles.heroSearchContainer}>
                         <Search searchValue="" handleSearchChange={() => {}} />
                     </div>
                 </div>

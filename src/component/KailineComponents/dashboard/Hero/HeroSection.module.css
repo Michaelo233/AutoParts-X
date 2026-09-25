@@ -1,19 +1,20 @@
-
-
 /* Background and structural layout */
 .heroSection {
-  position: relative;
-  width: 100%;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  padding: 4rem 2rem;
-  /* Dark blue tint overlaid on top of the background image[cite: 1] */
-  background-image: linear-gradient(rgba(4, 18, 38, 0.85), rgba(4, 18, 38, 0.85)), url('../../../../assets/images/AutoPartsBackground.jpg');
-  background-size: cover;
-  background-position: center;
-  font-family: system-ui, -apple-system, sans-serif;
+    position: relative;
+    width: 100%; /* Add this to force full width */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    padding: 40px 20px;
+    background-image: linear-gradient(rgba(4, 18, 38, 0.85), rgba(4, 18, 38, 0.85)), url('../../../assets/images/AutoPartsBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    box-sizing: border-box;
 }
+
+
 
 /* Left-aligned content container */
 .heroContent {
@@ -21,7 +22,6 @@
     z-index: 1;
     max-width: 650px;
     color: #ffffff;
-    
     text-align: left; 
     display: flex;
     flex-direction: column;
@@ -45,6 +45,7 @@
 
 
 .heroTitle {
+    font-family: 'Fira Sans', sans-serif;
     color: #ffffff;
     font-size: 2.25rem;
     font-weight: 800;
@@ -62,7 +63,16 @@
 
 /* Search Area8 */
 .heroSearchContainer {
-  margin-bottom: 2rem;
+    width: 100%;
+    min-width: 600px;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .heroSection {
+    min-height: 0;
+    padding-block: 64px;
+  }
 }
 
 
