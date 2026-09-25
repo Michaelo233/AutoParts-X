@@ -1,4 +1,4 @@
-import "./Search.css";
+import styles from './search.module.css';
 
 /*  Search component to allow users to search for items */
 function Search({searchValue, handleSearchChange}
@@ -8,14 +8,13 @@ function Search({searchValue, handleSearchChange}
     }
 ) {
     return (
-        <form className="search-container" action="#">
+        <form className= {styles.searchcontainer} action="#">
             {/* Search input */}
             <input type="text" 
             placeholder="Search for auto parts and services"
-            className="search-input"
+            className={styles.searchInput}
             value={searchValue} 
             onChange={ e => handleSearchChange(e.target.value)} />
-            <input type="submit" value="Search"/>
         </form>
     );
 }

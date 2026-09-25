@@ -1,14 +1,11 @@
-import logo from '../../assets/images/Auto part X.jpg';
 import Search from '../../common/search/Search';
-import styles from './header.module.css';
+import styles from './Header.module.css';
 
 
 function Header() {
   return (
     <header className={styles.headerContainer}>
-      <img src={logo} alt="Auto parts X logo" />
-      <h1>Welcome to Auto parts X</h1>
-      <Search searchValue="" handleSearchChange={() => {}} />
+      <h1 className={styles.headerText}>Auto parts X</h1>
     </header>
   );
 }

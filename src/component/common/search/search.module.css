@@ -1,0 +1,28 @@
+.searchContainer {
+  position: relative;
+  width: min(100%, 450px);
+}
+
+.searchContainer input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.searchContainer input[type="submit"] {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #0B132B;
+  color: #F3F4F6;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.searchContainer input[type="submit"]:hover {
+  background-color:#0056D2;
+}
