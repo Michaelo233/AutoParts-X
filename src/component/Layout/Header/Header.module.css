@@ -1,7 +1,7 @@
 .headerContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: right;
     padding: 10px 20px;
     background-color:#0B132B;
 }

@@ -1,13 +1,20 @@
-export type AutoPart = {
+
+
+export interface Auto {
+    imageUrl: string;
+    partName: string;
+    price: number;
+    description: string;
+    AutoPart: AutoPart[];
+}
+
+export interface AutoPart {
   objectId: number;
   UserId: string;
-  PartName: string;
-  description: string;
   location: string;
   contactNumber: string;
   condition: string;
   year: number;
-  price: number;
-  imageUrl: string;
   isActive: boolean;
+  className?: string;
 };

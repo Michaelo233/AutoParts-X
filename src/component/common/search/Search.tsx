@@ -1,12 +1,14 @@
+import ReusableButton from '../ReusableButton';
 import styles from './search.module.css';
 
+type SearchProps = {
+  searchValue: string;
+  handleSearchChange: (value: string) => void;
+};
+
 /*  Search component to allow users to search for items */
-function Search({searchValue, handleSearchChange}
-    :{
-        searchValue: string;
-        handleSearchChange: (value: string) => void;
-    }
-) {
+function Search({ searchValue, handleSearchChange }: SearchProps) {
+
     return (
         <form className= {styles.searchContainer} action="#">
             <span className={styles.searchIcon}>🔍</span>
@@ -17,7 +19,8 @@ function Search({searchValue, handleSearchChange}
               className={styles.searchInput}
               value={searchValue} 
               onChange={ e => handleSearchChange(e.target.value)} />
-            <button className={styles.btnSearch}>Search parts</button>
+           <ReusableButton label="Search parts"
+          onClick={() => console.log("Searching for:", searchValue)}/>
         </form>
     );
 }

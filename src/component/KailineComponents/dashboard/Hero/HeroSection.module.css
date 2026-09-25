@@ -8,10 +8,10 @@
     justify-content: center;
     text-align: left;
     padding: 40px 20px;
-    background-image: linear-gradient(rgba(4, 18, 38, 0.85), rgba(4, 18, 38, 0.85)), url('../../../assets/images/AutoPartsBackground.jpg');
+    background-image: linear-gradient(rgba(4, 18, 38, 0.85), rgba(4, 18, 38, 0.85)), url('../../../../assets/images/AutoPartsBackground.jpg');
     background-size: cover;
     background-position: center;
-    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
 
