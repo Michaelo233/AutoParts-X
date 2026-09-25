@@ -15,8 +15,8 @@ function App() {
             <Route index element={<Home />} />
 
              {/* Nested routes for the layout component */}
-            <Route path="/sell" element={<SellService />} />
-            <Route path="/rent" element={<RentAndBuy />} />
+            <Route path="/sell-services" element={<SellService />} />
+            <Route path="/buy-rent" element={<RentAndBuy />} />
           </Route>
         </Routes>
       </BrowserRouter>

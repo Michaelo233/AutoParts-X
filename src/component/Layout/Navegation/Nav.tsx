@@ -13,11 +13,11 @@ export function Nav() {
                 <NavLink to="/" end>
                     Home
                 </NavLink>
-                <NavLink to="/products">
-                    All Products 
+                <NavLink to="/sell-services">
+                   Sell Services 
                 </NavLink>
-                <NavLink to="/products/my-products">
-                    My Products
+                <NavLink to="/buy-rent">
+                    Buy and Rent
                 </NavLink>
             </div>
             <div className={styles.loginLink}>
