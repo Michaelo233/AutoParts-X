@@ -1,28 +1,44 @@
+
+
+/* White search box containing input and button */
 .searchContainer {
-  position: relative;
-  width: min(100%, 450px);
-}
-
-.searchContainer input[type="text"] {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 6px;
+  border-radius: 6px;
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 550px;
 }
 
-.searchContainer input[type="submit"] {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: #0B132B;
-  color: #F3F4F6;
+.searchIcon {
+  padding: 0 10px;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.searchInput {
+  flex: 1;
   border: none;
-  padding: 10px 20px;
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
+  outline: none;
+  padding: 10px 5px;
+  font-size: 0.95rem;
+  color: #1f2937;
 }
 
-.searchContainer input[type="submit"]:hover {
-  background-color:#0056D2;
+.btnSearch {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btnSearch:hover {
+  background-color: #1557b0;
 }

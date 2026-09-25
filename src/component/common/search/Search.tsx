@@ -8,13 +8,16 @@ function Search({searchValue, handleSearchChange}
     }
 ) {
     return (
-        <form className= {styles.searchcontainer} action="#">
-            {/* Search input */}
-            <input type="text" 
-            placeholder="Search for auto parts and services"
-            className={styles.searchInput}
-            value={searchValue} 
-            onChange={ e => handleSearchChange(e.target.value)} />
+        <form className= {styles.searchContainer} action="#">
+            <span className={styles.searchIcon}>🔍</span>
+            <input 
+              id="part-search"
+              type="text" 
+              placeholder='Search for auto parts and services...' 
+              className={styles.searchInput}
+              value={searchValue} 
+              onChange={ e => handleSearchChange(e.target.value)} />
+            <button className={styles.btnSearch}>Search parts</button>
         </form>
     );
 }

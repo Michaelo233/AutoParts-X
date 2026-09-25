@@ -1,4 +1,3 @@
-import Search from '../../common/search/Search';
 import styles from './Header.module.css';
 
 
