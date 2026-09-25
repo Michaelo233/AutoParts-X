@@ -2,7 +2,7 @@
   padding: 0.75rem 1.5rem;
   border: 0;
   border-radius: 6px;
-  background-color: #E04935;
+  background-color: #1d6fe8;
   color: white;
   font: inherit;
   font-weight: 600;
@@ -10,7 +10,7 @@
 }
 
 .button:hover {
-  background-color: #E04935;
+  background-color: #1558bb;
 }
 
 .button:disabled {

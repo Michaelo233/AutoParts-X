@@ -10,7 +10,8 @@ type SearchProps = {
 function Search({ searchValue, handleSearchChange }: SearchProps) {
 
     return (
-        <form className= {styles.searchContainer} action="#">
+        <form className= {styles.searchContainer} onSubmit={(event) => {
+            event.preventDefault()}}>
             <span className={styles.searchIcon}>🔍</span>
             <input 
               id="part-search"
