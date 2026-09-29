@@ -3,11 +3,13 @@ import styles from './search.module.css';
 
 type SearchProps = {
   searchValue: string;
+  messages: string[];
   handleSearchChange: (value: string) => void;
+  handleSubmit: (value: string) => void;
 };
 
 /*  Search component to allow users to search for items */
-function Search({ searchValue, handleSearchChange }: SearchProps) {
+function Search({ searchValue, messages, handleSearchChange, handleSubmit }: SearchProps) {
 
     return (
         <form className= {styles.searchContainer} onSubmit={(event) => {
@@ -21,7 +23,7 @@ function Search({ searchValue, handleSearchChange }: SearchProps) {
               value={searchValue} 
               onChange={ e => handleSearchChange(e.target.value)} />
            <ReusableButton label="Search parts"
-          onClick={() => console.log("Searching for:", searchValue)}/>
+          onClick={() => handleSubmit(searchValue)}/>
         </form>
     );
 }

@@ -41,10 +41,10 @@ const AutoPartsData: Auto[] = [
         AutoPart: [
             {
                 imageUrl: "./images/brake_pads.jpg",
+                partId: 3,
                 partName: "Brake Pads",
                 price: 150.00,
                 description: "Durable brake pads for safe driving",
-                partId: 3,
                 location: "789 Elm St, Winnipeg, Canada",
                 contactNumber: "555-9012",
                 condition: "New",
