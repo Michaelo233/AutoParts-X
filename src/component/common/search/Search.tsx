@@ -9,7 +9,7 @@ type SearchProps = {
 };
 
 /*  Search component to allow users to search for items */
-function Search({ searchValue, messages, handleSearchChange, handleSubmit }: SearchProps) {
+function Search({ searchValue, handleSearchChange, handleSubmit }: SearchProps) {
 
     return (
         <form className= {styles.searchContainer} onSubmit={(event) => {
