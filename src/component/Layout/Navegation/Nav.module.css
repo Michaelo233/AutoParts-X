@@ -1,0 +1,53 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color:#0B132B;
+}
+
+.headerText {
+    font-size: 24px;
+    font-weight: bold;
+    color: #F3F4F6;
+}
+
+
+/* Spaces out the NavLinks */
+.navLinks {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Styles the standard links */
+.navLinks a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.navLinks a:hover {
+    color: #3498db;
+}
+
+/* Styles the active link using the global class provided by react-router-dom */
+.navLinks a:global(.active) {
+    font-weight: bold;
+    color: #3498db; /* Light blue */
+    border-bottom: 2px solid #3498db;
+}
+
+.loginLink a {
+    color: white;
+    text-decoration: none;
+    background-color: #3498db;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.loginLink a:hover {
+    background-color: #2980b9;
+}

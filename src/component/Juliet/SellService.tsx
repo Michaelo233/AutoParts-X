@@ -1,12 +1,8 @@
-function SellService() {
- const sellOptions = [
-    "Search auto parts",
-    "View auto part listings",
-    "Seller location",
-    "Delivery",
-  ];
+import { partsData } from "./partsData";
+import "./SellService.css";
 
-    const serviceOptions = [
+function SellService() {
+  const serviceOptions = [
     "Search services",
     "View service listings",
     "Service location",
@@ -14,23 +10,27 @@ function SellService() {
 
   return (
     <section className="sell-service">
-    <h2>Sell Auto Parts</h2>
-<p>Find options for selling auto parts.</p>
+      <h2>Sell Auto Parts</h2>
+      <p>Browse available automotive parts.</p>
 
-<ul>
-  {sellOptions.map((option) => (
-    <li key={option}>{option}</li>
-  ))}
-</ul>
-<h2>Automotive Services</h2>
-<p>Find automotive services near you.</p>
+      <div className="parts-list">
+        {partsData.map((part) => (
+          <div className="part-card" key={part.id}>
+            <h3>{part.name}</h3>
+            <p>Category: {part.category}</p>
+            <p>Price: ${part.price.toFixed(2)}</p>
+          </div>
+        ))}
+      </div>
 
-<ul>
-  {serviceOptions.map((service) => (
-    <li key={service}>{service}</li>
-  ))}
-</ul>
+      <h2>Automotive Services</h2>
+      <p>Find automotive services near you.</p>
 
+      <ul>
+        {serviceOptions.map((service) => (
+          <li key={service}>{service}</li>
+        ))}
+      </ul>
     </section>
   );
 }

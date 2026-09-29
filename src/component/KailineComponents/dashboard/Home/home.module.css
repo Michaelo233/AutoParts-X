@@ -1,18 +1,22 @@
 .homeContainer {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
+  min-height: 100vh;
+  text-align: left;
+  margin-top: 0; /* Added margin-top to create space from the top of the viewport */
 }
 
 .homeTitle {
+  text-align: center;
   font-size: 2rem;
+  margin-top: 2rem; /* Ensure no top margin for consistent spacing */
   margin-bottom: 1rem;
 }
 
+
 .homeDescription {
+  text-align: center;
   font-size: 1.2rem;
   margin-bottom: 2rem;
 }

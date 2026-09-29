@@ -3,6 +3,9 @@
 This document defines the core visual and interaction design principles for AutoParts-X. These guidelines ensure consistency 
 across all components, pages, and features.
 
+### Author:
+**Kailine Lima**
+
 ### CSS Modules Usage
 Every React component must have its own dedicated stylesheet using the `.module.css` extension.
 

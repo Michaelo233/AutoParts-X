@@ -1,7 +1,10 @@
 import styles from './heroSection.module.css';
 import Search from '../../../common/search/Search';
+import { useState } from 'react';
 
 function HeroSection() {
+    const [searchValue, setSearchValue] = useState('');
+
     return (
         <section className={styles.heroSection}>
             <div className={styles.heroContent}>
@@ -22,8 +25,11 @@ function HeroSection() {
                     <label htmlFor="search" className={styles.searchLabel}>
                         Search for auto parts and services:
                     </label>
-                    <div className={styles.searchContainer}>
-                        <Search searchValue="" handleSearchChange={() => {}} />
+                    <div className={styles.heroSearchContainer}>
+                        <Search 
+                        searchValue={searchValue}
+                        handleSearchChange={setSearchValue}
+                        />
                     </div>
                 </div>
             </div>
