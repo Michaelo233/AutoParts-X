@@ -1,0 +1,110 @@
+.container {
+  width: 100%;
+  padding: 56px 32px 72px;
+  box-sizing: border-box;
+  color: #075985;
+  font-family: var(--sans);
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.heading {
+  max-width: 680px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.heading h1 {
+  margin: 4px 0 12px;
+  color: #0c4a6e;
+}
+
+.eyebrow {
+  color: #0284c7;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.owner {
+  color: #075985;
+  font-size: 14px;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: #95a0b8;
+  max-width: 1040px;
+  margin: 0 auto;
+  border: 1px solid #95a0b8;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+}
+
+.card {
+  min-width: 0;
+  padding: 20px;
+  color: #075985;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.partImage {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.partName {
+  margin: 0;
+  color: #0c4a6e;
+  font-size: 18px;
+}
+
+.partPrice {
+  color: #0284c7;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.partDescription {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #075985;
+  flex-grow: 1;
+}
+
+.partId {
+  margin-top: 6px;
+  font-family: var(--mono);
+  color: #075985;
+  font-size: 14px;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #075985;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 36px 16px 48px;
+  }
+}
