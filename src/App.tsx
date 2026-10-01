@@ -8,20 +8,25 @@ import { useUserParts } from './component/MichaelComponent/usepartmock/UseUserPa
 import { AddPartForm } from './component/MichaelComponent/form/AddMyCarPartForm'
 
 
+
 function App() {
-  const { currentUser, handleAddPart } = useUserParts()
+  const { currentUser, handleAddPart, handleRemovePart } = useUserParts()
   return (
       <BrowserRouter>
         <Routes>
-          {/* Define your routes here */}
           <Route path="/" element={<Layout />}>
-           {/* Index makes the Home component the default route for the layout */}
-            <Route path="/Home" index element={<Home />} />
-
-             {/* Nested routes for the layout component */}
-            <Route path="/sell-services" element={<SellService />} />
-            <Route path="/myParts" element={<MyParts user={currentUser} />} />
-            <Route index element={<MyParts user={currentUser} />} />
+            <Route index element={<Home />} />
+            <Route path="Home" element={<Home />} />
+            <Route path="sell-services" element={<SellService />} />
+            <Route
+              path="myParts"
+              element={
+                <MyParts
+                  user={currentUser}
+                  onRemovePart={handleRemovePart}
+                />
+              }
+            />
             <Route
               path="myParts/addPart"
               element={
