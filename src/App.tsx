@@ -4,6 +4,7 @@ import RentAndBuy from './component/MichaelComponent/rentBuy'
 import { BrowserRouter, Route , Routes } from 'react-router-dom'
 import Layout from './component/Layout/Layout'
 import Home from './component/KailineComponents/dashboard/Home/Home'
+import Product from './component/Product/Product'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
              {/* Nested routes for the layout component */}
             <Route path="/sell-services" element={<SellService />} />
             <Route path="/buy-rent" element={<RentAndBuy />} />
+            <Route path="/products" element={<Product />} />
           </Route>
         </Routes>
       </BrowserRouter>

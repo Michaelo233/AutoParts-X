@@ -3,9 +3,10 @@ import styles from "./ProductCard.module.css";
 
 interface ProductCardProps {
   part: AutoPart;
+   onRemove: (partId: number) => void;
 }
 
-function ProductCard({ part }: ProductCardProps) {
+function ProductCard({ part, onRemove  }: ProductCardProps) {
   return (
     <div className={styles.productCard}>
       <img src={part.imageUrl} alt={part.partName} />
@@ -13,6 +14,9 @@ function ProductCard({ part }: ProductCardProps) {
       <h2>{part.partName}</h2>
       <p>${part.price}</p>
       <p>{part.description}</p>
+      <button onClick={() => onRemove(part.partId)}>
+  Remove
+</button>
     </div>
   );
 }
