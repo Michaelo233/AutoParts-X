@@ -1,0 +1,35 @@
+[
+  {
+    "userId": 1,
+    "userName": "Michael",
+    "partsOwned": [
+      {
+        "partId": "TR_001",
+        "partName": "Transmission",
+        "partDescription": "A transmission is a machine in a power transmission system, which provides controlled application of the power.",
+        "partPrice": 1200.00,
+        "partImage": "/images/Transmission.jpg"
+      },
+      {
+        "id": 2,
+        "partId": "EN_001",
+        "partName": "Engine",
+        "partDescription": "The engine is the component of a vehicle that generates power to propel the vehicle.",
+        "partPrice": 2500.00,
+        "partImage": "/images/engine_block.jpg",
+        "userId": 1,
+        "userName": "Michael"
+      },
+      {
+        "id": 3,
+        "partId": "BR_001",
+        "partName": "Brake Pads",
+        "partDescription": "Brake pads are a component of disc brakes used in automotive and other applications.",
+        "partPrice": 150.00,
+        "partImage": "/images/brake_pads.jpg",
+        "userId": 1,
+        "userName": "Michael"
+      }
+    ]
+  }
+]
