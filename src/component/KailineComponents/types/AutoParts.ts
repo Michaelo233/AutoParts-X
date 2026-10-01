@@ -6,7 +6,6 @@ export interface Auto {
 }
 
 export interface AutoPart {
-    UserId?: number;
     partId: number;
     imageUrl: string;
     partName: string;

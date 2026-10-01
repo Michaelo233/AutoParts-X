@@ -71,7 +71,7 @@ export default function AutoPartPage() {
     <main className={styles.pageContainer}>
       <AddAutoPartsForm
         category={categoryList}
-        onAddAutoPart={(part) => handleAddAutoPart(part)}
+        onAddAutoPart={handleAddAutoPart}
       />
 
       <header className={styles.headerSection}>

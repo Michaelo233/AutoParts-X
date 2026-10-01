@@ -4,7 +4,7 @@ import styles from './AddAutoPartForm.module.css';
 
 interface AddAutoPartsFormProps {
     category: string[];
-    onAddAutoPart: (autoPart: AutoPart) => void;
+    onAddAutoPart: (autoPart: AutoPart, category: string) => void;
 }
 
 function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
@@ -13,7 +13,8 @@ function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [validationMessage, setValidationMessage] = useState('');
    
-    const HandleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    {/* Handle input changes for text fields */}
+    const HandleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormName((prevFormName) => ({
             ...prevFormName,
@@ -37,6 +38,7 @@ function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
     {/* Handle form submission */}
     const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
         if (!formName.imageUrl) {
             setValidationMessage('Image URL is required');
             return;
@@ -64,8 +66,9 @@ function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
             return;
         }
 
+        
         const newAutoPart = {
-            partId: Date.now(),
+            partId: Date.now(), // Generate a unique ID for the new part
             imageUrl: formName.imageUrl,
             partName: formName.partName.trim(),
             price: Number(formName.price),
@@ -73,7 +76,7 @@ function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
             isFavourite: false,
         };
 
-        onAddAutoPart(newAutoPart);
+        onAddAutoPart(newAutoPart, selectedCategory);
 
         // Reset form fields after submission
         setFormName({ imageUrl: '', partName: '', price: '', description: '' });
