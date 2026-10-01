@@ -1,15 +1,16 @@
 import React from "react";
 import type { User } from "./types/carListInterface"
-import "./MyParts.css";
+import "./MyParts.Module.css";
 // import { useNavigate } from "react-router-dom";
 import { PartsNav } from "./navButton/NavButton";
+import { PartCard } from "./PartCard";
 
 interface MyPartsProps {
   user: User;
+  onRemovePart: (partId: string) => void;
 }
 
-export const MyParts: React.FC<MyPartsProps> = ({ user }) => {
-  // const navigate = useNavigate()
+export const MyParts: React.FC<MyPartsProps> = ({ user, onRemovePart }) => {
 
   return (
     <section className="container">
@@ -28,25 +29,11 @@ export const MyParts: React.FC<MyPartsProps> = ({ user }) => {
         <div className="grid">
 
           {user.partsOwned.map((part) => (
-
-            <div key={part.partId} className="card">
-              <img
-                src={part.partImage}
-                alt={part.partName}
-                className="partImage"
-              />
-
-              <h3 className="partName">{part.partName}</h3>
-
-              <p className="partDescription">{part.partDescription}</p>
-
-              <p className="partPrice">
-                Price: ${part.partPrice.toFixed(2)}
-              </p>
-
-              <small className="partId">Part ID: {part.partId}</small>
-
-            </div>
+            <PartCard
+              key={part.partId}
+              part={part}
+              onRemoveClick={onRemovePart}
+            />
           ))}
         </div>
       )}
