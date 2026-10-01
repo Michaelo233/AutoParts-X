@@ -10,12 +10,23 @@ export function useUserParts() {
   const handleAddPart = (newPart: Part) => {
     setCurrentUser((prevUser) => ({
       ...prevUser,
-      partsOwned: [...prevUser.partsOwned, newPart],
+      partsOwned: [newPart, ...prevUser.partsOwned],
+    }));
+  };
+
+  // Remove any part (JSON or newly added) by ID
+  const handleRemovePart = (partIdToRemove: string) => {
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      partsOwned: prevUser.partsOwned.filter(
+        (part) => part.partId !== partIdToRemove
+      ),
     }));
   };
 
   return {
     currentUser,
     handleAddPart,
+    handleRemovePart,
   };
 }
