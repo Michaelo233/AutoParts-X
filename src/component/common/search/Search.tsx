@@ -3,13 +3,15 @@ import styles from './search.module.css';
 
 type SearchProps = {
   searchValue: string;
-  messages: string[];
+  Title: string;
+  dependencies: any[];
+  filterFn: ((item: any) => boolean) | null;
   handleSearchChange: (value: string) => void;
   handleSubmit: (value: string) => void;
 };
 
 /*  Search component to allow users to search for items */
-function Search({ searchValue, handleSearchChange, handleSubmit }: SearchProps) {
+function Search({ searchValue, Title, handleSearchChange, handleSubmit }: SearchProps) {
 
     return (
         <form className= {styles.searchContainer} onSubmit={(event) => {
@@ -18,9 +20,9 @@ function Search({ searchValue, handleSearchChange, handleSubmit }: SearchProps) 
             <input 
               id="part-search"
               type="text" 
-              placeholder='Search for auto parts and services...' 
               className={styles.searchInput}
               value={searchValue} 
+              placeholder={Title}
               onChange={ e => handleSearchChange(e.target.value)} />
            <ReusableButton label="Search parts"
           onClick={() => handleSubmit(searchValue)}/>

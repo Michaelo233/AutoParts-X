@@ -1,30 +1,30 @@
 import { useState, type JSX } from "react";
-import TermCard from "../TermCard/TermCard";
+import TermCard from "../AutoPartsCard/AutoCard";
+import type { AutoPart } from "../../KailineComponents/types/AutoParts";
 
 
 export function TermListDisplay({terms, onSaveClick}: 
     {
-        terms: Term[], 
-        onSaveClick: (id: number) => {}
+        terms: AutoPart[], 
+        onSaveClick: (partId: number) => {}
     }) {
     const [expandedId, setExpandedId] = useState<number|null>(null);
-
-    // annotate type as a list of JSX elements
-    // map is the best means of creating a component array
-    const termListItems: JSX.Element[] = terms.map((term) => {
+    
+    // Map over the terms array to create a list of TermCard components
+    const termListAutoPartsItems: JSX.Element[] = terms.map((term) => {
         return (
             <TermCard
                 term={term} 
-                isExpanded={term.id === expandedId} 
+                isExpanded={term.partId === expandedId} 
                 onTitleClick={ 
                     () => {
-                        term.id !== expandedId ? 
-                            setExpandedId(term.id) : 
+                        term.partId !== expandedId ? 
+                            setExpandedId(term.partId) : 
                             setExpandedId(null)
                     }
                 }
-                onSaveClick={() => onSaveClick(term.id)}
-                key={term.id} 
+                onSaveClick={() => onSaveClick(term.partId)}
+                key={term.partId} 
             />
             // all iterated components should have a Key provided
         )

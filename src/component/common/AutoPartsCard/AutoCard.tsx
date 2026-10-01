@@ -1,30 +1,31 @@
+import type { AutoPart } from "../../KailineComponents/types/AutoParts";
 
-type TermCardProps = {
-    term: Term;
+type AutoPartCardProps = {
+    part: AutoPart;
     isExpanded: boolean;
     onTitleClick: () => void;
     onSaveClick: () => void;
 };
 
-function TermCard({ 
-        term,  
+function AutoPartCard({ 
+        part,  
         isExpanded, 
         onTitleClick,
-        onSaveClick }: TermCardProps) {
+        onSaveClick }: AutoPartCardProps) {
   return (
     <div>
       <div className="card-header">
         {/* Clicking one card's title may close the definitions for other cards. */}
             <h3 onClick={onTitleClick}>
-                {term.title}
+                {part.title}
             </h3>
                 <button onClick={onSaveClick}>
-                    {term.isFavourite ? "Unsave" : "Save"}
+                    {part.isFavourite ? "Unsave" : "Save"}
                 </button>
       </div>
-      {isExpanded ? <p>{term.definition}</p> : null}
+      {isExpanded ? <p>{part.definition}</p> : null}
     </div>
   );
 }
 
-export default TermCard;
+export default AutoPartCard;
