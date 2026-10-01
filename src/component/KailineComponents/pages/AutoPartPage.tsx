@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Auto, AutoPart } from '../types/AutoParts';
 import AutoPartsData from '../data/AutoPartsData';
 import AddAutoPartsForm from '../form/AddAutoPartForm';
@@ -12,7 +12,7 @@ export default function AutoPartPage() {
   const handleAddAutoPart = (newPart: AutoPart, targetCategory?: string) => {
     const completedPart: AutoPart = {
       partId: newPart.partId || Date.now(),
-      imageUrl: newPart.imageUrl || './images/placeholder.jpg',
+      imageUrl: newPart.imageUrl || 'jpg',
       partName: newPart.partName,
       price: Number(newPart.price) || 0,
       description: newPart.description || '',
@@ -20,7 +20,7 @@ export default function AutoPartPage() {
     };
 
     setCatalog((prevCatalog) => {
-      const resolvedCategory = targetCategory || prevCatalog[0]?.Category;
+      const resolvedCategory = targetCategory || prevCatalog[0]?.Category || 'General';
       const exists = prevCatalog.some(
         (group) => group.Category.toLowerCase() === resolvedCategory.toLowerCase()
       );
@@ -59,80 +59,84 @@ export default function AutoPartPage() {
     );
   };
 
+  // Flatten the catalog to get all parts with their category names
+  const allParts = catalog.flatMap((group) =>
+    group.AutoPart.map((part) => ({
+      ...part,
+      categoryName: group.Category,
+    }))
+  );
+
   return (
     <main className={styles.pageContainer}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Auto Parts Inventory</h1>
-        <p className={styles.subtitle}>
-          Manage catalog parts, categories, and inventory items in real-time.
-        </p>
-      </header>
-
       <AddAutoPartsForm
         category={categoryList}
         onAddAutoPart={(part) => handleAddAutoPart(part)}
       />
 
-      <section className={styles.inventorySection}>
-        <h2 className={styles.sectionTitle}>Available Inventory</h2>
+      <header className={styles.headerSection}>
+        <p className={styles.eyebrow}>AUTO PARTS</p>
+        <h1 className={styles.sectionHeading}>Find the Right Part for Your Vehicle</h1>
+      </header>
 
-        {catalog.length === 0 ? (
-          <p className={styles.emptyState}>The inventory is empty. Add a new part above.</p>
+      {/* A single grid for ALL parts */}
+      <section className={styles.cardGrid}>
+        {allParts.length === 0 ? (
+          <p>The inventory is empty. Add a new part above.</p>
         ) : (
-          catalog.map((group) => (
-            <article key={group.Category} className={styles.categoryCard}>
-              <div className={styles.categoryHeader}>
-                <h3 className={styles.categoryTitle}>{group.Category}</h3>
-                <span className={styles.categoryBadge}>
-                  {group.AutoPart.length} {group.AutoPart.length === 1 ? 'part' : 'parts'}
-                </span>
+          allParts.map((part) => (
+            <article key={part.partId} className={styles.productCard}>
+              
+              {/* Constrained Image Wrapper */}
+              <div className={styles.imageWrapper}>
+                <img
+                  src={part.imageUrl}
+                  alt={part.partName}
+                  className={styles.cardImage}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80';
+                  }}
+                />
               </div>
 
-              <section className={styles.partsGrid}>
-                {group.AutoPart.map((part) => (
-                  <div key={part.partId} className={styles.partCard}>
-                    <img
-                      src={part.imageUrl}
-                      alt={part.partName}
-                      className={styles.partThumbnail}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          'https://via.placeholder.com/90?text=Auto+Part';
-                      }}
-                    />
+              <div className={styles.cardContent}>
+                <div className={styles.categoryHeader}>
+                  <span className={styles.categoryTag}>{part.categoryName}</span>
+                  <span className={styles.newBadge}>New</span>
+                </div>
 
-                    <section className={styles.partDetails}>
-                      <h4 className={styles.partName}>
-                        {part.partName}{' '}
-                      </h4>
-                      <p className={styles.partPrice}>${Number(part.price).toFixed(2)}</p>
-                      <p className={styles.partDescription}>{part.description}</p>
-                    </section>
+                <h2 className={styles.cardTitle}>{part.partName}</h2>
+                <p className={styles.compatibilityText}>{part.description}</p>
+                
+                <div className={styles.ratingLine}>
+                  ★ 4.8 &bull; Verified seller
+                </div>
 
-                    <section className={styles.actions}>
-                      <button
-                        type="button"
-                        onClick={() => handleToggleFavourite(part.partId)}
-                        className={`${styles.favoriteButton} ${
-                          part.isFavourite ? styles.favorited : ''
-                        }`}
-                        aria-label={`Toggle favorite for ${part.partName}`}
-                      >
-                        {part.isFavourite ? '★ Favorited' : '☆ Favorite'}
-                      </button>
+                <div className={styles.cardFooter}>
+                  <span className={styles.price}>${Number(part.price).toFixed(2)}</span>
+                  
+                  <div className={styles.buttonGroup}>
+                    <button
+                      type="button"
+                      onClick={() => handleToggleFavourite(part.partId)}
+                      title={part.isFavourite ? 'Remove from favourites' : 'Add to favourites'}
+                      aria-label={part.isFavourite ? 'Remove from favourites' : 'Add to favourites'}
+                    >
+                      {part.isFavourite ? '★' : '☆'}
+                    </button>
 
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveAutoPart(part.partId)}
-                        className={styles.deleteButton}
-                        aria-label={`Delete ${part.partName}`}
-                      >
-                        Delete
-                      </button>
-                    </section>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveAutoPart(part.partId)}
+                      className={styles.deleteBtn}
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
+            
                   </div>
-                ))}
-              </section>
+                </div>
+              </div>
             </article>
           ))
         )}

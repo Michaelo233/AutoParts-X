@@ -6,7 +6,7 @@ const AutoPartsData: Auto[] = [
         AutoPart: [
             {
                 UserId: 3,
-                imageUrl: "./images/engine_block.jpg",
+                imageUrl: "/images/engine_block.jpg",
                 partId: 1,
                 partName: "Engine Block",
                 price: 1200.00,
@@ -21,7 +21,7 @@ const AutoPartsData: Auto[] = [
         AutoPart: [
             {
                 UserId: 2,
-                imageUrl: "./images/transmission.jpg",
+                imageUrl: "/images/Transmission.jpg",
                 partId: 2,
                 partName: "Transmission",
                 price: 800.00,
@@ -35,7 +35,7 @@ const AutoPartsData: Auto[] = [
         AutoPart: [
             {
                 UserId: 1,
-                imageUrl: "./images/brake_pads.jpg",
+                imageUrl: "/images/brake_pads.jpg",
                 partId: 3,
                 partName: "Brake Pads",
                 price: 150.00,
