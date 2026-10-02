@@ -5,6 +5,7 @@ import logoImage from "../../../assets/images/AutoPartX.jpg";
 export function Nav() {
     return(
         <nav className={styles.headerContainer}>
+            <img src="/images/Logo.jpg" alt="Auto Parts X Logo" className={styles.logo} />
             <div className={styles.brand}>
                 {/* The leading slash ensures it looks in the public folder */}
                 <img 
@@ -18,14 +19,14 @@ export function Nav() {
             </h1>
             <div className={styles.navLinks}>
                 {/* Create an <a> tag that routes to the provided string value */}
-                <NavLink to="/" end>
+                <NavLink to="/Home" end>
                     Home
                 </NavLink>
                 <NavLink to="/sell-services">
                    Sell Services 
                 </NavLink>
-                <NavLink to="/buy-rent">
-                    Buy and Rent
+                <NavLink to="/myParts">
+                    My Parts
                 </NavLink>
             </div>
             <div className={styles.loginLink}>
