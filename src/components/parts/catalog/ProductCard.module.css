@@ -1,0 +1,28 @@
+.productCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 60px;
+  border: 1px solid rgba(0, 0, 0, 0.199);
+  padding: 20px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.productCard img {
+  margin-top: 20px;
+  width: 70%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.productCard h2 {
+  margin: 10px 0;
+}
+
+.productCard p {
+  margin: 5px 0;
+}

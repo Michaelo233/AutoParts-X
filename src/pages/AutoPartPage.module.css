@@ -1,0 +1,224 @@
+/* AutoPartPage.module.css */
+
+.pageContainer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1a202c;
+}
+
+.headerSection {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.4rem 0;
+}
+
+.sectionHeading {
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #2757c7;
+  margin: 0 0 1.5rem 0;
+}
+
+/* 4-column responsive grid matching the design */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Individual Product Card */
+.productCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
+}
+
+/* Top Image Container */
+.imageWrapper {
+  width: 100%;
+  height: 190px;
+  background-color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Favorite heart icon button positioned on top of image */
+.favBadgeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.favBadgeBtn:hover {
+  transform: scale(1.1);
+}
+
+/* Card Body Content */
+.cardContent {
+  padding: 1rem 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Category & "New" Tag Header */
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.categoryTag {
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.newBadge {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* Title & Compatibility Description */
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  min-height: 2.7rem; /* keeps 2-line titles aligned */
+}
+
+.compatibilityText {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+  min-height: 2.25rem; /* keeps descriptions uniform */
+}
+
+/* Rating Line */
+.ratingLine {
+  font-size: 0.78rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+}
+
+.starIcon {
+  color: #475569;
+}
+
+/* Footer: Price & Add to Cart / Actions */
+.cardFooter {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.addToCartBtn {
+  background-color: #e53e3e; /* Red button from screenshot */
+  color: #ffffff;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.55rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.addToCartBtn:hover {
+  background-color: #c53030;
+}
+
+.deleteItemBtn {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  padding: 0.55rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.deleteItemBtn:hover {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}

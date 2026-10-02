@@ -1,0 +1,209 @@
+.container {
+  width: 100%;
+  padding: 0 32px 72px;
+  box-sizing: border-box;
+  color: #3b82f6;
+  font-family: var(--sans);
+  /* background-color: #ffffff; */
+  text-align: left;
+}
+
+.navPosition {
+  margin: 0 -32px;
+  margin-left: 413px;
+}
+
+.heading {
+  max-width: 680px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.heading h1 {
+  margin: 4px 0 12px;
+  color: #3b82f6;
+}
+
+.title {
+  margin: 4px 0 12px;
+  color: #3b82f6;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.owner {
+  color: #3b82f6;
+  font-size: 14px;
+  margin: 0;
+  margin-left: 413px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(390px, auto);
+  gap: 24px;
+  background: transparent;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 390px;
+  min-width: 0;
+  padding: 20px;
+  color: #075985;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dbe4ea;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgb(15 23 42 / 10%);
+}
+
+.partImage {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.partName {
+  margin: 0;
+  color: #3b82f6;
+  font-size: 18px;
+}
+
+.partPrice {
+  color: #3b82f6;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.partDescription {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #3b82f6;
+  flex-grow: 1;
+}
+
+.partId {
+  margin-top: 6px;
+  font-family: var(--mono);
+  color: #3b82f6;
+  font-size: 14px;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #3b82f6;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 16px 48px;
+  }
+
+  .navPosition {
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+}
+
+.cardTopRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.deleteBtn {
+  background: none;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.deleteBtn:hover {
+  color: #991b1b;
+}
+
+.confirmBanner {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.confirmBanner p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.confirmButtons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.yesBtn {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.noBtn {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.yesBtn:hover {
+  background-color: #b91c1c;
+}
+
+.noBtn:hover {
+  background-color: #d1d5db;
+}

@@ -1,10 +1,11 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Layout from './component/Layout/Layout'
-import Home from './component/KailineComponents/dashboard/Home/Home'
-import Product from './component/Product/Product'
-import { useUserParts } from './component/MichaelComponent/usepartmock/UseUserParts'
-import { AddPartForm } from './component/MichaelComponent/form/AddMyCarPartForm'
+import Layout from './components/common/layout/Layout'
+import Home from './pages/Home'
+import Product from './pages/Products'
+import { MyParts } from './pages/MyParts'
+import { useUserParts } from './hooks/useUserParts'
+import { AddPartForm } from './components/parts/my-parts/AddPartForm'
 
 
 function App() {
@@ -16,11 +17,11 @@ function App() {
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
 
-          {/* Juliet's / Other Routes */}
-          <Route path="sell-services" element={<SellService />} />
+          {/* Product routes */}
+          <Route path="sell-services" element={<Product />} />
           <Route path="products" element={<Product />} />
 
-          {/* Michael's MyParts Routes */}
+          {/* My parts routes */}
           <Route
             path="myParts"
             element={
