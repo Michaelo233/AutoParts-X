@@ -85,6 +85,11 @@
     background-color: #2980b9;
 }
 
+img {
+    height: 100px;
+    width: 100px;
+    border-radius: 90px;
+    
 /* --- MOBILE RESPONSIVE STYLES --- */
 
 /* Hide the hamburger button on desktop */
