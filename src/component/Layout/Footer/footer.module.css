@@ -1,0 +1,19 @@
+.footerContainer {
+  background-color:#0B132B;
+  padding: 20px;
+  text-align: center;
+}
+
+.footerText {
+  color: #F3F4F6;
+  font-size: 16px;
+  margin: 0;
+}
+
+.footerYear {
+  font-size: 10px;
+  font-weight: bold;
+  color: #F3F4F6;
+  margin-top: 5px;
+
+}

@@ -1,0 +1,108 @@
+/* Background and structural layout */
+.heroSection {
+    position: relative;
+    width: 100%; /* Add this to force full width */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    padding: 40px 20px;
+    background-image: linear-gradient(rgba(4, 18, 38, 0.85), rgba(4, 18, 38, 0.85)), url('../../../../assets/images/AutoPartsBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+
+
+/* Left-aligned content container */
+.heroContainer {
+    max-width: 650px;
+    color: #ffffff;
+    text-align: left; 
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.subheadingContainer {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.subheading {
+    color: #3b82f6; 
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    }
+
+
+/* Left-aligned content container */
+.heroContainer {
+  width: 100%;
+  max-width: 650px;
+  min-width: 0;
+  color: #ffffff;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.heroSearchContainer {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .heroSection {
+    min-height: 0;
+    padding: 40px 20px;
+  }
+
+  .heroTitle {
+    font-size: 1.8rem;
+    overflow-wrap: break-word;
+  }
+
+  .heroDescription {
+    max-width: 100%;
+  }
+}
+
+
+/* Action buttons layout[cite: 1] 
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Solid blue primary button[cite: 1] 
+.btn-primary {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border: none;
+}
+
+/* Transparent secondary button with white border[cite: 1] 
+.btn-secondary {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+/* Hover effects 
+.btn-search:hover, .btn-primary:hover {
+  background-color: #1557b0;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+*/
