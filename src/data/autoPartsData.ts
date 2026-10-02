@@ -2,54 +2,43 @@ import type { Auto } from '../types/autoParts';
 
 const AutoPartsData: Auto[] = [
     {
-        Name: "Engine Block",
+        Category: "Engine",
         AutoPart: [
             {
-                imageUrl: "./images/engine_block.jpg",
+                imageUrl: "/images/engine_block.jpg",
                 partId: 1,
                 partName: "Engine Block",
                 price: 1200.00,
                 description: "High-performance engine block for your vehicle",
-                location: "123 Main St, Winnipeg, Canada",
-                contactNumber: "555-1234",
-                condition: "New",
-                year: 2020,
-                isActive: true
+                isFavourite: false,
             }
         ]
     },
 
     {
-        Name: "Transmission",
+        Category: "Transmission",
         AutoPart: [
             {
-                imageUrl: "./images/transmission.jpg",
+
+                imageUrl: "/images/Transmission.jpg",
                 partId: 2,
                 partName: "Transmission",
                 price: 800.00,
                 description: "Reliable transmission for your car",
-                location: "456 Oak Ave, Winnipeg, Canada",
-                contactNumber: "555-5678",
-                condition: "Used",
-                year: 2019,
-                isActive: true
+                isFavourite: false
             }
         ]
     },
     {
-        Name: "Brake Pads",
+        Category: "Brake Pads",
         AutoPart: [
             {
-                imageUrl: "./images/brake_pads.jpg",
+                imageUrl: "/images/brake_pads.jpg",
+                partId: 3,
                 partName: "Brake Pads",
                 price: 150.00,
                 description: "Durable brake pads for safe driving",
-                partId: 3,
-                location: "789 Elm St, Winnipeg, Canada",
-                contactNumber: "555-9012",
-                condition: "New",
-                year: 2021,
-                isActive: true
+                isFavourite: false
             }
         ]
     }

@@ -4,7 +4,13 @@ import styles from './Nav.module.css';
 export function Nav() {
     return(
         <nav className={styles.headerContainer}>
-            <img src="/images/Logo.jpg" alt="Auto Parts X Logo" className={styles.logo} />
+            <div className={styles.brand}>
+                <img 
+                    src="/images/Logo.jpg"
+                    alt="" 
+                    className={styles.logoImg} 
+                />
+            </div>
             <h1 className={styles.headerText}>
                 Auto parts X
             </h1>

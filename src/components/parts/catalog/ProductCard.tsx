@@ -9,7 +9,9 @@ interface ProductCardProps {
 function ProductCard({ part, onRemove  }: ProductCardProps) {
   return (
     <div className={styles.productCard}>
-      <img src={part.imageUrl} alt={part.partName} />
+      {part.imageUrl.trim() && (
+        <img src={part.imageUrl} alt={part.partName} />
+      )}
 
       <h2>{part.partName}</h2>
       <p>${part.price}</p>
