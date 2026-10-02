@@ -13,13 +13,13 @@ export const MyParts: React.FC<MyPartsProps> = ({ user, onRemovePart }) => {
 
   return (
     <section className={styles.container}>
+      <div className={styles.navPosition}>
+        <PartsNav />
+      </div>
 
-      <h1 className={styles.title}>My Parts</h1>
       <p className={styles.owner}>Owner: {user.userName}</p>
 
-      {/* Navigation Button to Add Parts.*/}
-
-      <PartsNav/>
+      <h1 className={styles.title}>My Parts</h1>
 
       {user.partsOwned.length === 0 ? (
         <p className={styles.emptyMessage}>No parts available.</p>
