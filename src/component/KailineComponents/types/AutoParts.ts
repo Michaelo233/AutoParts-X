@@ -1,7 +1,7 @@
 
 
 export interface Auto {
-    Name : string;
+    Category: string;
     AutoPart: AutoPart[];
 }
 
@@ -11,10 +11,12 @@ export interface AutoPart {
     partName: string;
     price: number;
     description: string;
-    location: string;
-    contactNumber: string;
-    condition: string;
-    year: number;
-    isActive: boolean;
-    className?: string;
+    isFavourite: boolean;
+};
+
+export interface AutoPartSearchResult {
+    partId: number;
+    imageUrl: string;
+    partName: string;
+    price: number;
 };

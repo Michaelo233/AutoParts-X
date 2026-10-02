@@ -7,7 +7,7 @@ function HeroSection() {
 
     return (
         <section className={styles.heroSection}>
-            <div className={styles.heroContent}>
+            <div className={styles.heroContainer}>
                 <div className={styles.subheadingContainer}>
                     <span className={styles.subheading}> Buy Smarter. Sell with Auto Parts X
                     </span>
@@ -27,8 +27,12 @@ function HeroSection() {
                     </label>
                     <div className={styles.heroSearchContainer}>
                         <Search 
+                        Title="Search"
                         searchValue={searchValue}
                         handleSearchChange={setSearchValue}
+                        dependencies={[]}
+                        filterFn={() => true}
+                        handleSubmit={() => undefined}
                         />
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+import AutoPartPage from '../../pages/AutoPartPage';
 import HeroSection from '../Hero/HeroSection';
 import style from'./home.module.css';
 
@@ -9,12 +10,7 @@ function Home() {
       <HeroSection />
       
       {/* Main content area for the dashboard, can include featured items, etc. */}
-      <main className={style.homeMain}>
-        <h2 className={style.homeTitle}>Featured Auto Parts</h2>
-        <p className={style.homeDescription}>
-          Your list of items or other feature page components can go here.
-          </p>
-      </main>
+      <AutoPartPage />
     </section>
   );
 }
