@@ -62,7 +62,12 @@
 }
 
 body {
-  margin: 0;
+  display: flex;
+  place-content: center;
+}
+
+body{
+  margin: 0;;
 }
 
 h1,

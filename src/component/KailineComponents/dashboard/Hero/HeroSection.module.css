@@ -17,14 +17,12 @@
 
 
 /* Left-aligned content container */
-.heroContent {
-    position: relative;
-    z-index: 1;
+.heroContainer {
     max-width: 650px;
     color: #ffffff;
     text-align: left; 
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     align-items: flex-start;
 }
 
@@ -44,37 +42,39 @@
     }
 
 
-.heroTitle {
-    font-family: 'Fira Sans', sans-serif;
-    color: #ffffff;
-    font-size: 2.25rem;
-    font-weight: 800;
-    line-height: 1.2;
-    margin: 0 0 1rem 0;
-    }
-
-/* Standard weight description paragraph[cite: 1] */
-.heroDescription {
-  font-size: 1rem;
-  line-height: 1.5;
-  margin: 0 0 2rem 0;
-  max-width: 90%;
+/* Left-aligned content container */
+.heroContainer {
+  width: 100%;
+  max-width: 650px;
+  min-width: 0;
+  color: #ffffff;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* Search Area8 */
 .heroSearchContainer {
-    width: 100%;
-    min-width: 600px;
-    margin-bottom: 2rem;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 600px) {
   .heroSection {
     min-height: 0;
-    padding-block: 64px;
+    padding: 40px 20px;
+  }
+
+  .heroTitle {
+    font-size: 1.8rem;
+    overflow-wrap: break-word;
+  }
+
+  .heroDescription {
+    max-width: 100%;
   }
 }
-
 
 
 /* Action buttons layout[cite: 1] 

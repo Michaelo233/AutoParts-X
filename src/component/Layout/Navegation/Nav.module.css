@@ -1,22 +1,52 @@
+/* Container for the entire navigation bar */
 .headerContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color:#0B132B;
+    background-color: #0B132B;
+    position: relative; /* CRITICAL: Allows the mobile menu to anchor beneath the header */
+}
+
+/* Groups the logo and text together */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .headerText {
-    font-size: 24px;
-    font-weight: bold;
-    color: #F3F4F6;
+    color: #ecf0f1;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+    text-transform: uppercase;
+    border-left: 4px solid #38bdf8;
+    padding-left: 0.75rem;
 }
 
+/* Styles for the logo section */
+.logoImg {
+    height: 55px; 
+    width: auto; 
+    object-fit: contain; 
+}
+
+/* Wrapper that holds both navLinks and loginLink */
+.navGroup {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
 
 /* Spaces out the NavLinks */
 .navLinks {
     display: flex;
     gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 /* Styles the standard links */
@@ -26,28 +56,89 @@
     font-size: 1.1rem;
     padding: 0.5rem;
     transition: color 0.2s ease-in-out;
+    white-space: nowrap; /* Prevents text from breaking onto two lines */
 }
 
 .navLinks a:hover {
     color: #3498db;
 }
 
-/* Styles the active link using the global class provided by react-router-dom */
+/* Styles the active link */
 .navLinks a:global(.active) {
     font-weight: bold;
-    color: #3498db; /* Light blue */
+    color: #3498db; 
     border-bottom: 2px solid #3498db;
 }
 
 .loginLink a {
     color: white;
     text-decoration: none;
+    margin-left: 1rem;
     background-color: #3498db;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .loginLink a:hover {
     background-color: #2980b9;
+}
+
+/* --- MOBILE RESPONSIVE STYLES --- */
+
+/* Hide the hamburger button on desktop */
+.hamburgerBtn {
+    display: none;
+    background: transparent;
+    border: 2px solid #3498db;
+    color: #3498db;
+    border-radius: 4px;
+    padding: 0.25rem 0.6rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Trigger mobile layout on screens 768px and smaller */
+@media (max-width: 768px) {
+    /* 1. Show the hamburger button */
+    .hamburgerBtn {
+        display: block;
+    }
+
+    /* 2. Hide the nav group by default, format as a dropdown */
+    .navGroup {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Pushes menu right beneath the headerContainer */
+        left: 0;
+        width: 100%;
+        background-color: #0B132B;
+        padding: 1.5rem 0;
+        border-top: 1px solid #1e293b;
+        z-index: 50; /* Keeps menu above page content */
+    }
+
+    /* 3. This class is added by React when the button is clicked */
+    .navGroup:global(.open) {
+        display: flex;
+    }
+
+    /* 4. Center and stack the links */
+    .navLinks {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    /* 5. Adjust login button spacing for mobile */
+    .loginLink {
+        margin-top: 1rem;
+    }
+
+    .loginLink a {
+        margin-left: 0; 
+    }
 }

@@ -1,10 +1,18 @@
 import { NavLink } from "react-router";
 import styles from './Nav.module.css';
+import logoImage from "../../../assets/images/AutoPartX.jpg";
 
 export function Nav() {
     return(
         <nav className={styles.headerContainer}>
-            <img src="./Logo.jpg" alt="Auto Parts X Logo" className={styles.logo} />
+            <div className={styles.brand}>
+                {/* The leading slash ensures it looks in the public folder */}
+                <img 
+                    src={logoImage}
+                    alt="Auto Parts X Logo" 
+                    className={styles.logoImg} 
+                />
+            </div>
             <h1 className={styles.headerText}>
                 Auto parts X
             </h1>
