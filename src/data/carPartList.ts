@@ -1,4 +1,4 @@
-[
+export const carPartList = [
   {
     "userId": 1,
     "userName": "Michael",
@@ -57,8 +57,7 @@
         "partImage": "/images/brake_pads.jpg",
       }
     ]
-  }
-
+  },
   {
     "userId": 3,
     "userName": "David",

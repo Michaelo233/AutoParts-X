@@ -1,8 +1,15 @@
 import { useState } from 'react';
 import type { User, Part } from '../types/userParts';
-import userData from '../data/carPartList.json';
+import { carPartList as userData } from '../data/carPartList';
 
-const initialUserFromJSON: User = userData[0] as User;
+const initialUserFromJSON: User = {
+  ...userData[0],
+  partsOwned: userData[0].partsOwned.map((part) => ({
+    ...part,
+    partDescription: part.Description,
+    partPrice: part.Price,
+  })),
+};
 
 export function useUserParts() {
   const [currentUser, setCurrentUser] = useState<User>(initialUserFromJSON);
