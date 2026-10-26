@@ -8,7 +8,7 @@ type SearchProps = {
 };
 
 /*  Search component to allow users to search for items */
-function Search({ searchValue, Title, handleSearchChange, handleSubmit }: SearchProps) {
+function Search({ searchValue, handleSearchChange, handleSubmit }: SearchProps) {
     return (
         <form 
             className={styles.searchContainer} 
@@ -18,14 +18,14 @@ function Search({ searchValue, Title, handleSearchChange, handleSubmit }: Search
                 handleSubmit(searchValue); 
             }}
         >
-            <span className={styles.searchIcon}>🔍</span>
-            <input 
-              type="text" 
-              className={styles.searchInput}
-              value={searchValue} 
-              placeholder={Title}
-              onChange={e => handleSearchChange(e.target.value)} 
-            />
+            <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Search for auto parts..."
+                className={styles.searchInput}
+            />  
+            
             
             {/* Changed from "Search parts" to prevent duplicate wording */}
             <button type="submit" className={styles.searchButton}>
