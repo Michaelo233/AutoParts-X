@@ -1,16 +1,22 @@
 import { useState } from "react";
-import type { AutoPart } from "../types/autoParts";
+import type { Part } from "../types/userParts";
 import ProductCard from "../components/parts/catalog/ProductCard";
 import ProductForm from "../components/parts/catalog/ProductForm";
 
+/**
+ * Product Component
+ *
+ * Displays a form to add new auto parts and a list of existing auto parts.
+ */
 function Product() {
-  const initialParts: AutoPart[] = [];
+  const initialParts: Part[] = [];
+  const [parts, setParts] = useState<Part[]>(initialParts);
 
-  const [parts, setParts] = useState<AutoPart[]>(initialParts);
-
-  function handleRemove(partId: number) {
-    setParts(parts.filter((part) => part.partId !== partId));
-  }
+  const handleRemove = (partId: Part["partId"]) => {
+    setParts((currentParts) =>
+      currentParts.filter((part) => part.partId !== partId),
+    );
+  };
 
   return (
     <main>

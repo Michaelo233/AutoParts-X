@@ -1,154 +1,222 @@
-import React, { useState, type SyntheticEvent } from 'react';
-import type { AutoPart } from '../../../types/autoParts';
-import styles from './AddAutoPartForm.module.css';
+
+import { useState } from "react";
+import styles from "./AddAutoPartForm.module.css";
+import type { NewCatalogPart } from "../../../types/catalog";
 
 interface AddAutoPartsFormProps {
-    category: string[];
-    onAddAutoPart: (autoPart: AutoPart, category: string) => void;
+  categories: string[];
+  onAddAutoPart: (part: NewCatalogPart, category: string) => void;
 }
 
-function AddAutoPartsForm({ category, onAddAutoPart }: AddAutoPartsFormProps) {
-    {/* Initialize form state */}
-    const [formName, setFormName] = useState({ imageUrl: '', partName: '', price: '', description: ''});
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [validationMessage, setValidationMessage] = useState('');
-   
-    {/* Handle input changes for text fields */}
-    const HandleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormName((prevFormName) => ({
-            ...prevFormName,
-            [name]: value
-        }));
-        if (validationMessage) {
-            setValidationMessage('');
-        }
-    };
-
-    {/* Handle the image upload */}
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            // This creates a temporary local URL so the browser can display your selected .jpg immediately
-            const localImageUrl = URL.createObjectURL(e.target.files[0]);
-            setFormName((prev) => ({ ...prev, imageUrl: localImageUrl }));
-            if (validationMessage) setValidationMessage('');
-        }
-    };
-
-    {/* Handle form submission */}
-    const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        
-        if (!formName.imageUrl) {
-            setValidationMessage('Image URL is required');
-            return;
-        }
-
-        if (!formName.partName.trim()) {
-            setValidationMessage('Part Name is required');
-            return;
-        }
-        
-        if (!formName.price) {
-            setValidationMessage('Price is required');
-            return;
-        }
-        if (!formName.description) {
-            setValidationMessage('Description is required');
-            return;
-        }
-        if (!selectedCategory) {
-            setValidationMessage('Category is required');
-            return;
-        }
-        if (!category.includes(selectedCategory)) {
-            setValidationMessage('Please select an existing category');
-            return;
-        }
-
-        
-        const newAutoPart = {
-            partId: Date.now(), // Generate a unique ID for the new part
-            imageUrl: formName.imageUrl,
-            partName: formName.partName.trim(),
-            price: Number(formName.price),
-            description: formName.description.trim(),
-            isFavourite: false,
-        };
-
-        onAddAutoPart(newAutoPart, selectedCategory);
-
-        // Reset form fields after submission
-        setFormName({ imageUrl: '', partName: '', price: '', description: '' });
-        setSelectedCategory('');
-        setValidationMessage('');
-    };
-
-    return (        
-        <section className={styles.formContainer}>
-            <header className={styles.headerBox}>
-                <p className={styles.eyebrow}>ADD NEW PART</p>
-                <h2 className={styles.title}>Add a New Auto Part</h2>
-                <p className={styles.subtitle}>Share a part with the AutoPartX marketplace.</p>
-            </header>
-            <form  className={styles.form} onSubmit={handleSubmit}>
-                <label className={styles.label} htmlFor="imageUrl">Upload Image:</label>
-                <input
-                id="imageUrl"
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleImageUpload}
-                className={styles.input}
-                />
-                <label className={styles.label} htmlFor="partName">Part Name:</label>
-                <input
-                    type="text"
-                    placeholder="Part Name"
-                    name="partName"
-                    value={formName.partName}
-                    onChange={HandleInputChange}
-                    className={styles.input}
-                />
-                <label className={styles.label} htmlFor="price">Price:</label>
-                <input
-                    id="price"
-                    type="number"
-                    placeholder="e.g. 500"
-                    name="price"
-                    value={formName.price}
-                    onChange={(e) => setFormName((prev) => ({ ...prev, price: e.target.value }))}
-                    className={styles.input}
-                />
-                <label className={styles.label} htmlFor="description">Description:</label>
-                <textarea
-                    placeholder="Description"
-                    name="description"
-                    value={formName.description}
-                    onChange={HandleInputChange}
-                    className={styles.textarea}
-                />
-                <label className={styles.label} htmlFor="category">Category:</label>
-                <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                    {/* Render category options */}
-                    <option value="">Select a category</option>
-                    {category.map((cat) => (
-                        <option key={cat} value={cat}>
-                            {cat}
-                        </option>
-                    ))}
-                </select>
-                {validationMessage && <p className={styles.errorMessage}>{validationMessage}</p>}
-            
-                <button className={styles.submitBtn} type="submit">
-                    Add Auto Part
-                </button>
-            </form>
-        </section>
-    );
-
+interface FormValues {
+  imageUrl: string;
+  partName: string;
+  price: string;
+  description: string;
 }
 
-export default AddAutoPartsForm;
+const emptyForm: FormValues = {
+  imageUrl: "",
+  partName: "",
+  price: "",
+  description: "",
+};
+
+/**
+ * AddAutoPartsForm
+ *
+ * Collects and validates new auto part information.
+ * Calls the parent callback after successful validation.
+ *
+ * Does not directly modify the catalogue or JSON.
+ * Shared catalogue state is managed by the Context.
+ */
+export default function AddAutoPartsForm({
+  categories,
+  onAddAutoPart,
+}: AddAutoPartsFormProps) {
+  const [form, setForm] = useState<FormValues>(emptyForm);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [validationMessage, setValidationMessage] = useState("");
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setValidationMessage("");
+  };
+
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setValidationMessage("Please select an image.");
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setForm(prev => ({
+      ...prev,
+      imageUrl,
+    }));
+
+    setValidationMessage("");
+  };
+
+  const handleSubmit = (
+    event: React.SubmitEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+
+    if (!form.partName.trim()) {
+      setValidationMessage("Part name is required.");
+      return;
+    }
+
+    const price = Number(form.price);
+
+    if (!Number.isFinite(price) || price <= 0) {
+      setValidationMessage("Enter a valid price greater than zero.");
+      return;
+    }
+
+    if (!form.description.trim()) {
+      setValidationMessage("Description is required.");
+      return;
+    }
+
+    if (!selectedCategory || !categories.includes(selectedCategory)) {
+      setValidationMessage("Please select a category.");
+      return;
+    }
+
+    const newPart: NewCatalogPart = {
+      partName: form.partName.trim(),
+      description: form.description.trim(),
+      price,
+      imageUrl: form.imageUrl,
+      isFavourite: false,
+    };
+
+    onAddAutoPart(newPart, selectedCategory);
+
+    setForm(emptyForm);
+    setSelectedCategory("");
+    setValidationMessage("");
+  };
+
+  return (
+    <section className={styles.formContainer}>
+      <header className={styles.headerBox}>
+        <p className={styles.eyebrow}>ADD NEW PART</p>
+
+        <h2 className={styles.title}>
+          Add a New Auto Part
+        </h2>
+
+        <p className={styles.subtitle}>
+          Share a part with the AutoParts-X marketplace.
+        </p>
+      </header>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label className={styles.label} htmlFor="imageUrl">
+          Upload Image:
+        </label>
+
+        <input
+          id="imageUrl"
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className={styles.input}
+        />
+
+        <label className={styles.label} htmlFor="partName">
+          Part Name:
+        </label>
+
+        <input
+          id="partName"
+          name="partName"
+          type="text"
+          placeholder="Part Name"
+          value={form.partName}
+          onChange={handleInputChange}
+          className={styles.input}
+        />
+
+        <label className={styles.label} htmlFor="price">
+          Price:
+        </label>
+
+        <input
+          id="price"
+          name="price"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="e.g. 500"
+          value={form.price}
+          onChange={handleInputChange}
+          className={styles.input}
+        />
+
+        <label className={styles.label} htmlFor="description">
+          Description:
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleInputChange}
+          className={styles.textarea}
+        />
+
+        <label className={styles.label} htmlFor="category">
+          Category:
+        </label>
+
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={event =>
+            setSelectedCategory(event.target.value)
+          }
+          className={styles.input}
+        >
+          <option value="">Select a category</option>
+
+          {categories.map(category => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+
+        {validationMessage && (
+          <p className={styles.errorMessage} role="alert">
+            {validationMessage}
+          </p>
+        )}
+
+        <button className={styles.submitBtn} type="submit">
+          Add Auto Part
+        </button>
+      </form>
+    </section>
+  );
+}

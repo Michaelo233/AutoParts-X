@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { carPartSearchService } from "../services/carPartSearchService";
-import type { AutoPart } from "../types/autoParts";
+import type { Part } from "../types/userParts";
 
 
 export function useCarPartSearch() {
-    const [results, setResults] = useState<AutoPart[]>([]);
+    const [results, setResults] = useState<Part[]>([]);
 
     const searchParts = async (query: string) => {
         const matchingParts = await carPartSearchService.searchParts(query);

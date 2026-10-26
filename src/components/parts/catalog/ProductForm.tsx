@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { AutoPart } from "../../../types/autoParts";
+import type { Part } from "../../../types/userParts";
 
 interface ProductFormProps {
-  parts: AutoPart[];
-  setParts: React.Dispatch<React.SetStateAction<AutoPart[]>>;
+  parts: Part[];
+  setParts: React.Dispatch<React.SetStateAction<Part[]>>;
 }
 
 function ProductForm({ parts, setParts }: ProductFormProps) {
@@ -13,17 +13,13 @@ function ProductForm({ parts, setParts }: ProductFormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const newPart: AutoPart = {
-      partId: Date.now(),
-      imageUrl: "",
+    const newPart: Part = {
+      partId: String(Date.now()),
       partName: partName,
-      price: Number(price),
-      description: "",
-      location: "",
-      contactNumber: "",
-      condition: "",
-      year: new Date().getFullYear(),
-      isActive: true,
+      partPrice: Number(price),
+      partDescription: "",
+      partImage: "",
+      isFavorite: false,
     };
 
     setParts([...parts, newPart]);

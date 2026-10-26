@@ -25,6 +25,13 @@ export function Nav() {
                 <NavLink to="/myParts">
                     My Parts
                 </NavLink>
+        
+                <NavLink
+                to="/add-auto-part"
+                className={styles.addPartButton}
+                >
+                + Add Auto Part
+                </NavLink>
             </div>
             <div className={styles.loginLink}>
                 <span>
