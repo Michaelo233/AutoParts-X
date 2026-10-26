@@ -34,12 +34,20 @@ function ProductForm({ parts, setParts }: ProductFormProps) {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="partName">Part Name</label>
-      <input
+      <select
         id="partName"
         value={partName}
         onChange={(event) => setPartName(event.target.value)}
         required
-      />
+      >
+        <option value="">Select a part</option>
+
+        {parts.map((part) => (
+          <option key={part.partId} value={part.partName}>
+            {part.partName}
+          </option>
+        ))}
+      </select>
 
       <label htmlFor="price">Price</label>
       <input
