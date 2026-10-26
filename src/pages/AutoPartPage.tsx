@@ -1,11 +1,44 @@
 import { useState } from 'react';
 import type { Auto, AutoPart } from '../types/autoParts';
-import AutoPartsData from '../data/autoPartsData';
+import AutoPartsData from '../data/carPartList.json';
 import AddAutoPartsForm from '../components/parts/catalog/AddAutoPartForm';
 import styles from './AutoPartPage.module.css';
 
 export default function AutoPartPage() {
-  const [catalog, setCatalog] = useState<Auto[]>(AutoPartsData);
+  const initialCatalog: Auto[] = (AutoPartsData as unknown[]).flatMap((owner) => {
+    const ownerRecord = owner as {
+      userName?: string;
+      partsOwned?: unknown[];
+    };
+
+    return ownerRecord.partsOwned?.length
+      ? [{
+          Category: ownerRecord.userName || 'General',
+          AutoPart: ownerRecord.partsOwned.map((rawPart) => {
+            const part = rawPart as {
+              partId?: number | string;
+              id?: number;
+              partName?: string;
+              Description?: string;
+              Price?: number;
+              partImage?: string;
+              isFavorite?: boolean;
+            };
+
+            return {
+              partId: Number(part.partId ?? part.id ?? Date.now()),
+              partName: part.partName || 'Unnamed part',
+              description: part.Description || '',
+              price: Number(part.Price) || 0,
+              imageUrl: part.partImage || 'jpg',
+              isFavourite: part.isFavorite || false,
+            };
+          }),
+        }]
+      : [];
+  });
+
+  const [catalog, setCatalog] = useState<Auto[]>(initialCatalog);
 
   const categoryList = catalog.map((group) => group.Category);
 

@@ -7,6 +7,7 @@ export interface Part {
   partImage: string;
   userId?: number;
   userName?: string;
+  isFavorite?: boolean;
 }
 
 export interface User {

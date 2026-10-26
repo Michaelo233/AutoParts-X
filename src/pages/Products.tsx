@@ -1,13 +1,10 @@
 import { useState } from "react";
-import AutoPartsData from "../data/autoPartsData";
 import type { AutoPart } from "../types/autoParts";
 import ProductCard from "../components/parts/catalog/ProductCard";
 import ProductForm from "../components/parts/catalog/ProductForm";
 
 function Product() {
-  const initialParts: AutoPart[] = AutoPartsData.flatMap(
-    (category) => category.AutoPart
-  );
+  const initialParts: AutoPart[] = [];
 
   const [parts, setParts] = useState<AutoPart[]>(initialParts);
 
