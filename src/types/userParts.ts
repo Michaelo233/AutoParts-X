@@ -7,6 +7,10 @@ export interface Part {
   partImage: string;
   userId?: number;
   userName?: string;
+  description?: string;
+  price?: number;
+  isFavorite?: boolean;
+  isForSale?: boolean;
 }
 
 export interface User {
@@ -15,9 +19,17 @@ export interface User {
   partsOwned: Part[];
 }
 
-// props interface here
-export interface AddPartFormProps {
+export interface AddPartForm {
   userId: number;
   userName: string;
-  onAddPart: (newPart: Part) => void;
+  onAddPart: (newPart: Part) => Promise<boolean>;
+  onUserChanged?: (userName: string) => void;
+  error?: string | null;
+}
+
+export interface SellToggle {
+  partId: string;
+  userName: string;
+  isForSale: boolean;
+  onToggleSale: (userName: string, partId: string, isForSale: boolean) => void;
 }
