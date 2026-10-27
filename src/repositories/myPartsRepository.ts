@@ -22,13 +22,7 @@ interface RawUser {
 
 const users: RawUser[] = userData;
 
-/**
- * My Parts Repository
- *
- * Reads data from carPartList.json.
- * Converts JSON fields to the Part and User interfaces.
- * Does not manage React state.
- */
+// Repository for managing user parts data.
 export const myPartsRepository = {
     getAllUsers: (): User[] => {
         return users.map(user => ({

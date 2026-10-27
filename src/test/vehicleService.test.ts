@@ -8,184 +8,324 @@ import {
     afterEach,
 } from "vitest";
 
-import type { VehicleModel } from "../types/vehice";
+import type { AerproVehicle } from "../types/AerproVehicle";
 
-// Mock the Repository to prevent real API requests.
-vi.mock("../repositories/vehicleRepository", () => ({
-    fetchVehicleModels: vi.fn(),
+// Mock Aerpro repository to prevent real API requests.
+vi.mock("../repositories/aerproRepository", () => ({
+    searchAerproVehicles: vi.fn(),
+    fetchCompatiblePartSkus: vi.fn(),
 }));
 
-let service: typeof import("../services/vehicleService");
-let repository: typeof import("../repositories/vehicleRepository");
+let service: typeof import("../services/aerproService");
+let repository: typeof import("../repositories/aerproRepository");
 
-// Sample vehicle models returned by the mocked API.
-const mockVehicles: VehicleModel[] = [
+// Sample vehicles returned by Aerpro.
+const mockVehicles: AerproVehicle[] = [
     {
-        id: 101,
-        name: "Civic",
-        make: "Honda",
+        id: "18501",
+        title: "Ford Ranger 2012-2015",
+        image: "",
+        url: "",
     },
     {
-        id: 102,
-        name: "Accord",
-        make: "Honda",
-    },
-    {
-        id: 103,
-        name: "CR-V",
-        make: "Honda",
+        id: "18502",
+        title: "Ford Ranger 2016-2018",
+        image: "",
+        url: "",
     },
 ];
 
-describe("Vehicle Service", () => {
-    beforeEach(async () => {
-        // Reset module-level cache between tests.
-        vi.resetModules();
-        vi.clearAllMocks();
+// Sample compatible automotive part SKUs.
+const mockParts = ["FP7500", "APP072", "CHFO3C"];
 
-        repository = await import("../repositories/vehicleRepository");
-        service = await import("../services/vehicleService");
+describe("Aerpro Service", () => {
+
+    beforeEach(async () => {
+        // Reset the service's module-level caches.
+        vi.resetModules();
+        vi.resetAllMocks();
+
+        repository = await import(
+            "../repositories/aerproRepository"
+        );
+
+        service = await import(
+            "../services/aerproService"
+        );
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
     });
 
-    // TEST 1 - Retrieve vehicle models
-    it("should return vehicle models for a valid make and year", async () => {
-        vi.mocked(repository.fetchVehicleModels)
+    // TEST 1 - Search vehicles
+    it("should return vehicles for a valid search", async () => {
+        vi.mocked(repository.searchAerproVehicles)
             .mockResolvedValue(mockVehicles);
 
-        const result = await service.getVehicleModels(
-            "Honda",
-            2016
+        const result = await service.searchVehicles(
+            "Ford Ranger"
         );
 
         expect(result).toEqual(mockVehicles);
 
-        expect(repository.fetchVehicleModels)
-            .toHaveBeenCalledWith("honda", 2016);
+        expect(repository.searchAerproVehicles)
+            .toHaveBeenCalledWith("ford ranger");
     });
 
-    // TEST 2 - Validate manufacturer
-    it("should reject an empty manufacturer", async () => {
+    // TEST 2 - Validate empty search
+    it("should reject an empty search term", async () => {
         await expect(
-            service.getVehicleModels("", 2016)
+            service.searchVehicles("")
         ).rejects.toThrow(
-            "Please select a vehicle manufacturer."
+            "Enter at least 3 characters."
         );
 
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .not.toHaveBeenCalled();
     });
 
-    // TEST 3 - Validate vehicle year
-    it("should reject an invalid vehicle year", async () => {
+    // TEST 3 - Validate short search
+    it("should reject a search shorter than 3 characters", async () => {
         await expect(
-            service.getVehicleModels("Honda", 1990)
+            service.searchVehicles("Fo")
         ).rejects.toThrow(
-            "Please enter a valid vehicle year."
+            "Enter at least 3 characters."
         );
 
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .not.toHaveBeenCalled();
     });
 
-    // TEST 4 - Verify caching
-    it("should use cached data for repeated requests", async () => {
-        vi.mocked(repository.fetchVehicleModels)
+    // TEST 4 - Normalize search input
+    it("should trim spaces and normalize search terms", async () => {
+        vi.mocked(repository.searchAerproVehicles)
             .mockResolvedValue(mockVehicles);
 
-        const firstResult = await service.getVehicleModels(
-            "Honda",
-            2016
+        await service.searchVehicles("  FORD   Ranger  ");
+
+        expect(repository.searchAerproVehicles)
+            .toHaveBeenCalledWith("ford ranger");
+    });
+
+    // TEST 5 - Vehicle caching
+    it("should cache repeated vehicle searches", async () => {
+        vi.mocked(repository.searchAerproVehicles)
+            .mockResolvedValue(mockVehicles);
+
+        const first = await service.searchVehicles(
+            "Ford Ranger"
         );
 
-        const secondResult = await service.getVehicleModels(
-            "Honda",
-            2016
+        const second = await service.searchVehicles(
+            "ford ranger"
         );
 
-        expect(firstResult).toEqual(secondResult);
+        expect(first).toEqual(second);
 
-        // Repository should only be called once.
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .toHaveBeenCalledTimes(1);
     });
 
-    // TEST 5 - Cache expiration
-    it("should fetch fresh data after the cache expires", async () => {
+    // TEST 6 - Cache expiration
+    it("should fetch new vehicles after cache expiration", async () => {
         const now = 1000;
 
         const clock = vi.spyOn(Date, "now")
             .mockReturnValue(now);
 
-        vi.mocked(repository.fetchVehicleModels)
+        vi.mocked(repository.searchAerproVehicles)
             .mockResolvedValue(mockVehicles);
 
-        await service.getVehicleModels("Honda", 2016);
+        await service.searchVehicles("Ford Ranger");
 
-        // Move ahead more than 10 minutes.
-        clock.mockReturnValue(now + 10 * 60 * 1000 + 1);
+        // Move forward more than 10 minutes.
+        clock.mockReturnValue(
+            now + 10 * 60 * 1000 + 1
+        );
 
-        await service.getVehicleModels("Honda", 2016);
+        await service.searchVehicles("Ford Ranger");
 
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .toHaveBeenCalledTimes(2);
     });
 
-    // TEST 6 - API failure
-    it("should handle repository failures without corrupting cache", async () => {
+    // TEST 7 - API failure and retry
+    it("should retry after a failed vehicle request", async () => {
         const mockFetch = vi.mocked(
-            repository.fetchVehicleModels
+            repository.searchAerproVehicles
         );
 
         mockFetch.mockRejectedValueOnce(
-            new Error("API unavailable")
+            new Error("Aerpro API unavailable")
         );
 
         await expect(
-            service.getVehicleModels("Honda", 2016)
-        ).rejects.toThrow("API unavailable");
+            service.searchVehicles("Ford Ranger")
+        ).rejects.toThrow("Aerpro API unavailable");
 
-        // Successful retry should still work.
         mockFetch.mockResolvedValueOnce(mockVehicles);
 
-        const result = await service.getVehicleModels(
-            "Honda",
-            2016
+        const result = await service.searchVehicles(
+            "Ford Ranger"
         );
 
         expect(result).toEqual(mockVehicles);
         expect(mockFetch).toHaveBeenCalledTimes(2);
     });
 
-    // TEST 7 - Different manufacturers
-    it("should cache different manufacturers separately", async () => {
-        vi.mocked(repository.fetchVehicleModels)
+    // TEST 8 - Separate search caches
+    it("should cache different vehicle searches separately", async () => {
+        vi.mocked(repository.searchAerproVehicles)
             .mockResolvedValue(mockVehicles);
 
-        await service.getVehicleModels("Honda", 2016);
-        await service.getVehicleModels("Toyota", 2016);
+        await service.searchVehicles("Ford Ranger");
+        await service.searchVehicles("Honda Civic");
 
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .toHaveBeenCalledTimes(2);
     });
 
-    // TEST 8 - Simultaneous requests
-    it("should reuse a request that is already running", async () => {
-        vi.mocked(repository.fetchVehicleModels)
+    // TEST 9 - Simultaneous vehicle requests
+    it("should reuse a vehicle request already running", async () => {
+        vi.mocked(repository.searchAerproVehicles)
             .mockResolvedValue(mockVehicles);
 
-        const first = service.getVehicleModels("Honda", 2016);
-        const second = service.getVehicleModels("Honda", 2016);
+        const first = service.searchVehicles("Ford Ranger");
+        const second = service.searchVehicles("Ford Ranger");
 
         const results = await Promise.all([first, second]);
 
         expect(results[0]).toEqual(mockVehicles);
         expect(results[1]).toEqual(mockVehicles);
 
-        expect(repository.fetchVehicleModels)
+        expect(repository.searchAerproVehicles)
             .toHaveBeenCalledTimes(1);
+    });
+
+    // TEST 10 - Compatible parts
+    it("should return compatible part SKUs", async () => {
+        vi.mocked(repository.fetchCompatiblePartSkus)
+            .mockResolvedValue(mockParts);
+
+        const result = await service.getCompatiblePartSkus(
+            "18501"
+        );
+
+        expect(result).toEqual(mockParts);
+
+        expect(repository.fetchCompatiblePartSkus)
+            .toHaveBeenCalledWith("18501");
+    });
+
+    // TEST 11 - Validate vehicle ID
+    it("should reject an empty vehicle ID", async () => {
+        await expect(
+            service.getCompatiblePartSkus("  ")
+        ).rejects.toThrow(
+            "Please select a vehicle."
+        );
+
+        expect(repository.fetchCompatiblePartSkus)
+            .not.toHaveBeenCalled();
+    });
+
+    // TEST 12 - Compatible parts caching
+    it("should cache compatible parts for the same vehicle", async () => {
+        vi.mocked(repository.fetchCompatiblePartSkus)
+            .mockResolvedValue(mockParts);
+
+        const first = await service.getCompatiblePartSkus(
+            "18501"
+        );
+
+        const second = await service.getCompatiblePartSkus(
+            "18501"
+        );
+
+        expect(first).toEqual(second);
+
+        expect(repository.fetchCompatiblePartSkus)
+            .toHaveBeenCalledTimes(1);
+    });
+
+    // TEST 13 - Cache different vehicles independently
+    it("should fetch parts separately for different vehicle IDs", async () => {
+        vi.mocked(repository.fetchCompatiblePartSkus)
+            .mockResolvedValue(mockParts);
+
+        await service.getCompatiblePartSkus("18501");
+        await service.getCompatiblePartSkus("18502");
+
+        expect(repository.fetchCompatiblePartSkus)
+            .toHaveBeenCalledTimes(2);
+    });
+
+    // TEST 14 - Compatible parts API failure
+    it("should allow retrying after a compatible parts request fails", async () => {
+        const mockFetch = vi.mocked(
+            repository.fetchCompatiblePartSkus
+        );
+
+        mockFetch.mockRejectedValueOnce(
+            new Error("Unable to retrieve compatible parts")
+        );
+
+        await expect(
+            service.getCompatiblePartSkus("18501")
+        ).rejects.toThrow(
+            "Unable to retrieve compatible parts"
+        );
+
+        mockFetch.mockResolvedValueOnce(mockParts);
+
+        const result = await service.getCompatiblePartSkus(
+            "18501"
+        );
+
+        expect(result).toEqual(mockParts);
+        expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
+    // TEST 15 - Simultaneous compatible parts requests
+    it("should reuse a pending compatible parts request", async () => {
+        vi.mocked(repository.fetchCompatiblePartSkus)
+            .mockResolvedValue(mockParts);
+
+        const first =
+            service.getCompatiblePartSkus("18501");
+
+        const second =
+            service.getCompatiblePartSkus("18501");
+
+        const results = await Promise.all([first, second]);
+
+        expect(results[0]).toEqual(mockParts);
+        expect(results[1]).toEqual(mockParts);
+
+        expect(repository.fetchCompatiblePartSkus)
+            .toHaveBeenCalledTimes(1);
+    });
+
+    // TEST 16 - Compatible parts cache expiration
+    it("should refresh compatible parts after 10 minutes", async () => {
+        const now = 1000;
+
+        const clock = vi.spyOn(Date, "now")
+            .mockReturnValue(now);
+
+        vi.mocked(repository.fetchCompatiblePartSkus)
+            .mockResolvedValue(mockParts);
+
+        await service.getCompatiblePartSkus("18501");
+
+        clock.mockReturnValue(
+            now + 10 * 60 * 1000 + 1
+        );
+
+        await service.getCompatiblePartSkus("18501");
+
+        expect(repository.fetchCompatiblePartSkus)
+            .toHaveBeenCalledTimes(2);
     });
 });
