@@ -1,27 +1,23 @@
 export interface Part {
-  id: string;
+  id?: number;
   partId: string;
   partName: string;
-  categoryId: string;
   partDescription: string;
   partPrice: number;
   partImage: string;
-  userId?: string;
+  userId?: number;
   userName?: string;
-  isFavorite?: boolean;
 }
 
 export interface User {
-  userId: string;
+  userId: number;
   userName: string;
   partsOwned: Part[];
 }
 
-export type NewPart = Omit<Part, "id">;
-
 // props interface here
 export interface AddPartFormProps {
-  userId: string;
+  userId: number;
   userName: string;
   onAddPart: (newPart: Part) => void;
 }

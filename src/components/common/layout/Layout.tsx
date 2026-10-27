@@ -8,9 +8,8 @@ function Layout() {
   return (
     <>
         <Nav />
-       <main>
-        <Outlet />   
-      </main>
+        {/* Outlet is used to render the child routes of the layout component */}
+        <Outlet /> 
       <Footer />
     </>
   );

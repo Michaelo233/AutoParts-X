@@ -64,9 +64,7 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
 
     // Construct full Part object with fixed hidden user credentials
     const newPart: Part = {
-      id: generatedPartId,
       partId: generatedPartId,
-      categoryId: partName,
       partName,
       partDescription: description.trim(),
       partPrice: Number(price),

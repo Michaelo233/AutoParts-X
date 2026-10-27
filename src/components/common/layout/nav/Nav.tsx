@@ -4,6 +4,13 @@ import styles from './Nav.module.css';
 export function Nav() {
     return(
         <nav className={styles.headerContainer}>
+            <div className={styles.brand}>
+                <img 
+                    src="/images/Logo.jpg"
+                    alt="" 
+                    className={styles.logoImg} 
+                />
+            </div>
             <h1 className={styles.headerText}>
                 Auto parts X
             </h1>
@@ -17,12 +24,6 @@ export function Nav() {
                 </NavLink>
                 <NavLink to="/myParts">
                     My Parts
-                </NavLink>
-                <NavLink to="/vehicle-models">
-                    Compatible Auto Parts
-                </NavLink>
-                <NavLink to="/add-auto-part">
-                Add Auto Part
                 </NavLink>
             </div>
             <div className={styles.loginLink}>
