@@ -7,9 +7,9 @@ import { MyParts } from './pages/MyParts'
 import { useUserParts } from './hooks/useUserParts'
 import { AddPartForm } from './components/parts/my-parts/AddPartForm'
 
-
 function App() {
-  const { currentUser, handleAddPart, handleRemovePart } = useUserParts()
+  const { currentUser, users, error, handleAddPart, handleRemovePart, handleToggleForSale } = useUserParts()
+
   return (
     <BrowserRouter>
       <Routes>
@@ -17,17 +17,18 @@ function App() {
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
 
-          {/* Product routes */}
           <Route path="sell-services" element={<Product />} />
           <Route path="products" element={<Product />} />
 
-          {/* My parts routes */}
           <Route
             path="myParts"
             element={
               <MyParts
                 user={currentUser}
+                users={users}
+                error={error}
                 onRemovePart={handleRemovePart}
+                onToggleSale={handleToggleForSale}
               />
             }
           />
@@ -38,6 +39,7 @@ function App() {
                 userId={currentUser.userId}
                 userName={currentUser.userName}
                 onAddPart={handleAddPart}
+                error={error}
               />
             }
           />
