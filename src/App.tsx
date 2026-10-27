@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import Product from "./pages/Products";
 import { MyParts } from "./pages/MyParts";
 import AddAutoPartPage from "./pages/AddAutoPartPages";
+import VehicleModels from "./pages/VehicleModels";
 
 // Components
 import { AddPartForm } from "./components/parts/my-parts/AddPartForm";
@@ -68,6 +69,10 @@ function App() {
               <Route
                 path="sell-services"
                 element={<Product />}
+              />
+              <Route
+                path="vehicle-models"
+                element={<VehicleModels />}
               />
 
               {/* Add Auto Part */}
