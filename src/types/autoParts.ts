@@ -24,3 +24,21 @@ export interface AutoPartSearchResult {
   partName: string;
   price: number;
 }
+
+
+export interface CarPart {
+  id: number;
+  partId: string;
+  partName: string;
+  description: string;
+  price: number;
+  partImage: string;
+  isFavorite: boolean;
+  isForSale: boolean;
+}
+
+export interface CarPartOwner {
+  userId: number;
+  userName: string;
+  partsOwned: CarPart[];
+}

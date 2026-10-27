@@ -1,24 +1,26 @@
-import type { AutoPart } from "../../../types/autoParts";
+
+import type { CarPart } from "../../../types/autoParts";
 import styles from "./ProductCard.module.css";
 
 interface ProductCardProps {
-  part: AutoPart;
-   onRemove: (partId: number) => void;
+  part: CarPart;
+  onRemove: (partId: number) => void;
 }
 
-function ProductCard({ part, onRemove  }: ProductCardProps) {
+function ProductCard({ part, onRemove }: ProductCardProps) {
   return (
     <div className={styles.productCard}>
-      {part.imageUrl.trim() && (
-        <img src={part.imageUrl} alt={part.partName} />
+      {part.partImage.trim() && (
+        <img src={part.partImage} alt={part.partName} />
       )}
 
       <h2>{part.partName}</h2>
       <p>${part.price}</p>
       <p>{part.description}</p>
-      <button onClick={() => onRemove(part.partId)}>
-  Remove
-</button>
+
+      <button onClick={() => onRemove(part.id)}>
+        Remove
+      </button>
     </div>
   );
 }

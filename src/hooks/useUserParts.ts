@@ -6,8 +6,8 @@ const initialUserFromJSON: User = {
   ...userData[0],
   partsOwned: userData[0].partsOwned.map((part) => ({
     ...part,
-    partDescription: part.Description,
-    partPrice: part.Price,
+    partDescription: part.description,
+    partPrice: part.price,
   })),
 };
 

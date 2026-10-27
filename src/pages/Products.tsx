@@ -1,19 +1,22 @@
+
 import { useState } from "react";
-import AutoPartsData from "../data/autoPartsData";
-import type { AutoPart } from "../types/autoParts";
+import { carPartList } from "../data/carPartList";
+import type { CarPart } from "../types/autoParts";
 import ProductCard from "../components/parts/catalog/ProductCard";
 import ProductForm from "../components/parts/catalog/ProductForm";
 
 function Product() {
-  const initialParts: AutoPart[] = AutoPartsData.flatMap(
-    (category) => category.AutoPart
+  const initialParts: CarPart[] = carPartList.flatMap(
+    (user) => user.partsOwned
   );
 
-  const [parts, setParts] = useState<AutoPart[]>(initialParts);
+  const [parts, setParts] = useState<CarPart[]>(initialParts);
 
   function handleRemove(partId: number) {
-    setParts(parts.filter((part) => part.partId !== partId));
+    setParts(parts.filter((part) => part.id !== partId));
   }
+
+  const partsForSale = parts.filter((part) => part.isForSale === true);
 
   return (
     <main>
@@ -21,13 +24,17 @@ function Product() {
 
       <ProductForm parts={parts} setParts={setParts} />
 
-      {parts.map((part) => (
-        <ProductCard
-          key={part.partId}
-          part={part}
-          onRemove={handleRemove}
-        />
-      ))}
+      {partsForSale.length === 0 ? (
+        <p>No parts available for sale</p>
+      ) : (
+        partsForSale.map((part) => (
+          <ProductCard
+            key={part.id}
+            part={part}
+            onRemove={handleRemove}
+          />
+        ))
+      )}
     </main>
   );
 }
