@@ -1,9 +1,9 @@
 import styles from './HeroSection.module.css';
 import Search from '../common/search/Search';
-import { useState } from 'react';
+import { useSearchForm } from '../../hooks/useSearchForm';
 
 function HeroSection() {
-    const [searchValue, setSearchValue] = useState('');
+    const { searchValue, handleSearchChange, handleSubmit } = useSearchForm();
 
     return (
         <section className={styles.heroSection}>
@@ -29,8 +29,8 @@ function HeroSection() {
                         <Search 
                         Title="Search"
                         searchValue={searchValue}
-                        handleSearchChange={setSearchValue}
-                        handleSubmit={() => undefined}
+                        handleSearchChange={handleSearchChange}
+                        handleSubmit={handleSubmit}
                         />
                     </div>
                 </div>
