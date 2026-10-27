@@ -3,11 +3,14 @@ import Search from '../common/search/Search';
 import { useState } from 'react';
 
 interface HeroSectionProps {
-  onSearch: (query: string) => void;
+  searchTerm: string;
+  onSearch: (value: string) => void;
 }
-
-function HeroSection({ onSearch }: HeroSectionProps) {
-    const [searchValue, setSearchValue] = useState('');
+function HeroSection({
+  searchTerm,
+  onSearch,
+}: HeroSectionProps) {
+    const [searchValue, setSearchValue] = useState(searchTerm);
 
     return (
         <section className={styles.heroSection}>
