@@ -1,4 +1,5 @@
 import HeroSection from '../components/home/HeroSection';
+import VehicleLookup from '../components/home/VehicleLookup';
 import AutoPartPage from './AutoPartPage';
 import style from './stylesPages/Home.module.css';
 
@@ -10,6 +11,7 @@ function Home() {
       <HeroSection />
       
       {/* Main content area for the dashboard, can include featured items, etc. */}
+      <VehicleLookup />
       <AutoPartPage />
     </section>
   );
