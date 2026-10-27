@@ -4,20 +4,8 @@ import { myPartsRepository } from "../repositories/myPartsRepository";
 import { generatePartId } from "../components/common/utils/generateID";
 import { MyPartsService } from "../services/myPartsService";
 
-/**
- * useUserParts Custom Hook
- *
- * Manages the currently selected user's auto parts.
- *
- * Responsibilities:
- * - Retrieve the user from the Repository
- * - Manage user data in React state
- * - Generate sequential IDs for new parts
- * - Add new parts
- * - Remove parts using their unique listing ID
- *
- * JSON data is accessed through the Repository,
- * not imported directly into this hook.
+/* 
+ * Custom hook for managing user's auto parts.
  */
 export function useUserParts() {
 
