@@ -18,9 +18,7 @@ export function Nav() {
                 <NavLink to="/myParts">
                     My Parts
                 </NavLink>
-                <NavLink to="/vehicle-models">
-                    Compatible Auto Parts
-                </NavLink>
+        
                 <NavLink to="/add-auto-part">
                 Add Auto Part
                 </NavLink>
