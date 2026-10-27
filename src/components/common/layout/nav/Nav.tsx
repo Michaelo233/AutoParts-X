@@ -19,7 +19,7 @@ export function Nav() {
                     My Parts
                 </NavLink>
                 <NavLink to="/vehicle-models">
-                    Vehicle Models
+                    Compatible Auto Parts
                 </NavLink>
                 <NavLink to="/add-auto-part">
                 Add Auto Part
