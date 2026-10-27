@@ -6,17 +6,19 @@ import ProductCard from "../components/parts/catalog/ProductCard";
 import ProductForm from "../components/parts/catalog/ProductForm";
 
 function Product() {
-  const initialParts: CarPart[] = carPartList.flatMap(
-    (user) => user.partsOwned
+  const [parts, setParts] = useState<CarPart[]>(() =>
+    carPartList.flatMap((user) => user.partsOwned)
   );
 
-  const [parts, setParts] = useState<CarPart[]>(initialParts);
-
   function handleRemove(partId: number) {
-    setParts(parts.filter((part) => part.id !== partId));
+    setParts((previousParts) =>
+      previousParts.filter((part) => part.id !== partId)
+    );
   }
 
-  const partsForSale = parts.filter((part) => part.isForSale === true);
+  const partsForSale = parts.filter(
+    (part) => part.isForSale === true
+  );
 
   return (
     <main>

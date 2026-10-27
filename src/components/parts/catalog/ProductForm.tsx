@@ -1,38 +1,79 @@
+
 import { useState } from "react";
-import type { AutoPart } from "../../../types/autoParts";
+import type { CarPart, CarPartOwner } from "../../../types/autoParts";
+import { carPartList } from "../../../data/carPartList";
 
 interface ProductFormProps {
-  parts: AutoPart[];
-  setParts: React.Dispatch<React.SetStateAction<AutoPart[]>>;
+  parts: CarPart[];
+  setParts: React.Dispatch<React.SetStateAction<CarPart[]>>;
 }
 
 function ProductForm({ parts, setParts }: ProductFormProps) {
+  const [userName, setUserName] = useState("");
   const [partName, setPartName] = useState("");
   const [price, setPrice] = useState("");
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const newPart: AutoPart = {
-      partId: Date.now(),
-      imageUrl: "",
-      partName: partName,
+    const enteredUserName = userName.trim();
+
+    if (!enteredUserName || !partName || Number(price) <= 0) {
+      return;
+    }
+
+    let user = carPartList.find(
+      (owner) =>
+        owner.userName.toLowerCase() === enteredUserName.toLowerCase()
+    );
+
+    if (!user) {
+      const newUser: CarPartOwner = {
+        userId: Math.max(0, ...carPartList.map((owner) => owner.userId)) + 1,
+        userName: enteredUserName,
+        partsOwned: [],
+      };
+
+      carPartList.push(newUser);
+      user = newUser;
+    }
+
+    const selectedPart = parts.find(
+      (part) => part.partName === partName
+    );
+
+    const newPart: CarPart = {
+      id: Math.max(0, ...parts.map((part) => part.id)) + 1,
+      partId: `${partName.substring(0, 2).toUpperCase()}_${Date.now()}`,
+      partName,
+      description: selectedPart?.description ?? "",
       price: Number(price),
-      description: "",
-      location: "",
-      contactNumber: "",
-      condition: "",
-      year: new Date().getFullYear(),
-      isActive: true,
+      partImage: selectedPart?.partImage ?? "",
+      isFavorite: false,
+      isForSale: true,
     };
 
-    setParts([...parts, newPart]);
+    user.partsOwned.push(newPart);
+    setParts((previousParts) => [...previousParts, newPart]);
+
+    setUserName("");
     setPartName("");
     setPrice("");
   }
 
+  const uniquePartNames = [...new Set(parts.map((part) => part.partName))];
+
   return (
     <form onSubmit={handleSubmit}>
+      <label htmlFor="userName">Username</label>
+      <input
+        id="userName"
+        type="text"
+        value={userName}
+        onChange={(event) => setUserName(event.target.value)}
+        required
+      />
+
       <label htmlFor="partName">Part Name</label>
       <select
         id="partName"
@@ -41,10 +82,9 @@ function ProductForm({ parts, setParts }: ProductFormProps) {
         required
       >
         <option value="">Select a part</option>
-
-        {parts.map((part) => (
-          <option key={part.partId} value={part.partName}>
-            {part.partName}
+        {uniquePartNames.map((name) => (
+          <option key={name} value={name}>
+            {name}
           </option>
         ))}
       </select>
@@ -53,6 +93,8 @@ function ProductForm({ parts, setParts }: ProductFormProps) {
       <input
         id="price"
         type="number"
+        min="0.01"
+        step="0.01"
         value={price}
         onChange={(event) => setPrice(event.target.value)}
         required
