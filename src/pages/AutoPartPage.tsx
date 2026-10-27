@@ -3,62 +3,56 @@ import { useMemo } from "react";
 import { useAutoPartCatalog } from "../context/AutoPartCatalogContext";
 import styles from "./AutoPartPage.module.css";
 
-/**
- * Props received from Home.tsx.
- *
- * searchTerm is submitted by the Search component
- * inside HeroSection.
- */
 interface AutoPartPageProps {
   searchTerm: string;
 }
 
 /**
- * AutoPartPage Component
+ * AutoPartPage
  *
- * Displays automotive parts using shared catalogue state.
+ * Displays automotive parts from the shared catalogue.
  *
  * Responsibilities:
  * - Receive searchTerm from Home.tsx
- * - Display matching auto parts
- * - Remove parts from the catalogue
- * - Add or remove favourites
- *
- * Catalogue state is managed by AutoPartCatalogContext.
- * This prevents components from maintaining separate
- * copies of the product data.
+ * - Filter parts by name, description, or seller
+ * - Display search results
+ * - Remove parts
+ * - Toggle favourites
  */
 export default function AutoPartPage({
   searchTerm,
 }: AutoPartPageProps) {
 
-  // Access shared catalogue state and actions.
   const {
     catalog,
     removePart,
     toggleFavourite,
   } = useAutoPartCatalog();
 
-  console.log("Catalogue:", catalog);
-  console.log("Search term:", searchTerm);
-  /**
-   * Filter parts when the catalogue or search term changes.
-   */
+  // Filter parts when searchTerm or catalogue changes.
   const filteredParts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
-    return catalog.flatMap((group) =>
+    return catalog.flatMap(group =>
       group.AutoPart
-        .filter((part) => {
+        .filter(part => {
+          const partName = part.partName?.toLowerCase() ?? "";
+          const description =
+            part.description?.toLowerCase() ?? "";
+          const sellerName = group.Category.toLowerCase();
+          const categoryId =
+            part.categoryId?.toLowerCase() ?? "";
+
           return (
-            part.partName.toLowerCase().includes(query) ||
-            part.description.toLowerCase().includes(query) ||
-            group.Category.toLowerCase().includes(query)
+            partName.includes(query) ||
+            description.includes(query) ||
+            sellerName.includes(query) ||
+            categoryId.includes(query)
           );
         })
-        .map((part) => ({
+        .map(part => ({
           ...part,
-          categoryName: group.Category,
+          sellerName: group.Category,
         }))
     );
   }, [catalog, searchTerm]);
@@ -66,7 +60,6 @@ export default function AutoPartPage({
   return (
     <main className={styles.pageContainer}>
 
-      {/* Page heading */}
       <header className={styles.headerSection}>
         <p className={styles.eyebrow}>
           AUTO PARTS
@@ -76,36 +69,33 @@ export default function AutoPartPage({
           Find the Right Part for Your Vehicle
         </h1>
 
-        {/* Display the search term and number of results */}
         {searchTerm.trim() && (
           <p>
             Search results for:{" "}
             <strong>{searchTerm}</strong>
             {" — "}
-            {filteredParts.length} part(s) found
+            {filteredParts.length}{" "}
+            {filteredParts.length === 1
+              ? "part found"
+              : "parts found"}
           </p>
         )}
       </header>
 
-      {/* Auto parts grid */}
-      <section className={styles.cardGrid}>
-
-        {filteredParts.length === 0 ? (
-          <p>
-            {searchTerm.trim()
-              ? "No matching auto parts found."
-              : "The inventory is empty."}
-          </p>
-        ) : (
-
-          filteredParts.map((part) => (
-
+      {filteredParts.length === 0 ? (
+        <p role="status">
+          {searchTerm.trim()
+            ? `No auto parts found for "${searchTerm}". Try another search.`
+            : "No auto parts are currently available."}
+        </p>
+      ) : (
+        <section className={styles.cardGrid}>
+          {filteredParts.map(part => (
             <article
               key={part.partId}
               className={styles.productCard}
             >
 
-              {/* Product image */}
               <div className={styles.imageWrapper}>
                 {part.imageUrl && (
                   <img
@@ -116,12 +106,10 @@ export default function AutoPartPage({
                 )}
               </div>
 
-              {/* Product information */}
               <div className={styles.cardContent}>
-
                 <div className={styles.categoryHeader}>
                   <span className={styles.categoryTag}>
-                    {part.categoryName}
+                    {part.sellerName}
                   </span>
 
                   <span className={styles.newBadge}>
@@ -137,16 +125,13 @@ export default function AutoPartPage({
                   {part.description}
                 </p>
 
-                {/* Product price and actions */}
                 <div className={styles.cardFooter}>
-
                   <span className={styles.price}>
                     ${part.price.toFixed(2)}
                   </span>
 
                   <div className={styles.buttonGroup}>
 
-                    {/* Favourite button */}
                     <button
                       type="button"
                       onClick={() =>
@@ -167,7 +152,6 @@ export default function AutoPartPage({
                       {part.isFavourite ? "★" : "☆"}
                     </button>
 
-                    {/* Delete button */}
                     <button
                       type="button"
                       onClick={() =>
@@ -184,9 +168,9 @@ export default function AutoPartPage({
                 </div>
               </div>
             </article>
-          ))
-        )}
-      </section>
+          ))}
+        </section>
+      )}
     </main>
   );
 }

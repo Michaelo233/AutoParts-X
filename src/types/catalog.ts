@@ -2,6 +2,7 @@
 export interface CatalogPart {
     partId: string;
     partName: string;
+    categoryId: string;
     description: string;
     price: number;
     imageUrl: string;

@@ -103,6 +103,7 @@ export default function AddAutoPartsForm({
 
     const newPart: NewCatalogPart = {
       partName: form.partName.trim(),
+      categoryId: selectedCategory,
       description: form.description.trim(),
       price,
       imageUrl: form.imageUrl,

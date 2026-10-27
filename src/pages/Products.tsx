@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Part } from "../types/userParts";
+import type { NewPart, Part } from "../types/userParts";
 import ProductCard from "../components/parts/catalog/ProductCard";
 import ProductForm from "../components/parts/catalog/ProductForm";
 
@@ -18,11 +18,18 @@ function Product() {
     );
   };
 
+  const handleAddPart = (part: NewPart) => {
+    setParts((currentParts) => [
+      ...currentParts,
+      { ...part, id: crypto.randomUUID() },
+    ]);
+  };
+
   return (
     <main>
       <h1>Auto Parts</h1>
 
-      <ProductForm parts={parts} setParts={setParts} />
+      <ProductForm onAddPart={handleAddPart} />
 
       {parts.map((part) => (
         <ProductCard

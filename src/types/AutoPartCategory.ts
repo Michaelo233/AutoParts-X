@@ -1,4 +1,4 @@
 export interface AutoPartCategory {
-    id: string;
+    CategoryId: string;
     categoryName: string;
 }

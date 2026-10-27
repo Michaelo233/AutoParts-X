@@ -14,7 +14,6 @@ import Layout from "./components/common/layout/Layout";
 import Home from "./pages/Home";
 import Product from "./pages/Products";
 import { MyParts } from "./pages/MyParts";
-import AddAutoPartPage from "./pages/AddAutoPartPages";
 
 // Components
 import { AddPartForm } from "./components/parts/my-parts/AddPartForm";
@@ -68,9 +67,15 @@ function App() {
 
             {/* Add Auto Part */}
             <Route
-              path="add-auto-part"
-              element={<AddAutoPartPage />}
-            />
+              path="myParts/addPart"
+              element={
+                <AddPartForm
+                  userId={currentUser.userId}
+                  userName={currentUser.userName}
+                  onAddPart={handleAddPart}
+                />
+  }
+/>
 
             {/* My Parts */}
             <Route

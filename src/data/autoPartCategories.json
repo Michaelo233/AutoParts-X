@@ -1,42 +1,42 @@
 [
   {
-    "id": "CT001",
+    "CategoryId": "CT001",
     "categoryName": "Engine & Components"
   },
   {
-    "id": "CT002",
+    "CategoryId": "CT002",
     "categoryName": "Transmission & Drivetrain"
   },
   {
-    "id": "CT003",
+    "CategoryId": "CT003",
     "categoryName": "Brakes"
   },
   {
-    "id": "CT004",
+    "CategoryId": "CT004",
     "categoryName": "Suspension & Steering"
   },
   {
-    "id": "CT005",
+    "CategoryId": "CT005",
     "categoryName": "Electrical & Lighting"
   },
   {
-    "id": "CT006",
+    "CategoryId": "CT006",
     "categoryName": "Body & Exterior"
   },
   {
-    "id": "CT007",
+    "CategoryId": "CT007",
     "categoryName": "Cooling & Heating"
   },
   {
-    "id": "CT008",
+    "CategoryId": "CT008",
     "categoryName": "Exhaust & Emissions"
   },
   {
-    "id": "CT009",
+    "CategoryId": "CT009",
     "categoryName": "Tires & Wheels"
   },
   {
-    "id": "CT010",
+    "CategoryId": "CT010",
     "categoryName": "Interior & Accessories"
   }
 ]

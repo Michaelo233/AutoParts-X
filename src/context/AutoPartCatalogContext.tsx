@@ -16,7 +16,8 @@ import type {
 
 interface RawPart {
   partId?: string | number;
-  id?: number;
+  id?: string | number;
+  categoryId?: string;
   partName?: string;
   Description?: string;
   partDescription?: string;
@@ -27,7 +28,7 @@ interface RawPart {
 }
 
 interface RawOwner {
-  userId: number;
+  userId: string;
   userName: string;
   partsOwned: RawPart[];
 }
@@ -40,38 +41,63 @@ interface CatalogContextValue {
   toggleFavourite: (partId: string) => void;
 }
 
-const CatalogContext = createContext<CatalogContextValue | null>(null);
+const CatalogContext =
+  createContext<CatalogContextValue | null>(null);
 
+/**
+ * Convert JSON records to catalogue data.
+ */
 function loadInitialCatalog(): CatalogGroup[] {
-  const owners = carPartList as RawOwner[];
+  const owners: RawOwner[] = carPartList;
 
-  return owners.map((owner) => ({
+  return owners.map(owner => ({
     Category: owner.userName,
 
-    AutoPart: owner.partsOwned.map((part, index): CatalogPart => ({
-      partId: `${owner.userId}-${part.partId ?? part.id ?? index}`,
-
-      partName: part.partName ?? "Unnamed part",
-
-      description:
-        part.partDescription ?? part.Description ?? "",
-
-      price: Number(
-        part.partPrice ?? part.Price ?? 0
-      ),
-
-      imageUrl: part.partImage ?? "",
-
-      isFavourite: part.isFavorite ?? false,
-    })),
+    AutoPart: owner.partsOwned.map(
+      (part, index): CatalogPart => ({
+        partId: String(
+          part.partId ?? part.id ?? `${owner.userId}-${index}`
+        ),
+        categoryId: part.categoryId ?? "",
+        partName: part.partName ?? "",
+        description:
+          part.partDescription ?? part.Description ?? "",
+        price: part.partPrice ?? part.Price ?? 0,
+        imageUrl: part.partImage ?? "",
+        isFavourite: part.isFavorite ?? false,
+      })
+    ),
   }));
 }
 
 /**
- * Provides shared catalogue state to all pages.
+ * Generate a new catalogue part ID.
+ * Example: PART001, PART002 -> PART003
+ */
+function generateNextCatalogId(
+  catalog: CatalogGroup[]
+): string {
+  const maxId = catalog
+    .flatMap(group => group.AutoPart)
+    .reduce((max, part) => {
+      const match = /^PART(\d+)$/.exec(part.partId);
+
+      return match
+        ? Math.max(max, Number(match[1]))
+        : max;
+    }, 0);
+
+  return `PART${String(maxId + 1).padStart(3, "0")}`;
+}
+
+/**
+ * AutoPartCatalogProvider
  *
- * Keeps add, delete and favourite actions centralized,
- * so components do not maintain separate copies of data.
+ * Manages shared catalogue state:
+ * - Load initial parts from JSON
+ * - Add new parts
+ * - Remove parts
+ * - Toggle favourites
  */
 export function AutoPartCatalogProvider({
   children,
@@ -88,18 +114,16 @@ export function AutoPartCatalogProvider({
     newPart: NewCatalogPart,
     category: string
   ) => {
-    const completedPart: CatalogPart = {
-      ...newPart,
-      partId: crypto.randomUUID(),
-    };
-
     const selectedCategory = category.trim();
 
-    if (!selectedCategory) {
-      return;
-    }
+    if (!selectedCategory) return;
 
     setCatalog(prev => {
+      const completedPart: CatalogPart = {
+        ...newPart,
+        partId: generateNextCatalogId(prev),
+      };
+
       const exists = prev.some(
         group =>
           group.Category.toLowerCase() ===
@@ -112,7 +136,10 @@ export function AutoPartCatalogProvider({
           selectedCategory.toLowerCase()
             ? {
                 ...group,
-                AutoPart: [completedPart, ...group.AutoPart],
+                AutoPart: [
+                  completedPart,
+                  ...group.AutoPart,
+                ],
               }
             : group
         );
@@ -145,7 +172,10 @@ export function AutoPartCatalogProvider({
         ...group,
         AutoPart: group.AutoPart.map(part =>
           part.partId === partId
-            ? { ...part, isFavourite: !part.isFavourite }
+            ? {
+                ...part,
+                isFavourite: !part.isFavourite,
+              }
             : part
         ),
       }))
