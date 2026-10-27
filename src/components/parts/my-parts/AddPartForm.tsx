@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { Part, AddPartFormProps } from "../../../types/userParts";
+import type { Part, AddPartForm as AddPartFormProps } from "../../../types/userParts";
 import { PART_PRESETS } from "../../../data/partPresets";
 import "./AddPartForm.css";
 import { PartsNav } from "./PartsNav";
@@ -10,11 +10,13 @@ interface FormErrors {
   partPrice?: string;
 }
 
-export const AddPartForm: React.FC<AddPartFormProps> = ({
+export const AddMyPartForm: React.FC<AddPartFormProps> = ({
   userId,
   userName,
   onAddPart,
+  error,
 }) => {
+  const [targetUserName, setTargetUserName] = useState(userName);
   const [partName, setPartName] = useState("");
   const [price, setPrice] = useState<number | "">("");
   const [description, setDescription] = useState("");
@@ -51,18 +53,14 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    // Determine part image path based on selected part
     const imagePath = PART_PRESETS[partName]?.image || "/data/images/default.jpg";
-
-    // Generate a unique Part ID prefix
     const generatedPartId = `${partName.substring(0, 2).toUpperCase()}_${Date.now().toString().slice(-3)}`;
 
-    // Construct full Part object with fixed hidden user credentials
     const newPart: Part = {
       partId: generatedPartId,
       partName,
@@ -70,12 +68,15 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
       partPrice: Number(price),
       partImage: imagePath,
       userId,
-      userName,
+      userName: targetUserName.trim() || userName,
+      isForSale: false,
+      isFavorite: false,
     };
 
-    onAddPart(newPart);
+    const added = await onAddPart(newPart);
+    if (!added) return;
 
-    // Reset Form
+    setTargetUserName(targetUserName.trim() || userName);
     setPartName("");
     setPrice("");
     setDescription("");
@@ -89,7 +90,17 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
       <PartsNav/>
       <h2>Add New Car Part</h2>
       <form onSubmit={handleSubmit}>
-        {/* Part Selection */}
+        <div className="fieldGroup">
+          <label htmlFor="ownerName">Owner Name:</label>
+          <input
+            id="ownerName"
+            type="text"
+            value={targetUserName}
+            onChange={(e) => setTargetUserName(e.target.value)}
+            placeholder="Enter user name"
+          />
+        </div>
+
         <div className="fieldGroup">
           <label htmlFor="partName">Part Name:</label>
           <select
@@ -109,7 +120,6 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
           )}
         </div>
 
-        {/* Price Input (Defaults automatically on part selection)*/}
         <div className="fieldGroup">
           <label htmlFor="partPrice">Price ($):</label>
           <input
@@ -127,7 +137,6 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
           )}
         </div>
 
-        {/* Description Textarea (Minimum 30 characters)*/}
         <div className="fieldGroup">
           <label htmlFor="partDescription">Description (min. 30 characters):</label>
           <textarea
@@ -147,7 +156,10 @@ export const AddPartForm: React.FC<AddPartFormProps> = ({
         <button type="submit" className="submitBtn">
           Add Part
         </button>
+        {error && <p className="errorText">{error}</p>}
       </form>
     </section>
   );
 };
+
+export const AddPartForm = AddMyPartForm;
