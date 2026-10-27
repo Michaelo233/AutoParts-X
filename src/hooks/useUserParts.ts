@@ -1,25 +1,53 @@
-import { useState } from 'react';
-import type { User, Part } from '../types/userParts';
-import userData from '../data/carPartList.json';
+import { useState } from "react";
+import type { User, Part } from "../types/userParts";
+import { myPartsRepository } from "../repositories/myPartsRepository";
+import { generatePartId } from "../components/common/utils/generateID";
+import { MyPartsService } from "../services/myPartsService";
 
-const initialUserFromJSON: User = userData[0] as User;
-
+/* 
+ * Custom hook for managing user's auto parts.
+ */
 export function useUserParts() {
-  const [currentUser, setCurrentUser] = useState<User>(initialUserFromJSON);
 
-  const handleAddPart = (newPart: Part) => {
-    setCurrentUser((prevUser) => ({
-      ...prevUser,
-      partsOwned: [newPart, ...prevUser.partsOwned],
-    }));
+  // Load user U001 from the JSON Repository.
+  const [currentUser, setCurrentUser] = useState<User>(() =>
+    MyPartsService.getUser("U001") ?? {
+      userId: "U001",
+      userName: "Unknown",
+      partsOwned: [],
+    }
+  );
+
+  // Add a new part with a generated P001-style ID.
+  const handleAddPart = (newPart: Omit<Part, "id">) => {
+    setCurrentUser((prevUser) => {
+
+      const nextId = generatePartId([
+        ...myPartsRepository.getAllParts(),
+        ...prevUser.partsOwned,
+      ]);
+
+      const completedPart: Part = {
+        ...newPart,
+        id: nextId,
+      };
+
+      return {
+        ...prevUser,
+        partsOwned: [
+          completedPart,
+          ...prevUser.partsOwned,
+        ],
+      };
+    });
   };
 
-  // Remove any part (JSON or newly added) by ID
-  const handleRemovePart = (partIdToRemove: string) => {
+  // Remove a part using its unique listing ID.
+  const handleRemovePart = (idToRemove: string) => {
     setCurrentUser((prevUser) => ({
       ...prevUser,
       partsOwned: prevUser.partsOwned.filter(
-        (part) => part.partId !== partIdToRemove
+        (part) => part.id !== idToRemove
       ),
     }));
   };
