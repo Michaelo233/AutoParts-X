@@ -8,15 +8,23 @@ import {
 
 import carPartList from "../data/carPartList.json";
 
+import { generateAutoPartId } from
+  "../components/common/utils/generateID";
+
 import type {
   CatalogGroup,
   CatalogPart,
   NewCatalogPart,
 } from "../types/catalog";
 
+/**
+ * RawPart
+ *
+ * Represents an auto part from carPartList.json.
+ */
 interface RawPart {
-  partId?: string | number;
   id?: string | number;
+  partId?: string | number;
   categoryId?: string;
   partName?: string;
   Description?: string;
@@ -27,76 +35,118 @@ interface RawPart {
   isFavorite?: boolean;
 }
 
+/**
+ * RawOwner
+ *
+ * Represents a user and their parts.
+ */
 interface RawOwner {
   userId: string;
   userName: string;
   partsOwned: RawPart[];
 }
 
+/**
+ * CatalogContextValue
+ *
+ * Defines the shared catalogue data and actions.
+ */
 interface CatalogContextValue {
   catalog: CatalogGroup[];
   categories: string[];
-  addPart: (part: NewCatalogPart, category: string) => void;
+
+  addPart: (
+    part: NewCatalogPart,
+    category: string
+  ) => void;
+
   removePart: (partId: string) => void;
+
   toggleFavourite: (partId: string) => void;
 }
 
+/**
+ * Create the catalogue Context.
+ */
 const CatalogContext =
   createContext<CatalogContextValue | null>(null);
 
 /**
- * Convert JSON records to catalogue data.
+ * loadInitialCatalog
+ *
+ * Loads auto parts from JSON.
+ * Converts JSON properties into CatalogPart objects.
+ *
+ * The Category field currently stores the seller name
+ * to preserve existing search functionality.
  */
 function loadInitialCatalog(): CatalogGroup[] {
   const owners: RawOwner[] = carPartList;
+
+  const usedIds = new Set<string>();
 
   return owners.map(owner => ({
     Category: owner.userName,
 
     AutoPart: owner.partsOwned.map(
-      (part, index): CatalogPart => ({
-        partId: String(
-          part.partId ?? part.id ?? `${owner.userId}-${index}`
-        ),
-        categoryId: part.categoryId ?? "",
-        partName: part.partName ?? "",
-        description:
-          part.partDescription ?? part.Description ?? "",
-        price: part.partPrice ?? part.Price ?? 0,
-        imageUrl: part.partImage ?? "",
-        isFavourite: part.isFavorite ?? false,
-      })
+      (part, index): CatalogPart => {
+
+        // Get the original part ID.
+        const originalId = String(
+          part.partId ??
+          part.id ??
+          `${owner.userId}-${index}`
+        );
+
+        let uniqueId = originalId;
+        let duplicateNumber = 1;
+
+        // Prevent duplicate IDs.
+        while (usedIds.has(uniqueId)) {
+          uniqueId =
+            `${owner.userId}-${originalId}-${duplicateNumber}`;
+
+          duplicateNumber++;
+        }
+
+        usedIds.add(uniqueId);
+
+        // Convert JSON fields to CatalogPart.
+        return {
+          partId: uniqueId,
+
+          categoryId: part.categoryId ?? "",
+
+          partName: part.partName ?? "",
+
+          description:
+            part.partDescription ??
+            part.Description ??
+            "",
+
+          price:
+            part.partPrice ??
+            part.Price ??
+            0,
+
+          imageUrl: part.partImage ?? "",
+
+          isFavourite: part.isFavorite ?? false,
+        };
+      }
     ),
   }));
 }
 
 /**
- * Generate a new catalogue part ID.
- * Example: PART001, PART002 -> PART003
- */
-function generateNextCatalogId(
-  catalog: CatalogGroup[]
-): string {
-  const maxId = catalog
-    .flatMap(group => group.AutoPart)
-    .reduce((max, part) => {
-      const match = /^PART(\d+)$/.exec(part.partId);
-
-      return match
-        ? Math.max(max, Number(match[1]))
-        : max;
-    }, 0);
-
-  return `PART${String(maxId + 1).padStart(3, "0")}`;
-}
-
-/**
  * AutoPartCatalogProvider
  *
- * Manages shared catalogue state:
- * - Load initial parts from JSON
- * - Add new parts
- * - Remove parts
+ * Manages shared React catalogue state.
+ *
+ * Responsibilities:
+ * - Load catalogue data
+ * - Add auto parts
+ * - Remove auto parts
  * - Toggle favourites
  */
 export function AutoPartCatalogProvider({
@@ -104,35 +154,68 @@ export function AutoPartCatalogProvider({
 }: {
   children: ReactNode;
 }) {
-  const [catalog, setCatalog] = useState<CatalogGroup[]>(
-    loadInitialCatalog
+
+  // Initialize catalogue state.
+  const [catalog, setCatalog] =
+    useState<CatalogGroup[]>(loadInitialCatalog);
+
+  /**
+   * Get group names.
+   *
+   * Currently, these groups are sellers,
+   * such as Sarah and Michael.
+   */
+  const categories = Array.from(
+    new Set(
+      catalog.map(group => group.Category)
+    )
   );
 
-  const categories = catalog.map(group => group.Category);
-
+  /**
+   * Add a new auto part.
+   *
+   * Generates PART001-style IDs using
+   * generateAutoPartId from generateID.ts.
+   */
   const addPart = (
     newPart: NewCatalogPart,
     category: string
-  ) => {
+  ): void => {
+
     const selectedCategory = category.trim();
 
-    if (!selectedCategory) return;
+    if (!selectedCategory) {
+      return;
+    }
 
     setCatalog(prev => {
+
+      // Retrieve every existing catalogue part.
+      const allParts: CatalogPart[] = prev.flatMap(
+        group => group.AutoPart
+      );
+
+      // Generate the next auto part ID.
+      const nextPartId = generateAutoPartId(allParts);
+
+      // Create the complete part.
       const completedPart: CatalogPart = {
         ...newPart,
-        partId: generateNextCatalogId(prev),
+        partId: nextPartId,
       };
 
-      const exists = prev.some(
+      // Check whether the group already exists.
+      const groupExists = prev.some(
         group =>
-          group.Category.toLowerCase() ===
+          group.Category.trim().toLowerCase() ===
           selectedCategory.toLowerCase()
       );
 
-      if (exists) {
+      if (groupExists) {
+
+        // Add part to an existing group.
         return prev.map(group =>
-          group.Category.toLowerCase() ===
+          group.Category.trim().toLowerCase() ===
           selectedCategory.toLowerCase()
             ? {
                 ...group,
@@ -145,6 +228,7 @@ export function AutoPartCatalogProvider({
         );
       }
 
+      // Create a new group.
       return [
         ...prev,
         {
@@ -155,10 +239,15 @@ export function AutoPartCatalogProvider({
     });
   };
 
-  const removePart = (partId: string) => {
+  /**
+   * Remove an auto part by its partId.
+   */
+  const removePart = (partId: string): void => {
+
     setCatalog(prev =>
       prev.map(group => ({
         ...group,
+
         AutoPart: group.AutoPart.filter(
           part => part.partId !== partId
         ),
@@ -166,10 +255,17 @@ export function AutoPartCatalogProvider({
     );
   };
 
-  const toggleFavourite = (partId: string) => {
+  /**
+   * Toggle favourite status for an auto part.
+   */
+  const toggleFavourite = (
+    partId: string
+  ): void => {
+
     setCatalog(prev =>
       prev.map(group => ({
         ...group,
+
         AutoPart: group.AutoPart.map(part =>
           part.partId === partId
             ? {
@@ -197,7 +293,13 @@ export function AutoPartCatalogProvider({
   );
 }
 
+/**
+ * useAutoPartCatalog
+ *
+ * Custom Hook for accessing shared catalogue data.
+ */
 export function useAutoPartCatalog() {
+
   const context = useContext(CatalogContext);
 
   if (!context) {

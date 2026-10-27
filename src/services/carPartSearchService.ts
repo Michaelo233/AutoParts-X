@@ -1,5 +1,4 @@
 import { carPartSearchRepository } from "../repositories/carPartSearchRepository";
-import type { Part } from "../types/userParts";
 
 /**
  * Car Part Search Service

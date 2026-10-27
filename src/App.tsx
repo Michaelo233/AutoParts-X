@@ -14,6 +14,7 @@ import Layout from "./components/common/layout/Layout";
 import Home from "./pages/Home";
 import Product from "./pages/Products";
 import { MyParts } from "./pages/MyParts";
+import AddAutoPartPage from "./pages/AddAutoPartPages";
 
 // Components
 import { AddPartForm } from "./components/parts/my-parts/AddPartForm";
@@ -25,6 +26,10 @@ import { useUserParts } from "./hooks/useUserParts";
 import {
   AutoPartCatalogProvider,
 } from "./context/AutoPartCatalogContext";
+
+//Storage 
+import { StorageProvider } from "./context/StorageContext";
+import StorageConsent from "./components/common/StorageConsent";
 
 /**
  * App Component
@@ -46,63 +51,63 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AutoPartCatalogProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
+      <StorageProvider>
+        <AutoPartCatalogProvider>
 
-            {/* Home */}
-            <Route index element={<Home />} />
-            <Route path="home" element={<Home />} />
+          {/* Local Storage Consent */}
+          <StorageConsent />
 
-            {/* Products / Services */}
-            <Route
-              path="sell-services"
-              element={<Product />}
-            />
+          <Routes>
+            <Route path="/" element={<Layout />}>
 
-            <Route
-              path="products"
-              element={<Product />}
-            />
+              {/* Home */}
+              <Route index element={<Home />} />
+              <Route path="home" element={<Home />} />
 
-            {/* Add Auto Part */}
-            <Route
-              path="myParts/addPart"
-              element={
-                <AddPartForm
-                  userId={currentUser.userId}
-                  userName={currentUser.userName}
-                  onAddPart={handleAddPart}
-                />
-  }
-/>
+              {/* Products / Services */}
+              <Route
+                path="sell-services"
+                element={<Product />}
+              />
 
-            {/* My Parts */}
-            <Route
-              path="myParts"
-              element={
-                <MyParts
-                  user={currentUser}
-                  onRemovePart={handleRemovePart}
-                />
-              }
-            />
+              {/* Add Auto Part */}
+              <Route
+                path="add-auto-part"
+                element={
+                  <AddAutoPartPage
+                    sellerName={currentUser.userName}
+                  />
+                }
+              />
 
-            {/* Add to My Parts */}
-            <Route
-              path="myParts/addPart"
-              element={
-                <AddPartForm
-                  userId={currentUser.userId}
-                  userName={currentUser.userName}
-                  onAddPart={handleAddPart}
-                />
-              }
-            />
+              {/* My Parts */}
+              <Route
+                path="myParts"
+                element={
+                  <MyParts
+                    user={currentUser}
+                    onRemovePart={handleRemovePart}
+                  />
+                }
+              />
 
-          </Route>
-        </Routes>
-      </AutoPartCatalogProvider>
+              {/* Add to My Parts */}
+              <Route
+                path="myParts/addPart"
+                element={
+                  <AddPartForm
+                    userId={currentUser.userId}
+                    userName={currentUser.userName}
+                    onAddPart={handleAddPart}
+                  />
+                }
+              />
+
+            </Route>
+          </Routes>
+
+        </AutoPartCatalogProvider>
+      </StorageProvider>
     </BrowserRouter>
   );
 }

@@ -44,7 +44,9 @@ export function generatePartId(parts: Part[]): string {
  *
  * Uses the Part.partId property.
  */
-export function generateAutoPartId(parts: Part[]): string {
+export function generateAutoPartId(
+  parts: ReadonlyArray<{ partId: string }>
+): string {
   const maxId = parts.reduce((max, part) => {
     const match = /^PART(\d+)$/.exec(part.partId);
 
@@ -55,6 +57,7 @@ export function generateAutoPartId(parts: Part[]): string {
 
   return `PART${String(maxId + 1).padStart(3, "0")}`;
 }
+
 
 /**
  * Generates a new user ID.

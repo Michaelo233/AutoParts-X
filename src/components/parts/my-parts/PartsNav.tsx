@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './PartsNav.module.css'
+
+
 export const PartsNav: React.FC = () => {
   const navigate = useNavigate();
 

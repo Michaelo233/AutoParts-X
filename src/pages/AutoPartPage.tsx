@@ -3,6 +3,10 @@ import { useMemo } from "react";
 import { useAutoPartCatalog } from "../context/AutoPartCatalogContext";
 import styles from "./AutoPartPage.module.css";
 
+/**
+ * AutoPartPage Props
+ * Receives the search term from Home.tsx.
+ */
 interface AutoPartPageProps {
   searchTerm: string;
 }
@@ -10,56 +14,55 @@ interface AutoPartPageProps {
 /**
  * AutoPartPage
  *
- * Displays automotive parts from the shared catalogue.
- *
- * Responsibilities:
- * - Receive searchTerm from Home.tsx
- * - Filter parts by name, description, or seller
- * - Display search results
- * - Remove parts
- * - Toggle favourites
+ * Displays and filters available auto parts.
  */
 export default function AutoPartPage({
   searchTerm,
 }: AutoPartPageProps) {
-
   const {
     catalog,
     removePart,
     toggleFavourite,
   } = useAutoPartCatalog();
 
-  // Filter parts when searchTerm or catalogue changes.
+  // Filter catalogue parts.
   const filteredParts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
-    return catalog.flatMap(group =>
-      group.AutoPart
+    const sellerExists = catalog.some(
+      group =>
+        group.Category.trim().toLowerCase() === query
+    );
+
+    return catalog.flatMap(group => {
+      const sellerName = group.Category.trim();
+
+      return group.AutoPart
         .filter(part => {
-          const partName = part.partName?.toLowerCase() ?? "";
-          const description =
-            part.description?.toLowerCase() ?? "";
-          const sellerName = group.Category.toLowerCase();
-          const categoryId =
-            part.categoryId?.toLowerCase() ?? "";
+          if (!query) return true;
+
+          // Search by exact seller name first.
+          if (sellerExists) {
+            return sellerName.toLowerCase() === query;
+          }
 
           return (
-            partName.includes(query) ||
-            description.includes(query) ||
-            sellerName.includes(query) ||
-            categoryId.includes(query)
+            part.partName.toLowerCase().includes(query) ||
+            part.description.toLowerCase().includes(query) ||
+            part.categoryId.toLowerCase().includes(query) ||
+            sellerName.toLowerCase().includes(query)
           );
         })
         .map(part => ({
           ...part,
-          sellerName: group.Category,
-        }))
-    );
+          sellerName,
+        }));
+    });
   }, [catalog, searchTerm]);
 
+  // IMPORTANT: React component must return JSX.
   return (
     <main className={styles.pageContainer}>
-
       <header className={styles.headerSection}>
         <p className={styles.eyebrow}>
           AUTO PARTS
@@ -70,7 +73,7 @@ export default function AutoPartPage({
         </h1>
 
         {searchTerm.trim() && (
-          <p>
+          <p role="status">
             Search results for:{" "}
             <strong>{searchTerm}</strong>
             {" — "}
@@ -95,7 +98,7 @@ export default function AutoPartPage({
               key={part.partId}
               className={styles.productCard}
             >
-
+              {/* Product image */}
               <div className={styles.imageWrapper}>
                 {part.imageUrl && (
                   <img
@@ -106,6 +109,7 @@ export default function AutoPartPage({
                 )}
               </div>
 
+              {/* Product details */}
               <div className={styles.cardContent}>
                 <div className={styles.categoryHeader}>
                   <span className={styles.categoryTag}>
@@ -131,16 +135,11 @@ export default function AutoPartPage({
                   </span>
 
                   <div className={styles.buttonGroup}>
-
+                    {/* Favourite button */}
                     <button
                       type="button"
                       onClick={() =>
                         toggleFavourite(part.partId)
-                      }
-                      title={
-                        part.isFavourite
-                          ? "Remove from favourites"
-                          : "Add to favourites"
                       }
                       aria-label={
                         part.isFavourite
@@ -152,18 +151,17 @@ export default function AutoPartPage({
                       {part.isFavourite ? "★" : "☆"}
                     </button>
 
+                    {/* Delete button */}
                     <button
                       type="button"
+                      className={styles.deleteBtn}
                       onClick={() =>
                         removePart(part.partId)
                       }
-                      className={styles.deleteBtn}
-                      title="Delete Auto Part"
                       aria-label={`Delete ${part.partName}`}
                     >
                       🗑️
                     </button>
-
                   </div>
                 </div>
               </div>

@@ -1,26 +1,25 @@
-import { useNavigate } from "react-router-dom";
+
 import AddAutoPartsForm from "../components/parts/catalog/AddAutoPartForm";
 import { useAutoPartCatalog } from "../context/AutoPartCatalogContext";
+import categoryData from "../data/autoPartCategories.json";
 import type { NewCatalogPart } from "../types/catalog";
 
-/**
- * AddAutoPartPage
- *
- * Displays the form for adding a new auto part.
- * Uses the shared catalogue context to save the new part.
- * Navigates to Home after successful submission.
- */
-export default function AddAutoPartPage() {
-  const navigate = useNavigate();
+interface AddAutoPartPageProps {
+  sellerName: string;
+}
 
-  const { categories, addPart } = useAutoPartCatalog();
+export default function AddAutoPartPage({
+  sellerName,
+}: AddAutoPartPageProps) {
+  const { addPart } = useAutoPartCatalog();
 
-  const handleAddAutoPart = (
-    part: NewCatalogPart,
-    category: string
-  ) => {
-    addPart(part, category);
-    navigate("/home");
+  const categories = categoryData.map(category => ({
+    id: category.CategoryId,
+    categoryName: category.categoryName,
+  }));
+
+  const handleAddAutoPart = (part: NewCatalogPart): void => {
+    addPart(part, sellerName);
   };
 
   return (
