@@ -1,4 +1,11 @@
-
+/**
+ * Sprint 3 Architecture:
+ * This component displays product information received through props.
+ * Products.tsx uses the useProducts hook to retrieve product data
+ * through productService and productRepository.
+ * The Remove button calls the callback provided by Products.tsx,
+ * keeping business logic and data access outside this component.
+ */
 import { useNavigate } from "react-router-dom";
 import type { Part } from "../../../types/userParts";
 import styles from "./ProductCard.module.css";
@@ -29,11 +36,11 @@ function ProductCard({ part, onRemove }: ProductCardProps) {
       </button>
 
       <button
-        type="button"
-        onClick={() => onRemove(part.partId)}
-      >
-        Remove
-      </button>
+  type="button"
+  onClick={() => onRemove(part.id)}
+>
+  Remove
+</button>
     </div>
   );
 }

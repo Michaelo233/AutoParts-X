@@ -1,4 +1,12 @@
-
+/**
+ * Sprint 3 Architecture:
+ * This component uses the useProducts custom hook to retrieve
+ * available products, manage loading state, and remove products.
+ * The hook delegates business logic to productService, which
+ * accesses product data through productRepository.
+ * This separation keeps presentation, business logic,
+ * and data access in their appropriate layers.
+ */
 import { useSearchParams } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/parts/catalog/ProductCard";

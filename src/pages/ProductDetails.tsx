@@ -2,21 +2,45 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { Part } from "../types/userParts";
-import { productRepository } from "../repositories/productRepository";
-import { userPartRepository } from "../repositories/userPartRepository";
+import { productService } from "../services/productService";
+import { userPartService } from "../services/userPartService";
 
+/**
+ * Sprint 3 Architecture:
+ * This component loads product details through productService
+ * and seller information through userPartService.
+ * Both services use repositories for data access, keeping
+ * repository operations separate from the page.
+ */
 function ProductDetails() {
   const { id } = useParams();
   const [part, setPart] = useState<Part | null>(null);
+  const [sellerName, setSellerName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadPart() {
+      setLoading(true);
+
       const selectedPart = id
-        ? await productRepository.getById(id)
+        ? await productService.getPartById(id)
         : undefined;
 
       setPart(selectedPart ?? null);
+
+      if (selectedPart) {
+        const users = await userPartService.getAllUsers();
+        const seller = users.find((user) =>
+          user.partsOwned.some((item) => item.id === selectedPart.id)
+        );
+
+        setSellerName(
+          seller?.userName ?? selectedPart.userName ?? null
+        );
+      } else {
+        setSellerName(null);
+      }
+
       setLoading(false);
     }
 
@@ -30,10 +54,6 @@ function ProductDetails() {
   if (!part) {
     return <p>Part not found.</p>;
   }
-
-  const seller = userPartRepository.getUsers().find((user) =>
-    user.partsOwned.some((item) => item.id === part.id)
-  );
 
   return (
     <main>
@@ -52,7 +72,7 @@ function ProductDetails() {
       <p>Price: ${part.partPrice.toFixed(2)}</p>
       <p>Description: {part.partDescription}</p>
       <p>Part ID: {part.partId}</p>
-      <p>Seller: {seller?.userName ?? part.userName ?? "Unknown"}</p>
+      <p>Seller: {sellerName ?? "Unknown"}</p>
     </main>
   );
 }
