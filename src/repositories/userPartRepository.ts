@@ -131,6 +131,34 @@ export const userPartRepository = {
     return cloneUser(users[userIndex]);
   },
 
+  
+  updatePart: (updatedPart: Part): Part | null => {
+    let savedPart: Part | null = null;
+
+    users = users.map((user) => ({
+      ...user,
+      partsOwned: user.partsOwned.map((part) => {
+        if (part.id !== updatedPart.id) {
+          return part;
+        }
+
+        savedPart = {
+          ...part,
+          ...updatedPart,
+          id: part.id,
+          partId: part.partId,
+          userId: part.userId,
+          userName: part.userName,
+        };
+
+        return savedPart;
+      }),
+    }));
+
+    return savedPart ? clonePart(savedPart as Part) : null;
+  },
+
+
   togglePartSaleStatus: (userName: string, partId: string, isForSale: boolean): User | null => {
     const userIndex = findUserIndexByName(userName);
     if (userIndex === -1) return null;

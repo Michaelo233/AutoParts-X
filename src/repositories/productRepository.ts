@@ -31,21 +31,12 @@ export const productRepository = {
     return addedPart;
   },
 
+  
   async update(part: Part): Promise<Part | undefined> {
-    const users = userPartRepository.getUsers();
-
-    for (const user of users) {
-      const existingPart = user.partsOwned.find(
-        (item) => item.id === part.id
-      );
-
-      if (existingPart) {
-        return part;
-      }
-    }
-
-    return undefined;
+    const updatedPart = userPartRepository.updatePart(part);
+    return updatedPart ?? undefined;
   },
+
 
   async remove(id: string): Promise<void> {
     const users = userPartRepository.getUsers();
