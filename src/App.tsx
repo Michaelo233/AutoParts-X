@@ -1,3 +1,4 @@
+import ProductDetails from './pages/ProductDetails'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/common/layout/Layout'
@@ -7,9 +8,9 @@ import { MyParts } from './pages/MyParts'
 import { useUserParts } from './hooks/useUserParts'
 import { AddPartForm } from './components/parts/my-parts/AddPartForm'
 
-
 function App() {
   const { currentUser, handleAddPart, handleRemovePart } = useUserParts()
+
   return (
     <BrowserRouter>
       <Routes>
@@ -20,6 +21,7 @@ function App() {
           {/* Product routes */}
           <Route path="sell-services" element={<Product />} />
           <Route path="products" element={<Product />} />
+          <Route path="products/:id" element={<ProductDetails />} />
 
           {/* My parts routes */}
           <Route
@@ -31,6 +33,7 @@ function App() {
               />
             }
           />
+
           <Route
             path="myParts/addPart"
             element={

@@ -1,42 +1,63 @@
 
 import { carPartList } from "../data/carPartList";
-import type { CarPart } from "../types/autoParts";
-
-let products: CarPart[] = carPartList.flatMap(
-  (user) => user.partsOwned
-);
+import type { CarPart, CarPartOwner } from "../types/autoParts";
 
 export const productRepository = {
   async getAll(): Promise<CarPart[]> {
-    return [...products];
+    return carPartList.flatMap((user) => user.partsOwned);
   },
 
   async getById(id: number): Promise<CarPart | undefined> {
-    return products.find((part) => part.id === id);
+    const parts = await this.getAll();
+    return parts.find((part) => part.id === id);
   },
 
-  async add(part: CarPart): Promise<CarPart> {
-    products = [...products, part];
+  async add(part: CarPart, userName: string): Promise<CarPart> {
+    let user = carPartList.find(
+      (owner) =>
+        owner.userName.toLowerCase() === userName.toLowerCase()
+    );
+
+    if (!user) {
+      const newUser: CarPartOwner = {
+        userId: Math.max(0, ...carPartList.map((owner) => owner.userId)) + 1,
+        userName,
+        partsOwned: [],
+      };
+
+      carPartList.push(newUser);
+      user = newUser;
+    }
+
+    user.partsOwned.push(part);
     return part;
   },
 
   async update(part: CarPart): Promise<CarPart | undefined> {
-    const existingPart = products.find(
-      (item) => item.id === part.id
-    );
+    for (const user of carPartList) {
+      const index = user.partsOwned.findIndex(
+        (item) => item.id === part.id
+      );
 
-    if (!existingPart) {
-      return undefined;
+      if (index !== -1) {
+        user.partsOwned[index] = part;
+        return part;
+      }
     }
 
-    products = products.map((item) =>
-      item.id === part.id ? part : item
-    );
-
-    return part;
+    return undefined;
   },
 
   async remove(id: number): Promise<void> {
-    products = products.filter((part) => part.id !== id);
+    for (const user of carPartList) {
+      const index = user.partsOwned.findIndex(
+        (part) => part.id === id
+      );
+
+      if (index !== -1) {
+        user.partsOwned.splice(index, 1);
+        return;
+      }
+    }
   },
 };

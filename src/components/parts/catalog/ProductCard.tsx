@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import type { CarPart } from "../../../types/autoParts";
 import styles from "./ProductCard.module.css";
 
@@ -8,6 +9,8 @@ interface ProductCardProps {
 }
 
 function ProductCard({ part, onRemove }: ProductCardProps) {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.productCard}>
       {part.partImage.trim() && (
@@ -18,7 +21,17 @@ function ProductCard({ part, onRemove }: ProductCardProps) {
       <p>${part.price}</p>
       <p>{part.description}</p>
 
-      <button onClick={() => onRemove(part.id)}>
+      <button
+        type="button"
+        onClick={() => navigate(`/products/${part.id}`)}
+      >
+        View Details
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onRemove(part.id)}
+      >
         Remove
       </button>
     </div>

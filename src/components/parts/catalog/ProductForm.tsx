@@ -1,41 +1,24 @@
 
 import { useState } from "react";
-import type { CarPart, CarPartOwner } from "../../../types/autoParts";
-import { carPartList } from "../../../data/carPartList";
+import type { CarPart } from "../../../types/autoParts";
 
 interface ProductFormProps {
   parts: CarPart[];
-  setParts: React.Dispatch<React.SetStateAction<CarPart[]>>;
+  onAddProduct: (part: CarPart, userName: string) => Promise<void>;
 }
 
-function ProductForm({ parts, setParts }: ProductFormProps) {
+function ProductForm({ parts, onAddProduct }: ProductFormProps) {
   const [userName, setUserName] = useState("");
   const [partName, setPartName] = useState("");
   const [price, setPrice] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const enteredUserName = userName.trim();
 
     if (!enteredUserName || !partName || Number(price) <= 0) {
       return;
-    }
-
-    let user = carPartList.find(
-      (owner) =>
-        owner.userName.toLowerCase() === enteredUserName.toLowerCase()
-    );
-
-    if (!user) {
-      const newUser: CarPartOwner = {
-        userId: Math.max(0, ...carPartList.map((owner) => owner.userId)) + 1,
-        userName: enteredUserName,
-        partsOwned: [],
-      };
-
-      carPartList.push(newUser);
-      user = newUser;
     }
 
     const selectedPart = parts.find(
@@ -53,8 +36,7 @@ function ProductForm({ parts, setParts }: ProductFormProps) {
       isForSale: true,
     };
 
-    user.partsOwned.push(newPart);
-    setParts((previousParts) => [...previousParts, newPart]);
+    await onAddProduct(newPart, enteredUserName);
 
     setUserName("");
     setPartName("");
