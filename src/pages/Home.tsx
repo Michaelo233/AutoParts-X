@@ -1,17 +1,25 @@
-import HeroSection from '../components/home/HeroSection';
-import AutoPartPage from './AutoPartPage';
-import style from './stylesPages/Home.module.css';
 
+
+import HeroSection from "../components/home/HeroSection";
+import AutoPartPage from "./AutoPartPage";
+import styles from "./stylesPages/Home.module.css";
+import { useStorage } from "../context/StorageContext";
+import VehicleModels from "./VehicleModels";
 
 function Home() {
+  const { searchTerm, setSearchTerm } = useStorage();
+
   return (
-    <section className={style.homeContainer}>
-      {/* Hero section is top of the page the user sees first */}
-      <HeroSection />
-      
-      {/* Main content area for the dashboard, can include featured items, etc. */}
-      <AutoPartPage />
+    <section className={styles.homeContainer}>
+      <HeroSection
+        searchTerm={searchTerm}
+        onSearch={setSearchTerm}
+      />
+
+      <AutoPartPage searchTerm={searchTerm} />
+      <VehicleModels />
     </section>
   );
 }
+
 export default Home;

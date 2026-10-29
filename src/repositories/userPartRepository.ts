@@ -3,13 +3,17 @@ import type { Part, User } from '../types/userParts';
 
 let users: User[] = initialUsers.map((user) => ({
   ...user,
+  userId: String(user.userId),
   partsOwned: user.partsOwned.map((part) => ({
     ...part,
-    partDescription: part.description,
-    partPrice: part.price,
+    id: String(part.id),
+    partId: String(part.partId),
+    categoryId: part.categoryId ?? 'GENERAL',
+    partDescription: part.description ?? '',
+    partPrice: part.price ?? 0,
     isForSale: part.isForSale ?? false,
     isFavorite: part.isFavorite ?? false,
-    userId: user.userId,
+    userId: String(user.userId),
     userName: user.userName,
   })),
 }));
@@ -60,10 +64,10 @@ export const userPartRepository = {
     }
 
     const nextUserId =
-      users.reduce((maxId, user) => Math.max(maxId, user.userId), 0) + 1;
+      users.reduce((maxId, user) => Math.max(maxId, Number(user.userId) || 0), 0) + 1;
 
     const newUser: User = {
-      userId: nextUserId,
+      userId: `U${String(nextUserId).padStart(3, '0')}`,
       userName: normalizedName,
       partsOwned: [],
     };
@@ -91,7 +95,7 @@ export const userPartRepository = {
     };
 
     users = users.map((user) => {
-      if (user.userId !== targetUser!.userId) {
+      if (String(user.userId) !== String(targetUser!.userId)) {
         return user;
       }
 
@@ -109,11 +113,11 @@ export const userPartRepository = {
     if (userIndex === -1) return null;
 
     const currentUser = users[userIndex];
-    if (!currentUser.partsOwned.some((part) => part.partId === partId)) {
+    if (!currentUser.partsOwned.some((part) => String(part.partId) === String(partId))) {
       return null;
     }
 
-    const updatedParts = currentUser.partsOwned.filter((part) => part.partId !== partId);
+    const updatedParts = currentUser.partsOwned.filter((part) => String(part.partId) !== String(partId));
 
     users = users.map((user, index) =>
       index === userIndex ? { ...user, partsOwned: updatedParts } : user
@@ -125,7 +129,7 @@ export const userPartRepository = {
   togglePartSaleStatus: (userName: string, partId: string, isForSale: boolean): User | null => {
     const userIndex = findUserIndexByName(userName);
     if (userIndex === -1) return null;
-    if (!users[userIndex].partsOwned.some((part) => part.partId === partId)) {
+    if (!users[userIndex].partsOwned.some((part) => String(part.partId) === String(partId))) {
       return null;
     }
 
@@ -135,7 +139,7 @@ export const userPartRepository = {
       return {
         ...user,
         partsOwned: user.partsOwned.map((part) =>
-          part.partId === partId ? { ...part, isForSale } : part
+          String(part.partId) === String(partId) ? { ...part, isForSale } : part
         ),
       };
     });

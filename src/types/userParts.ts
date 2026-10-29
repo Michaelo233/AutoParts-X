@@ -1,11 +1,12 @@
 export interface Part {
-  id?: number;
+  id: string;
   partId: string;
   partName: string;
+  categoryId: string;
   partDescription: string;
   partPrice: number;
   partImage: string;
-  userId?: number;
+  userId?: string | number;
   userName?: string;
   description?: string;
   price?: number;
@@ -14,18 +15,22 @@ export interface Part {
 }
 
 export interface User {
-  userId: number;
+  userId: string | number;
   userName: string;
   partsOwned: Part[];
 }
 
+export type NewPart = Omit<Part, "id">;
+
 export interface AddPartForm {
-  userId: number;
+  userId: string | number;
   userName: string;
   onAddPart: (newPart: Part) => Promise<boolean>;
   onUserChanged?: (userName: string) => void;
   error?: string | null;
 }
+
+export interface AddPartFormProps extends AddPartForm {}
 
 export interface SellToggle {
   partId: string;

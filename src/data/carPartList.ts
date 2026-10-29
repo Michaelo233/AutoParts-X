@@ -5,6 +5,7 @@ export const carPartList = [
     partsOwned: [
       {
         id: 1,
+        categoryId: 'TR',
         partId: 'TR_001',
         partName: 'Transmission',
         description:
@@ -16,6 +17,7 @@ export const carPartList = [
       },
       {
         id: 2,
+        categoryId: 'EN',
         partId: 'EN_001',
         partName: 'Engine',
         description:
@@ -27,6 +29,7 @@ export const carPartList = [
       },
       {
         id: 3,
+        categoryId: 'BR',
         partId: 'BR_001',
         partName: 'Brake Pads',
         description:
@@ -44,6 +47,7 @@ export const carPartList = [
     partsOwned: [
       {
         id: 4,
+        categoryId: 'TR',
         partId: 'TR_002',
         partName: 'Transmission',
         description:
@@ -55,6 +59,7 @@ export const carPartList = [
       },
       {
         id: 5,
+        categoryId: 'EN',
         partId: 'EN_002',
         partName: 'Engine',
         description:
@@ -66,6 +71,7 @@ export const carPartList = [
       },
       {
         id: 6,
+        categoryId: 'BR',
         partId: 'BR_002',
         partName: 'Brake Pads',
         description:
@@ -83,6 +89,7 @@ export const carPartList = [
     partsOwned: [
       {
         id: 7,
+        categoryId: 'TR',
         partId: 'TR_003',
         partName: 'Transmission',
         description:
@@ -94,6 +101,7 @@ export const carPartList = [
       },
       {
         id: 8,
+        categoryId: 'EN',
         partId: 'EN_003',
         partName: 'Engine',
         description:
@@ -105,6 +113,7 @@ export const carPartList = [
       },
       {
         id: 9,
+        categoryId: 'BR',
         partId: 'BR_003',
         partName: 'Brake Pads',
         description:

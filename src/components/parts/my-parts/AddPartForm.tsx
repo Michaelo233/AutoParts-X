@@ -62,7 +62,9 @@ export const AddMyPartForm: React.FC<AddPartFormProps> = ({
     const generatedPartId = `${partName.substring(0, 2).toUpperCase()}_${Date.now().toString().slice(-3)}`;
 
     const newPart: Part = {
+      id: generatedPartId,
       partId: generatedPartId,
+      categoryId: partName,
       partName,
       partDescription: description.trim(),
       partPrice: Number(price),

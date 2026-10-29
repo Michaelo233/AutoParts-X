@@ -1,4 +1,15 @@
-import type { Auto } from '../types/autoParts';
+type AutoPartItem = {
+  partId: number;
+  imageUrl: string;
+  partName: string;
+  price: number;
+  description: string;
+};
+
+type Auto = {
+  Category: string;
+  AutoPart: AutoPartItem[];
+};
 
 const autoPartsData: Auto[] = [
   {
