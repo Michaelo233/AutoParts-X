@@ -98,6 +98,24 @@
     font-size: 1.5rem;
     cursor: pointer;
 }
+ /* added styles for the "Add Auto Part" button */
+.addPartButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background-color: #087bff;
+  color: white;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.addPartButton:hover {
+  background-color: #005ccc;
+  color: white;
+}
 
 /* Trigger mobile layout on screens 768px and smaller */
 @media (max-width: 768px) {

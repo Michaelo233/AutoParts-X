@@ -1,23 +1,26 @@
 
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { CarPart } from "../types/autoParts";
+import type { Part } from "../types/userParts";
 import { productRepository } from "../repositories/productRepository";
-import { carPartList } from "../data/carPartList";
+import { userPartRepository } from "../repositories/userPartRepository";
 
 function ProductDetails() {
   const { id } = useParams();
-  const [part, setPart] = useState<CarPart | null>(null);
+  const [part, setPart] = useState<Part | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadPart() {
-      const selectedPart = await productRepository.getById(Number(id));
+      const selectedPart = id
+        ? await productRepository.getById(id)
+        : undefined;
+
       setPart(selectedPart ?? null);
       setLoading(false);
     }
 
-    loadPart();
+    void loadPart();
   }, [id]);
 
   if (loading) {
@@ -28,7 +31,7 @@ function ProductDetails() {
     return <p>Part not found.</p>;
   }
 
-  const seller = carPartList.find((user) =>
+  const seller = userPartRepository.getUsers().find((user) =>
     user.partsOwned.some((item) => item.id === part.id)
   );
 
@@ -46,10 +49,10 @@ function ProductDetails() {
         />
       )}
 
-      <p>Price: ${part.price.toFixed(2)}</p>
-      <p>Description: {part.description}</p>
+      <p>Price: ${part.partPrice.toFixed(2)}</p>
+      <p>Description: {part.partDescription}</p>
       <p>Part ID: {part.partId}</p>
-      <p>Seller: {seller?.userName ?? "Unknown"}</p>
+      <p>Seller: {seller?.userName ?? part.userName ?? "Unknown"}</p>
     </main>
   );
 }

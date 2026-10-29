@@ -1,11 +1,11 @@
 
 import { useEffect, useState } from "react";
-import type { CarPart } from "../types/autoParts";
+import type { Part } from "../types/userParts";
 import { productService } from "../services/productService";
 
 // Manages product listing state for components.
 export function useProducts() {
-  const [products, setProducts] = useState<CarPart[]>([]);
+  const [products, setProducts] = useState<Part[]>([]);
   const [loading, setLoading] = useState(true);
 
   async function loadProducts() {
@@ -18,12 +18,12 @@ export function useProducts() {
     void loadProducts();
   }, []);
 
-  async function addProduct(part: CarPart, userName: string) {
+  async function addProduct(part: Part, userName: string) {
     await productService.addPart(part, userName);
     await loadProducts();
   }
 
-  async function removeProduct(id: number) {
+  async function removeProduct(id: string) {
     await productService.removePart(id);
     await loadProducts();
   }

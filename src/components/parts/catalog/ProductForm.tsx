@@ -1,79 +1,80 @@
 
 import { useState } from "react";
-import type { CarPart } from "../../../types/autoParts";
+import type { NewPart } from "../../../types/userParts";
 
 interface ProductFormProps {
-  parts: CarPart[];
-  onAddProduct: (part: CarPart, userName: string) => Promise<void>;
+  onAddPart: (part: NewPart) => void;
 }
 
-function ProductForm({ parts, onAddProduct }: ProductFormProps) {
-  const [userName, setUserName] = useState("");
+/**
+ * ProductForm Component
+ *
+ * Collects information from the user.
+ * Passes the new part to the parent callback.
+ * Does not generate IDs or access JSON.
+ */
+export default function ProductForm({ onAddPart }: ProductFormProps) {
   const [partName, setPartName] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const enteredUserName = userName.trim();
+    const numericPrice = Number(price);
 
-    if (!enteredUserName || !partName || Number(price) <= 0) {
+    if (
+      !partName.trim() ||
+      !selectedCategoryId.trim() ||
+      !Number.isFinite(numericPrice) ||
+      numericPrice <= 0
+    ) {
       return;
     }
 
-    const selectedPart = parts.find(
-      (part) => part.partName === partName
-    );
-
-    const newPart: CarPart = {
-      id: Math.max(0, ...parts.map((part) => part.id)) + 1,
-      partId: `${partName.substring(0, 2).toUpperCase()}_${Date.now()}`,
-      partName,
-      description: selectedPart?.description ?? "",
-      price: Number(price),
-      partImage: selectedPart?.partImage ?? "",
+    const newPart: NewPart = {
+      partId: "",
+      partName: partName.trim(),
+      categoryId: selectedCategoryId.trim().toUpperCase(),
+      partPrice: numericPrice,
+      partDescription: description.trim(),
+      partImage: "",
       isFavorite: false,
-      isForSale: true,
     };
 
-    await onAddProduct(newPart, enteredUserName);
+    onAddPart(newPart);
 
-    setUserName("");
     setPartName("");
+    setSelectedCategoryId("");
     setPrice("");
-  }
-
-  const uniquePartNames = [...new Set(parts.map((part) => part.partName))];
+    setDescription("");
+  };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="userName">Username</label>
-      <input
-        id="userName"
-        type="text"
-        value={userName}
-        onChange={(event) => setUserName(event.target.value)}
-        required
-      />
-
       <label htmlFor="partName">Part Name</label>
-      <select
+      <input
         id="partName"
+        type="text"
         value={partName}
         onChange={(event) => setPartName(event.target.value)}
         required
-      >
-        <option value="">Select a part</option>
-        {uniquePartNames.map((name) => (
-          <option key={name} value={name}>
-            {name}
-          </option>
-        ))}
-      </select>
+      />
 
-      <label htmlFor="price">Price</label>
+      <label htmlFor="categoryId">Category ID</label>
       <input
-        id="price"
+        id="categoryId"
+        type="text"
+        placeholder="CT001"
+        value={selectedCategoryId}
+        onChange={(event) => setSelectedCategoryId(event.target.value)}
+        required
+      />
+
+      <label htmlFor="partPrice">Price</label>
+      <input
+        id="partPrice"
         type="number"
         min="0.01"
         step="0.01"
@@ -82,9 +83,14 @@ function ProductForm({ parts, onAddProduct }: ProductFormProps) {
         required
       />
 
+      <label htmlFor="description">Description</label>
+      <textarea
+        id="description"
+        value={description}
+        onChange={(event) => setDescription(event.target.value)}
+      />
+
       <button type="submit">Add Part</button>
     </form>
   );
 }
-
-export default ProductForm;

@@ -1,46 +1,45 @@
 
-import { carPartList } from "../data/carPartList";
-import type { CarPart, CarPartOwner } from "../types/autoParts";
+import { userPartRepository } from "./userPartRepository";
+import type { Part } from "../types/userParts";
 
 export const productRepository = {
-  async getAll(): Promise<CarPart[]> {
-    return carPartList.flatMap((user) => user.partsOwned);
+  async getAll(): Promise<Part[]> {
+    return userPartRepository
+      .getUsers()
+      .flatMap((user) => user.partsOwned);
   },
 
-  async getById(id: number): Promise<CarPart | undefined> {
+  async getById(id: string): Promise<Part | undefined> {
     const parts = await this.getAll();
     return parts.find((part) => part.id === id);
   },
 
-  async add(part: CarPart, userName: string): Promise<CarPart> {
-    let user = carPartList.find(
-      (owner) =>
-        owner.userName.toLowerCase() === userName.toLowerCase()
+  async add(part: Part, userName: string): Promise<Part> {
+    const updatedUser = userPartRepository.addPartToUser(
+      userName,
+      part
     );
 
-    if (!user) {
-      const newUser: CarPartOwner = {
-        userId: Math.max(0, ...carPartList.map((owner) => owner.userId)) + 1,
-        userName,
-        partsOwned: [],
-      };
+    const addedPart = updatedUser.partsOwned.find(
+      (item) => item.partId === part.partId
+    );
 
-      carPartList.push(newUser);
-      user = newUser;
+    if (!addedPart) {
+      throw new Error("Unable to add product.");
     }
 
-    user.partsOwned.push(part);
-    return part;
+    return addedPart;
   },
 
-  async update(part: CarPart): Promise<CarPart | undefined> {
-    for (const user of carPartList) {
-      const index = user.partsOwned.findIndex(
+  async update(part: Part): Promise<Part | undefined> {
+    const users = userPartRepository.getUsers();
+
+    for (const user of users) {
+      const existingPart = user.partsOwned.find(
         (item) => item.id === part.id
       );
 
-      if (index !== -1) {
-        user.partsOwned[index] = part;
+      if (existingPart) {
         return part;
       }
     }
@@ -48,14 +47,19 @@ export const productRepository = {
     return undefined;
   },
 
-  async remove(id: number): Promise<void> {
-    for (const user of carPartList) {
-      const index = user.partsOwned.findIndex(
-        (part) => part.id === id
+  async remove(id: string): Promise<void> {
+    const users = userPartRepository.getUsers();
+
+    for (const user of users) {
+      const part = user.partsOwned.find(
+        (item) => item.id === id
       );
 
-      if (index !== -1) {
-        user.partsOwned.splice(index, 1);
+      if (part) {
+        userPartRepository.removePartFromUser(
+          user.userName,
+          part.partId
+        );
         return;
       }
     }
