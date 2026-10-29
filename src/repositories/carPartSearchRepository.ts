@@ -1,6 +1,6 @@
 
 
-import userData from "../data/carPartList.json";
+import { carPartList as userData } from "../data/carPartList";
 import type { Part } from "../types/userParts";
 
 /**

@@ -1,6 +1,11 @@
 import { carPartList as initialUsers } from '../data/carPartList';
 import type { Part, User } from '../types/userParts';
 
+const parseUserNumber = (value: string | number): number => {
+  const match = /^U(\d+)$/i.exec(String(value));
+  return match ? Number(match[1]) : 0;
+};
+
 let users: User[] = initialUsers.map((user) => ({
   ...user,
   userId: String(user.userId),
@@ -9,8 +14,8 @@ let users: User[] = initialUsers.map((user) => ({
     id: String(part.id),
     partId: String(part.partId),
     categoryId: part.categoryId ?? 'GENERAL',
-    partDescription: part.description ?? '',
-    partPrice: part.price ?? 0,
+    partDescription: part.Description ?? '',
+    partPrice: part.Price ?? 0,
     isForSale: part.isForSale ?? false,
     isFavorite: part.isFavorite ?? false,
     userId: String(user.userId),
@@ -64,7 +69,7 @@ export const userPartRepository = {
     }
 
     const nextUserId =
-      users.reduce((maxId, user) => Math.max(maxId, Number(user.userId) || 0), 0) + 1;
+      users.reduce((maxId, user) => Math.max(maxId, parseUserNumber(user.userId)), 0) + 1;
 
     const newUser: User = {
       userId: `U${String(nextUserId).padStart(3, '0')}`,

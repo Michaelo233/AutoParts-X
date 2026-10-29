@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 
-import carPartList from "../data/carPartList.json";
+import { carPartList } from "../data/carPartList";
 
 import { generateAutoPartId } from
   "../components/common/utils/generateID";
@@ -20,7 +20,7 @@ import type {
 /**
  * RawPart
  *
- * Represents an auto part from carPartList.json.
+ * Represents an auto part from the TypeScript storage array.
  */
 interface RawPart {
   id?: string | number;
