@@ -1,15 +1,16 @@
-import { useSearchParams } from "react-router-dom";
+
+import { Navigate, useSearchParams } from "react-router-dom";
 
 function SearchResult() {
-    
-const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("q") ?? "";
 
-    return (
-        <main>
-            <h1>Search Results</h1>
-            <p>Search term: {searchParams.get("q")}</p>
-        </main>
-    );
+  return (
+    <Navigate
+      to={`/products?q=${encodeURIComponent(searchTerm)}`}
+      replace
+    />
+  );
 }
 
 export default SearchResult;
