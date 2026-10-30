@@ -2,34 +2,45 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { Part } from "../types/userParts";
+import { useProducts } from "../hooks/useProducts";
 import { productService } from "../services/productService";
 import { userPartService } from "../services/userPartService";
 
 /**
  * Sprint 3 Architecture:
- * This component loads product details through productService
+ * This component uses useProducts for shared product-listing logic.
+ * It also retrieves individual product details through productService
  * and seller information through userPartService.
- * Both services use repositories for data access, keeping
- * repository operations separate from the page.
+ * Services use repositories for data access, keeping presentation,
+ * business logic, and data access separate.
  */
 function ProductDetails() {
   const { id } = useParams();
+  const { products } = useProducts();
+
   const [part, setPart] = useState<Part | null>(null);
   const [sellerName, setSellerName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let ignore = false;
+
     async function loadPart() {
       setLoading(true);
 
-      const selectedPart = id
-        ? await productService.getPartById(id)
-        : undefined;
+      const selectedPart =
+        products.find((product) => product.id === id) ??
+        (id ? await productService.getPartById(id) : undefined);
+
+      if (ignore) return;
 
       setPart(selectedPart ?? null);
 
       if (selectedPart) {
         const users = await userPartService.getAllUsers();
+
+        if (ignore) return;
+
         const seller = users.find((user) =>
           user.partsOwned.some((item) => item.id === selectedPart.id)
         );
@@ -45,7 +56,11 @@ function ProductDetails() {
     }
 
     void loadPart();
-  }, [id]);
+
+    return () => {
+      ignore = true;
+    };
+  }, [id, products]);
 
   if (loading) {
     return <p>Loading part details...</p>;
