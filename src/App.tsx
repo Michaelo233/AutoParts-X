@@ -1,50 +1,79 @@
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Layout from './components/common/layout/Layout'
-import Home from './pages/Home'
-import Product from './pages/Products'
-import { MyParts } from './pages/MyParts'
-import { useUserParts } from './hooks/useUserParts'
-import { AddPartForm } from './components/parts/my-parts/AddPartForm'
 
+import "./App.css";
+
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import Layout from "./components/common/layout/Layout";
+import StorageConsent from "./components/common/StorageConsent";
+import { AutoPartCatalogProvider } from "./context/AutoPartCatalogContext";
+import { StorageProvider } from "./context/StorageContext";
+import { useUserParts } from "./hooks/useUserParts";
+
+import Home from "./pages/Home";
+import { MyParts } from "./pages/MyParts";
+import AddAutoPartPage from "./pages/AddAutoPartPages";
+import Product from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
+import VehicleModels from "./pages/VehicleModels";
 
 function App() {
-  const { currentUser, handleAddPart, handleRemovePart } = useUserParts()
+  const {
+    currentUser,
+    users,
+    error,
+    handleRemovePart,
+    handleToggleForSale,
+  } = useUserParts();
+
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
+      <StorageProvider>
+        <AutoPartCatalogProvider>
+          <StorageConsent />
 
-          {/* Product routes */}
-          <Route path="sell-services" element={<Product />} />
-          <Route path="products" element={<Product />} />
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="home" element={<Home />} />
 
-          {/* My parts routes */}
-          <Route
-            path="myParts"
-            element={
-              <MyParts
-                user={currentUser}
-                onRemovePart={handleRemovePart}
+              <Route path="sell-services" element={<Product />} />
+              <Route path="products" element={<Product />} />
+              <Route path="products/:id" element={<ProductDetails />} />
+
+              <Route path="vehicle-models" element={<VehicleModels />} />
+
+              <Route
+                path="add-auto-part"
+                element={
+                  <AddAutoPartPage sellerName={currentUser.userName} />
+                }
               />
-            }
-          />
-          <Route
-            path="myParts/addPart"
-            element={
-              <AddPartForm
-                userId={currentUser.userId}
-                userName={currentUser.userName}
-                onAddPart={handleAddPart}
+
+              <Route
+                path="myParts"
+                element={
+                  <MyParts
+                    user={currentUser}
+                    users={users}
+                    error={error}
+                    onRemovePart={handleRemovePart}
+                    onToggleSale={handleToggleForSale}
+                  />
+                }
               />
-            }
-          />
-        </Route>
-      </Routes>
+
+              <Route
+                path="myParts/addPart"
+                element={
+                  <AddAutoPartPage sellerName={currentUser.userName} />
+                }
+              />
+            </Route>
+          </Routes>
+        </AutoPartCatalogProvider>
+      </StorageProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

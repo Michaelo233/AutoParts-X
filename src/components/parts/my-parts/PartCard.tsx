@@ -4,20 +4,26 @@ import styles from './MyParts.module.css';
 
 interface PartCardProps {
   part: Part;
-  onRemoveClick: (partId: string) => void;
+  userName: string;
+  onRemoveClick: (userName: string, partId: string) => void;
+  onToggleSale: (userName: string, partId: string, isForSale: boolean) => void;
 }
 
-export const PartCard: React.FC<PartCardProps> = ({ part, onRemoveClick }) => {
+export const PartCard: React.FC<PartCardProps> = ({
+  part,
+  userName,
+  onRemoveClick,
+  onToggleSale,
+}) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleConfirmDelete = () => {
-    onRemoveClick(part.partId);
+    onRemoveClick(userName, part.partId);
     setShowConfirm(false);
   };
 
   return (
     <div className={styles.card}>
-      {/* Top bar with removal action */}
       <div className={styles.cardHeader}>
         <h3 className={styles.partName}>{part.partName}</h3>
         <button
@@ -26,11 +32,10 @@ export const PartCard: React.FC<PartCardProps> = ({ part, onRemoveClick }) => {
           onClick={() => setShowConfirm(true)}
           title="Remove part"
         >
-        X
+          X
         </button>
       </div>
 
-      {/* Confirmation dialog overlay */}
       {showConfirm && (
         <div className={styles.confirmBanner}>
           <p>Remove this part from inventory?</p>
@@ -53,18 +58,28 @@ export const PartCard: React.FC<PartCardProps> = ({ part, onRemoveClick }) => {
         </div>
       )}
 
-      <img
-        src={part.partImage}
-        alt={part.partName}
-        className={styles.partImage}
-      />
+      <img src={part.partImage} alt={part.partName} className={styles.partImage} />
 
       <div className={styles.cardDetails}>
-        <strong className={styles.partPrice}>
-          ${part.partPrice.toFixed(2)}
-        </strong>
+        <strong className={styles.partPrice}>${part.partPrice.toFixed(2)}</strong>
         <p className={styles.partDescription}>{part.partDescription}</p>
-        <span className={styles.partId}>Part ID: {part.partId}</span>
+      </div>
+
+      <div className={styles.cardSellorNot}>
+        <button
+          type="button"
+          className={`${styles.sellBtn} ${part.isForSale ? styles.saleStatusActive : ''}`}
+          onClick={() => onToggleSale(userName, part.partId, true)}
+        >
+          For sell
+        </button>
+        <button
+          type="button"
+          className={`${styles.SellBtn} ${part.isForSale === false ? styles.saleStatusActive : ''}`}
+          onClick={() => onToggleSale(userName, part.partId, false)}
+        >
+          Not for sell
+        </button>
       </div>
     </div>
   );

@@ -110,6 +110,63 @@
   font-size: 16px;
 }
 
+.filterBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+  margin: 20px auto 24px;
+  color: #3b82f6;
+}
+
+.filterBlock input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.searchButton {
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cardSellorNot {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.sellBtn,
+.SellBtn {
+  flex: 1;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sellBtn {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.SellBtn {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.saleStatusActive {
+  background: #22c55e;
+  color: #fff;
+}
+
 @media (max-width: 640px) {
   .container {
     padding: 0 16px 48px;

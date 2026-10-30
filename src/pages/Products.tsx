@@ -1,33 +1,49 @@
-import { useState } from "react";
-import AutoPartsData from "../data/autoPartsData";
-import type { AutoPart } from "../types/autoParts";
+/**
+ * Sprint 3 Architecture:
+ * This component uses the useProducts custom hook to retrieve
+ * available products, manage loading state, and remove products.
+ * The hook delegates business logic to productService, which
+ * accesses product data through productRepository.
+ * This separation keeps presentation, business logic,
+ * and data access in their appropriate layers.
+ */
+import { useSearchParams } from "react-router-dom";
+import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/parts/catalog/ProductCard";
-import ProductForm from "../components/parts/catalog/ProductForm";
 
 function Product() {
-  const initialParts: AutoPart[] = AutoPartsData.flatMap(
-    (category) => category.AutoPart
+  const { products, loading, removeProduct } = useProducts();
+  const [searchParams] = useSearchParams();
+
+  const searchTerm = (searchParams.get("q") ?? "")
+    .trim()
+    .toLowerCase();
+
+  const filteredProducts = products.filter((part) =>
+    part.partName.toLowerCase().includes(searchTerm)
   );
 
-  const [parts, setParts] = useState<AutoPart[]>(initialParts);
-
-  function handleRemove(partId: number) {
-    setParts(parts.filter((part) => part.partId !== partId));
+  if (loading) {
+    return <p>Loading products...</p>;
   }
 
   return (
     <main>
       <h1>Auto Parts</h1>
 
-      <ProductForm parts={parts} setParts={setParts} />
-
-      {parts.map((part) => (
-        <ProductCard
-          key={part.partId}
-          part={part}
-          onRemove={handleRemove}
-        />
-      ))}
+      {filteredProducts.length === 0 ? (
+        <p>No parts available for sale</p>
+      ) : (
+        filteredProducts.map((part) => (
+          <ProductCard
+            key={part.id}
+            part={part}
+            onRemove={(id) => {
+              void removeProduct(id);
+            }}
+          />
+        ))
+      )}
     </main>
   );
 }

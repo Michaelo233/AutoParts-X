@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './PartsNav.module.css'
+
+
 export const PartsNav: React.FC = () => {
   const navigate = useNavigate();
 
@@ -12,14 +14,6 @@ export const PartsNav: React.FC = () => {
         onClick={() => navigate('/myParts')}
       >
         My Parts
-      </button>
-      <span className={styles.separator}>|</span>
-      <button 
-        type="button" 
-        className={styles.navButton} 
-        onClick={() => navigate('/myParts/addPart')}
-      >
-        + Add New Part
       </button>
     </nav>
   );

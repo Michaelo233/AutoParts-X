@@ -1,4 +1,4 @@
-import styles from './search.module.css';
+import styles from "./search.module.css";
 
 type SearchProps = {
   searchValue: string;
@@ -7,32 +7,34 @@ type SearchProps = {
   handleSubmit: (value: string) => void;
 };
 
-/*  Search component to allow users to search for items */
-function Search({ searchValue, Title, handleSearchChange, handleSubmit }: SearchProps) {
-    return (
-        <form 
-            className={styles.searchContainer} 
-            onSubmit={(event) => {
-                event.preventDefault();
-                // This now properly triggers the search action
-                handleSubmit(searchValue); 
-            }}
-        >
-            <span className={styles.searchIcon}>🔍</span>
-            <input 
-              type="text" 
-              className={styles.searchInput}
-              value={searchValue} 
-              placeholder={Title}
-              onChange={e => handleSearchChange(e.target.value)} 
-            />
-            
-            {/* Changed from "Search parts" to prevent duplicate wording */}
-            <button type="submit" className={styles.searchButton}>
-                Search
-            </button>
-        </form>
-    );
+function Search({
+  searchValue,
+  Title,
+  handleSearchChange,
+  handleSubmit,
+}: SearchProps) {
+
+  return (
+    <form
+        className={styles.searchContainer}
+        onSubmit={(event) => {
+            event.preventDefault();
+            handleSubmit(searchValue.trim());
+        }}
+    >
+      <input
+        type="text"
+        placeholder={Title}
+        value={searchValue}
+        onChange={e => handleSearchChange(e.target.value)}
+        className={styles.searchInput}
+      />
+
+      <button type="submit" className={styles.searchButton}>
+        Search
+      </button>
+    </form>
+  );
 }
 
 export default Search;

@@ -1,0 +1,138 @@
+export const carPartList = [
+  {
+    userId: 'U001',
+    userName: 'Michael',
+    partsOwned: [
+      {
+        id: 1,
+        partId: 'TR_001',
+        partName: 'Transmission',
+        categoryId: 'CT002',
+        Description:
+          'A transmission is a machine in a power transmission system, which provides controlled application of the power.',
+        Price: 1200,
+        partImage: '/images/Transmission.jpg',
+        isFavorite: true,
+        isForSale: true,
+      },
+      {
+        id: 2,
+        partId: 'EN_001',
+        partName: 'Engine',
+        categoryId: 'CT001',
+        Description:
+          'The engine is the component of a vehicle that generates power to propel the vehicle.',
+        Price: 2500,
+        partImage: '/images/engine_block.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+      {
+        id: 3,
+        partId: 'BR_001',
+        partName: 'Brake Pads',
+        categoryId: 'CT003',
+        Description:
+          'Brake pads are a component of disc brakes used in automotive and other applications.',
+        Price: 150,
+        partImage: '/images/brake_pads.jpg',
+        isFavorite: true,
+        isForSale: true,
+      },
+    ],
+  },
+  {
+    userId: 'U002',
+    userName: 'Sarah',
+    partsOwned: [
+      {
+        id: 4,
+        partId: 'TR_002',
+        partName: 'Transmission',
+        categoryId: 'CT002',
+        Description:
+          'A transmission is a machine in a power transmission system, which provides controlled application of the power.',
+        Price: 1300,
+        partImage: '/images/Transmission.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+      {
+        id: 5,
+        partId: 'EN_002',
+        partName: 'Engine',
+        categoryId: 'CT001',
+        Description:
+          'The engine is the component of a vehicle that generates power to propel the vehicle.',
+        Price: 2600,
+        partImage: '/images/engine_block.jpg',
+        isFavorite: true,
+        isForSale: true,
+      },
+      {
+        id: 6,
+        partId: 'BR_002',
+        partName: 'Brake Pads',
+        categoryId: 'CT003',
+        Description:
+          'Brake pads are a component of disc brakes used in automotive and other applications.',
+        Price: 160,
+        partImage: '/images/brake_pads.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+    ],
+  },
+  {
+    userId: 'U003',
+    userName: 'David',
+    partsOwned: [
+      {
+        id: 7,
+        partId: 'EN_004',
+        partName: 'Engine',
+        categoryId: 'CT001',
+        Description: 'Engine for a vehicle',
+        Price: 2500,
+        partImage: '/images/engine_block.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+      {
+        id: 8,
+        partId: 'EN_003',
+        partName: 'Engine',
+        categoryId: 'CT001',
+        Description:
+          'The engine is the component of a vehicle that generates power to propel the vehicle.',
+        Price: 2700,
+        partImage: '/images/engine_block.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+      {
+        id: 9,
+        partId: 'BR_003',
+        partName: 'Brake Pads',
+        categoryId: 'CT003',
+        Description:
+          'Brake pads are a component of disc brakes used in automotive and other applications.',
+        Price: 170,
+        partImage: '/images/brake_pads.jpg',
+        isFavorite: false,
+        isForSale: true,
+      },
+      {
+  id: 10,
+  partId: 'BR_004',
+  partName: 'Brake Pads',
+  categoryId: 'CT003',
+  Description: 'Replacement brake pads for a vehicle.',
+  Price: 180,
+  partImage: '/images/brake_pads.jpg',
+  isFavorite: false,
+  isForSale: true,
+},
+    ],
+  },
+];
