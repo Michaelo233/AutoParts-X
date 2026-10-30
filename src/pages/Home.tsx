@@ -1,7 +1,6 @@
 
 import HeroSection from "../components/home/HeroSection";
 import AutoPartPage from "./AutoPartPage";
-import AllAutoParts from "../components/parts/catalog/AllAutoPartsList";
 import VehicleModels from "./VehicleModels";
 import { useStorage } from "../context/StorageContext";
 import styles from "./stylesPages/Home.module.css";
@@ -15,8 +14,6 @@ function Home() {
         searchTerm={searchTerm}
         onSearch={setSearchTerm}
       />
-
-      <AllAutoParts />
 
       <AutoPartPage searchTerm={searchTerm} />
 
