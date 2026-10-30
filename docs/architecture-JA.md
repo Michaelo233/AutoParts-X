@@ -9,7 +9,7 @@ The `useProducts` hook manages product listing state, loading status, and produc
 It separates React presentation state from business logic and data access. Product operations are delegated to the product service.
 
 **Where it is used:**  
-`src/pages/Products.tsx` uses this hook to display available products and handle product removal.
+`src/pages/Products.tsx` uses this hook to display available products and handle product removal. `src/pages/ProductDetails.tsx` also uses this hook to access product listing data when displaying individual product details.
 
 ## 2. Service: productService
 
@@ -20,7 +20,7 @@ The product service handles product-related business operations, including filte
 Business rules, such as checking whether a product is for sale, belong in the service rather than React components or repositories.
 
 **Where it is used:**  
-`src/hooks/useProducts.ts` calls the product service to retrieve and manage products.
+`src/hooks/useProducts.ts` calls the product service to retrieve and manage products. `src/pages/ProductDetails.tsx` also uses the service to retrieve individual product details by ID.
 
 ## 3. Repository: productRepository
 
