@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import type { Part, User } from '../types/userParts';
 import { userPartService } from '../services/userPartService';
@@ -24,10 +25,13 @@ export function useUserParts() {
     async function loadUsers() {
       try {
         const loadedUsers = await userPartService.getAllUsers();
+
         if (!ignore) {
           setUsers(loadedUsers);
           setCurrentUser(
-            loadedUsers.find((user) => user.userName.toLowerCase() === 'michael') ??
+            loadedUsers.find(
+              (user) => user.userName.toLowerCase() === 'michael'
+            ) ??
               loadedUsers[0] ??
               initialUser
           );
@@ -68,7 +72,9 @@ export function useUserParts() {
     selectUpdatedUser = false
   ): Promise<void> => {
     const updatedUsers = await userPartService.getAllUsers();
+
     setUsers(updatedUsers);
+
     setCurrentUser((current) =>
       selectUpdatedUser || updatedUser.userId === current.userId
         ? updatedUser
@@ -78,11 +84,13 @@ export function useUserParts() {
 
   const handleAddPart = async (newPart: Part): Promise<boolean> => {
     setError(null);
+
     try {
       const updatedUser = await userPartService.addPartToUser(
         newPart.userName ?? currentUser.userName,
         newPart
       );
+
       await refreshUsers(updatedUser, true);
       return true;
     } catch (addError) {
@@ -96,11 +104,13 @@ export function useUserParts() {
     partIdToRemove: string
   ): Promise<boolean> => {
     setError(null);
+
     try {
       const updatedUser = await userPartService.removePartFromUser(
         userName,
         partIdToRemove
       );
+
       await refreshUsers(updatedUser);
       return true;
     } catch (removeError) {
@@ -115,24 +125,32 @@ export function useUserParts() {
     isForSale: boolean
   ): Promise<boolean> => {
     setError(null);
+
     try {
       const updatedUser = await userPartService.togglePartSaleStatus(
         userName,
         partId,
         isForSale
       );
+
       await refreshUsers(updatedUser);
       return true;
     } catch (toggleError) {
-      setError(getErrorMessage(toggleError, 'Unable to update sale status.'));
+      setError(
+        getErrorMessage(toggleError, 'Unable to update sale status.')
+      );
       return false;
     }
   };
 
-  const setCurrentUserByName = async (userName: string): Promise<boolean> => {
+  const setCurrentUserByName = async (
+    userName: string
+  ): Promise<boolean> => {
     setError(null);
+
     try {
       const selectedUser = await userPartService.getUserByName(userName);
+
       if (!selectedUser) {
         setError('User not found.');
         return false;

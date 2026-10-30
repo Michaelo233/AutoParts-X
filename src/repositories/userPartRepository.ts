@@ -163,13 +163,11 @@ export const userPartRepository = {
     let removed = false;
 
     users = users.map((user) => {
-      const nextParts = user.partsOwned.filter(
-        (part) => {
-          const matches = String(part.partId) === String(partId);
-          if (matches) removed = true;
-          return !matches;
-        }
-      );
+      const nextParts = user.partsOwned.filter((part) => {
+        const matches = String(part.partId) === String(partId);
+        if (matches) removed = true;
+        return !matches;
+      });
 
       return { ...user, partsOwned: nextParts };
     });
@@ -179,6 +177,32 @@ export const userPartRepository = {
     }
 
     return removed;
+  },
+
+  updatePart: (updatedPart: Part): Part | null => {
+    let savedPart: Part | null = null;
+
+    users = users.map((user) => ({
+      ...user,
+      partsOwned: user.partsOwned.map((part) => {
+        if (part.id !== updatedPart.id) {
+          return part;
+        }
+
+        savedPart = {
+          ...part,
+          ...updatedPart,
+          id: part.id,
+          partId: part.partId,
+          userId: part.userId,
+          userName: part.userName,
+        };
+
+        return savedPart;
+      }),
+    }));
+
+    return savedPart ? clonePart(savedPart as Part) : null;
   },
 
   togglePartSaleStatus: (userName: string, partId: string, isForSale: boolean): User | null => {

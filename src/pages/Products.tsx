@@ -1,67 +1,49 @@
-import { useState } from "react";
+/**
+ * Sprint 3 Architecture:
+ * This component uses the useProducts custom hook to retrieve
+ * available products, manage loading state, and remove products.
+ * The hook delegates business logic to productService, which
+ * accesses product data through productRepository.
+ * This separation keeps presentation, business logic,
+ * and data access in their appropriate layers.
+ */
+import { useSearchParams } from "react-router-dom";
+import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/parts/catalog/ProductCard";
-import ProductForm from "../components/parts/catalog/ProductForm";
-import type { NewPart, Part } from "../types/userParts";
-
-const initialParts: Part[] = [
-  {
-    id: "P001",
-    partId: "P001",
-    partName: "Engine Block",
-    categoryId: "ENG",
-    partDescription: "Sample engine part for previewing the catalog page.",
-    partPrice: 2500,
-    partImage: "",
-    isFavorite: false,
-    isForSale: true,
-  },
-  {
-    id: "P002",
-    partId: "P002",
-    partName: "Brake Pads",
-    categoryId: "BRK",
-    partDescription: "Sample brake part for previewing the catalog page.",
-    partPrice: 150,
-    partImage: "",
-    isFavorite: false,
-    isForSale: true,
-  },
-];
 
 function Product() {
-  const [parts, setParts] = useState<Part[]>(initialParts);
+  const { products, loading, removeProduct } = useProducts();
+  const [searchParams] = useSearchParams();
 
-  const handleRemove = (partId: Part["partId"]) => {
-    setParts((currentParts) =>
-      currentParts.filter((part) => part.partId !== partId),
-    );
-  };
+  const searchTerm = (searchParams.get("q") ?? "")
+    .trim()
+    .toLowerCase();
 
-  const handleAddPart = (part: NewPart) => {
-    setParts((currentParts) => [
-      ...currentParts,
-      {
-        ...part,
-        id: part.partId || crypto.randomUUID(),
-        isFavorite: part.isFavorite ?? false,
-        isForSale: part.isForSale ?? true,
-      },
-    ]);
-  };
+  const filteredProducts = products.filter((part) =>
+    part.partName.toLowerCase().includes(searchTerm)
+  );
+
+  if (loading) {
+    return <p>Loading products...</p>;
+  }
 
   return (
     <main>
       <h1>Auto Parts</h1>
 
-      <ProductForm onAddPart={handleAddPart} />
-
-      {parts.map((part) => (
-        <ProductCard
-          key={part.partId}
-          part={part}
-          onRemove={handleRemove}
-        />
-      ))}
+      {filteredProducts.length === 0 ? (
+        <p>No parts available for sale</p>
+      ) : (
+        filteredProducts.map((part) => (
+          <ProductCard
+            key={part.id}
+            part={part}
+            onRemove={(id) => {
+              void removeProduct(id);
+            }}
+          />
+        ))
+      )}
     </main>
   );
 }

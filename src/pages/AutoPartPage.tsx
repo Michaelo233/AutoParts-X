@@ -19,29 +19,22 @@ interface AutoPartPageProps {
 export default function AutoPartPage({
   searchTerm,
 }: AutoPartPageProps) {
-  const {
-    catalog,
-    removePart,
-    toggleFavourite,
-  } = useAutoPartCatalog();
+  const { catalog, removePart, toggleFavourite } = useAutoPartCatalog();
 
-  // Filter catalogue parts.
   const filteredParts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
     const sellerExists = catalog.some(
-      group =>
-        group.Category.trim().toLowerCase() === query
+      (group) => group.Category.trim().toLowerCase() === query
     );
 
-    return catalog.flatMap(group => {
+    return catalog.flatMap((group) => {
       const sellerName = group.Category.trim();
 
       return group.AutoPart
-        .filter(part => {
+        .filter((part) => {
           if (!query) return true;
 
-          // Search by exact seller name first.
           if (sellerExists) {
             return sellerName.toLowerCase() === query;
           }
@@ -53,20 +46,17 @@ export default function AutoPartPage({
             sellerName.toLowerCase().includes(query)
           );
         })
-        .map(part => ({
+        .map((part) => ({
           ...part,
           sellerName,
         }));
     });
   }, [catalog, searchTerm]);
 
-  // IMPORTANT: React component must return JSX.
   return (
     <main className={styles.pageContainer}>
       <header className={styles.headerSection}>
-        <p className={styles.eyebrow}>
-          AUTO PARTS
-        </p>
+        <p className={styles.eyebrow}>AUTO PARTS</p>
 
         <h1 className={styles.sectionHeading}>
           Find the Right Part for Your Vehicle
@@ -74,8 +64,7 @@ export default function AutoPartPage({
 
         {searchTerm.trim() && (
           <p role="status">
-            Search results for:{" "}
-            <strong>{searchTerm}</strong>
+            Search results for: <strong>{searchTerm}</strong>
             {" — "}
             {filteredParts.length}{" "}
             {filteredParts.length === 1
@@ -93,12 +82,11 @@ export default function AutoPartPage({
         </p>
       ) : (
         <section className={styles.cardGrid}>
-          {filteredParts.map(part => (
+          {filteredParts.map((part) => (
             <article
               key={part.partId}
               className={styles.productCard}
             >
-              {/* Product image */}
               <div className={styles.imageWrapper}>
                 {part.imageUrl && (
                   <img
@@ -109,16 +97,13 @@ export default function AutoPartPage({
                 )}
               </div>
 
-              {/* Product details */}
               <div className={styles.cardContent}>
                 <div className={styles.categoryHeader}>
                   <span className={styles.categoryTag}>
                     {part.sellerName}
                   </span>
 
-                  <span className={styles.newBadge}>
-                    New
-                  </span>
+                  <span className={styles.newBadge}>New</span>
                 </div>
 
                 <h2 className={styles.cardTitle}>
@@ -135,12 +120,9 @@ export default function AutoPartPage({
                   </span>
 
                   <div className={styles.buttonGroup}>
-                    {/* Favourite button */}
                     <button
                       type="button"
-                      onClick={() =>
-                        toggleFavourite(part.partId)
-                      }
+                      onClick={() => toggleFavourite(part.partId)}
                       aria-label={
                         part.isFavourite
                           ? "Remove from favourites"
@@ -151,13 +133,10 @@ export default function AutoPartPage({
                       {part.isFavourite ? "★" : "☆"}
                     </button>
 
-                    {/* Delete button */}
                     <button
                       type="button"
                       className={styles.deleteBtn}
-                      onClick={() =>
-                        removePart(part.partId)
-                      }
+                      onClick={() => removePart(part.partId)}
                       aria-label={`Delete ${part.partName}`}
                     >
                       🗑️

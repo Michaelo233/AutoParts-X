@@ -1,21 +1,19 @@
 
 import "./App.css";
 
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "./components/common/layout/Layout";
 import StorageConsent from "./components/common/StorageConsent";
 import { AutoPartCatalogProvider } from "./context/AutoPartCatalogContext";
 import { StorageProvider } from "./context/StorageContext";
 import { useUserParts } from "./hooks/useUserParts";
+
 import Home from "./pages/Home";
 import { MyParts } from "./pages/MyParts";
 import AddAutoPartPage from "./pages/AddAutoPartPages";
 import Product from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 import VehicleModels from "./pages/VehicleModels";
 
 function App() {
@@ -40,11 +38,15 @@ function App() {
 
               <Route path="sell-services" element={<Product />} />
               <Route path="products" element={<Product />} />
+              <Route path="products/:id" element={<ProductDetails />} />
+
               <Route path="vehicle-models" element={<VehicleModels />} />
 
               <Route
                 path="add-auto-part"
-                element={<AddAutoPartPage sellerName={currentUser.userName} />}
+                element={
+                  <AddAutoPartPage sellerName={currentUser.userName} />
+                }
               />
 
               <Route

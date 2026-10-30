@@ -89,7 +89,7 @@ export const carPartList = [
     partsOwned: [
       {
         id: 7,
-        partId: 'EN_001',
+        partId: 'EN_004',
         partName: 'Engine',
         categoryId: 'CT001',
         Description: 'Engine for a vehicle',
@@ -122,6 +122,17 @@ export const carPartList = [
         isFavorite: false,
         isForSale: true,
       },
+      {
+  id: 10,
+  partId: 'BR_004',
+  partName: 'Brake Pads',
+  categoryId: 'CT003',
+  Description: 'Replacement brake pads for a vehicle.',
+  Price: 180,
+  partImage: '/images/brake_pads.jpg',
+  isFavorite: false,
+  isForSale: true,
+},
     ],
   },
 ];

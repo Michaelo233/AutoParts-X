@@ -1,10 +1,10 @@
 
-
 import HeroSection from "../components/home/HeroSection";
 import AutoPartPage from "./AutoPartPage";
-import styles from "./stylesPages/Home.module.css";
-import { useStorage } from "../context/StorageContext";
+import AllAutoParts from "../components/parts/catalog/AllAutoPartsList";
 import VehicleModels from "./VehicleModels";
+import { useStorage } from "../context/StorageContext";
+import styles from "./stylesPages/Home.module.css";
 
 function Home() {
   const { searchTerm, setSearchTerm } = useStorage();
@@ -16,7 +16,10 @@ function Home() {
         onSearch={setSearchTerm}
       />
 
+      <AllAutoParts />
+
       <AutoPartPage searchTerm={searchTerm} />
+
       <VehicleModels />
     </section>
   );
