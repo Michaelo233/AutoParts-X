@@ -4,6 +4,15 @@ import styles from '../components/parts/my-parts/MyParts.module.css';
 import { PartsNav } from '../components/parts/my-parts/PartsNav';
 import { PartCard } from '../components/parts/my-parts/PartCard';
 
+// Define the props for the MyParts component
+/* The MyPartsProps interface defines the expected props for the MyParts
+ component
+  user: The current user whose parts are displayed. 
+  users: The list of all users. 
+  onRemovePart: A function to handle removing a part from the current user.
+  onToggleSale: A function to handle toggling the sale status of a part for the current user.
+  error: A string containing any error messages to display.
+ */
 interface MyPartsProps {
   user: User;
   users: User[];
@@ -12,6 +21,8 @@ interface MyPartsProps {
   error: string | null;
 }
 
+// The MyParts component displays the parts owned by a user and allows searching
+//  for other users by name
 export const MyParts: React.FC<MyPartsProps> = ({
   user,
   users,
@@ -27,16 +38,19 @@ export const MyParts: React.FC<MyPartsProps> = ({
       return user;
     }
 
+    // Find the user in the users array whose userName matches the submittedName (case-insensitive)
     return users.find(
       (item) => item.userName.trim().toLowerCase() === submittedName.trim().toLowerCase()
     ) ?? null;
   }, [submittedName, user, users]);
 
+  // Handle the form submission for searching a user by name
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmittedName(searchName.trim());
   };
 
+  // Render the component
   return (
     <section className={styles.container}>
       <div className={styles.navPosition}>
@@ -55,6 +69,7 @@ export const MyParts: React.FC<MyPartsProps> = ({
         <button type="submit" className={styles.searchButton}>Search</button>
       </form>
 
+      // Display any error messages if present
       {error && <p className={styles.emptyMessage} role="alert">{error}</p>}
 
       {displayedUser ? (
