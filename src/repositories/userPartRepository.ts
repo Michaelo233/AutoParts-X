@@ -30,13 +30,27 @@ const cloneUser = (user: User): User => ({
   partsOwned: user.partsOwned.map(clonePart),
 });
 
+const listeners = new Set<() => void>();
+
+const notifyListeners = () => {
+  listeners.forEach((listener) => listener());
+};
+
+const normalizeUserName = (userName: string): string => userName.trim();
+
 const findUserIndexByName = (userName: string): number =>
   users.findIndex(
-    (user) => user.userName.trim().toLowerCase() === userName.trim().toLowerCase()
+    (user) =>
+      user.userName.trim().toLowerCase() === normalizeUserName(userName).toLowerCase()
   );
 
 export const userPartRepository = {
   getUsers: (): User[] => users.map(cloneUser),
+
+  subscribe: (listener: () => void): (() => void) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  },
 
   getUserByName: (userName: string): User | null => {
     const normalizedName = userName.trim();
@@ -78,14 +92,16 @@ export const userPartRepository = {
     };
 
     users = [...users, newUser];
+    notifyListeners();
     return cloneUser(newUser);
   },
 
   addPartToUser: (userName: string, part: Part): User => {
-    let targetUser = userPartRepository.getUserByName(userName);
+    const normalizedUserName = normalizeUserName(userName);
+    let targetUser = userPartRepository.getUserByName(normalizedUserName);
 
     if (!targetUser) {
-      targetUser = userPartRepository.createUser(userName);
+      targetUser = userPartRepository.createUser(normalizedUserName);
     }
 
     const normalizedPart: Part = {
@@ -104,12 +120,21 @@ export const userPartRepository = {
         return user;
       }
 
+      const alreadyExists = user.partsOwned.some(
+        (existingPart) => String(existingPart.partId) === String(normalizedPart.partId)
+      );
+
+      if (alreadyExists) {
+        return user;
+      }
+
       return {
         ...user,
         partsOwned: [normalizedPart, ...user.partsOwned],
       };
     });
 
+    notifyListeners();
     return userPartRepository.getUserByName(targetUser.userName)!;
   },
 
@@ -122,13 +147,38 @@ export const userPartRepository = {
       return null;
     }
 
-    const updatedParts = currentUser.partsOwned.filter((part) => String(part.partId) !== String(partId));
+    const updatedParts = currentUser.partsOwned.filter(
+      (part) => String(part.partId) !== String(partId)
+    );
 
     users = users.map((user, index) =>
       index === userIndex ? { ...user, partsOwned: updatedParts } : user
     );
 
+    notifyListeners();
     return cloneUser(users[userIndex]);
+  },
+
+  removePartById: (partId: string): boolean => {
+    let removed = false;
+
+    users = users.map((user) => {
+      const nextParts = user.partsOwned.filter(
+        (part) => {
+          const matches = String(part.partId) === String(partId);
+          if (matches) removed = true;
+          return !matches;
+        }
+      );
+
+      return { ...user, partsOwned: nextParts };
+    });
+
+    if (removed) {
+      notifyListeners();
+    }
+
+    return removed;
   },
 
   togglePartSaleStatus: (userName: string, partId: string, isForSale: boolean): User | null => {
@@ -149,6 +199,7 @@ export const userPartRepository = {
       };
     });
 
+    notifyListeners();
     return cloneUser(users[userIndex]);
   },
 };

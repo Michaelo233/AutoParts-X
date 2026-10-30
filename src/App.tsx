@@ -9,7 +9,6 @@ import {
 
 import Layout from "./components/common/layout/Layout";
 import StorageConsent from "./components/common/StorageConsent";
-import { AddPartForm } from "./components/parts/my-parts/AddPartForm";
 import { AutoPartCatalogProvider } from "./context/AutoPartCatalogContext";
 import { StorageProvider } from "./context/StorageContext";
 import { useUserParts } from "./hooks/useUserParts";
@@ -24,7 +23,6 @@ function App() {
     currentUser,
     users,
     error,
-    handleAddPart,
     handleRemovePart,
     handleToggleForSale,
   } = useUserParts();
@@ -65,12 +63,7 @@ function App() {
               <Route
                 path="myParts/addPart"
                 element={
-                  <AddPartForm
-                    userId={currentUser.userId}
-                    userName={currentUser.userName}
-                    onAddPart={handleAddPart}
-                    error={error}
-                  />
+                  <AddAutoPartPage sellerName={currentUser.userName} />
                 }
               />
             </Route>

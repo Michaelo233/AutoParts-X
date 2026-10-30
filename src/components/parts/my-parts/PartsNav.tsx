@@ -15,14 +15,6 @@ export const PartsNav: React.FC = () => {
       >
         My Parts
       </button>
-      <span className={styles.separator}>|</span>
-      <button 
-        type="button" 
-        className={styles.navButton} 
-        onClick={() => navigate('/myParts/addPart')}
-      >
-        + Add New Part
-      </button>
     </nav>
   );
 };
