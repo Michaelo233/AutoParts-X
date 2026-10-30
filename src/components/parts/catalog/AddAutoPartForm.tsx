@@ -11,13 +11,16 @@ interface CategoryOption {
 
 interface AddAutoPartsFormProps {
   categories: CategoryOption[];
-  onAddAutoPart: (part: NewCatalogPart) => void;
+  defaultUserName?: string;
+  onAddAutoPart: (part: NewCatalogPart, sellerName: string) => void;
 }
 
 export default function AddAutoPartsForm({
   categories,
+  defaultUserName = "Michael",
   onAddAutoPart,
 }: AddAutoPartsFormProps) {
+  const [sellerName, setSellerName] = useState(defaultUserName);
   const [partName, setPartName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -47,7 +50,13 @@ export default function AddAutoPartsForm({
     event.preventDefault();
     setError("");
 
+    const trimmedSeller = sellerName.trim();
     const numericPrice = Number(price);
+
+    if (!trimmedSeller) {
+      setError("Seller username is required.");
+      return;
+    }
 
     if (!partName.trim()) {
       setError("Part name is required.");
@@ -85,129 +94,152 @@ export default function AddAutoPartsForm({
       isFavourite: false,
     };
 
-    onAddAutoPart(newPart);
+    onAddAutoPart(newPart, trimmedSeller);
 
     setPartName("");
     setPrice("");
     setDescription("");
     setImageUrl("");
     setSelectedCategory("");
+    setSellerName(trimmedSeller);
   };
 
   return (
-    <section className={styles.formContainer}>
-      <h2>Add New Auto Part</h2>
+    <main className={styles.pageContainer}>
+      <header className={styles.headerSection}>
+        <p className={styles.eyebrow}>AUTO PARTS</p>
+        <h1 className={styles.sectionHeading}>Add a New Part</h1>
+      </header>
 
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit}
-      >
-        <label
-          htmlFor="partName"
-          className={styles.label}
+      <section className={styles.formContainer}>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit}
         >
-          Part Name
-        </label>
+          <label
+            htmlFor="sellerName"
+            className={styles.label}
+          >
+            Username
+          </label>
 
-        <input
-          id="partName"
-          type="text"
-          value={partName}
-          onChange={event =>
-            setPartName(event.target.value)
-          }
-          className={styles.input}
-          required
-        />
+          <input
+            id="sellerName"
+            type="text"
+            value={sellerName}
+            onChange={event => setSellerName(event.target.value)}
+            className={styles.input}
+            placeholder="Enter the seller name"
+            required
+          />
 
-        <label
-          htmlFor="category"
-          className={styles.label}
-        >
-          Category
-        </label>
+          <label
+            htmlFor="partName"
+            className={styles.label}
+          >
+            Part Name
+          </label>
 
-        <select
-          id="category"
-          value={selectedCategory}
-          onChange={event =>
-            setSelectedCategory(event.target.value)
-          }
-          className={styles.input}
-          required
-        >
-          <option value="">Select a category</option>
+          <input
+            id="partName"
+            type="text"
+            value={partName}
+            onChange={event =>
+              setPartName(event.target.value)
+            }
+            className={styles.input}
+            required
+          />
 
-          {categories.map(category => (
-            <option
-              key={category.id}
-              value={category.id}
-            >
-              {category.categoryName}
-            </option>
-          ))}
-        </select>
+          <label
+            htmlFor="category"
+            className={styles.label}
+          >
+            Category
+          </label>
 
-        <label
-          htmlFor="price"
-          className={styles.label}
-        >
-          Price
-        </label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={event =>
+              setSelectedCategory(event.target.value)
+            }
+            className={styles.input}
+            required
+          >
+            <option value="">Select a category</option>
 
-        <input
-          id="price"
-          type="number"
-          min="0.01"
-          step="0.01"
-          value={price}
-          onChange={event =>
-            setPrice(event.target.value)
-          }
-          className={styles.input}
-          required
-        />
+            {categories.map(category => (
+              <option
+                key={category.id}
+                value={category.id}
+              >
+                {category.categoryName}
+              </option>
+            ))}
+          </select>
 
-        <label
-          htmlFor="description"
-          className={styles.label}
-        >
-          Description
-        </label>
+          <label
+            htmlFor="price"
+            className={styles.label}
+          >
+            Price
+          </label>
 
-        <textarea
-          id="description"
-          value={description}
-          onChange={event =>
-            setDescription(event.target.value)
-          }
-          className={styles.input}
-          required
-        />
+          <input
+            id="price"
+            type="number"
+            min="0.01"
+            step="0.01"
+            value={price}
+            onChange={event =>
+              setPrice(event.target.value)
+            }
+            className={styles.input}
+            required
+          />
 
-        <label
-          htmlFor="image"
-          className={styles.label}
-        >
-          Part Image
-        </label>
+          <label
+            htmlFor="description"
+            className={styles.label}
+          >
+            Description
+          </label>
 
-        <input
-          id="image"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className={styles.input}
-        />
+          <textarea
+            id="description"
+            value={description}
+            onChange={event =>
+              setDescription(event.target.value)
+            }
+            className={styles.input}
+            required
+          />
 
-        {error && (
-          <p role="alert">{error}</p>
-        )}
+          <label
+            htmlFor="image"
+            className={styles.label}
+          >
+            Part Image
+          </label>
 
-        <button type="submit">
-          Add Auto Part
-        </button>
-      </form>
-    </section>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className={styles.input}
+          />
+
+          {error && (
+            <p role="alert" className={styles.errorMessage}>{error}</p>
+          )}
+
+          <button type="submit">
+            Add Auto Part
+          </button>
+        </form>
+      </section>
+    </main>
   );
 }

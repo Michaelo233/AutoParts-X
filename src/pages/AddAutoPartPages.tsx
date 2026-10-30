@@ -5,11 +5,11 @@ import categoryData from "../data/autoPartCategories.json";
 import type { NewCatalogPart } from "../types/catalog";
 
 interface AddAutoPartPageProps {
-  sellerName: string;
+  sellerName?: string;
 }
 
 export default function AddAutoPartPage({
-  sellerName,
+  sellerName = "Michael",
 }: AddAutoPartPageProps) {
   const { addPart } = useAutoPartCatalog();
 
@@ -18,16 +18,15 @@ export default function AddAutoPartPage({
     categoryName: category.categoryName,
   }));
 
-  const handleAddAutoPart = (part: NewCatalogPart): void => {
-    addPart(part, sellerName);
+  const handleAddAutoPart = (part: NewCatalogPart, inputSellerName: string): void => {
+    addPart(part, inputSellerName || sellerName);
   };
 
   return (
-    <main>
-      <AddAutoPartsForm
-        categories={categories}
-        onAddAutoPart={handleAddAutoPart}
-      />
-    </main>
+    <AddAutoPartsForm
+      categories={categories}
+      defaultUserName={sellerName}
+      onAddAutoPart={handleAddAutoPart}
+    />
   );
 }
