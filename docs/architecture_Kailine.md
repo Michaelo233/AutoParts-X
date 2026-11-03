@@ -14,7 +14,7 @@ I created repositories to centralize data access:
 **myPartsRepository.ts** — Retrieves and normalizes users and automotive parts 
 from test data.
 **carPartSearchRepository.ts** — Retrieves automotive parts for searching.
-**vehicleRepository.ts** — Retrieves external vehicle information from the NHTSA API
+**vehicleRepository.ts** — Retrieves external vehicle information from the Aerpro API
 #### 4.  Generate ID 
 **generatePartId()** — Generates listing IDs such as P001, P002, and P003.
 **generateAutoPartId()** — Generates automotive part IDs such as PART001, 
