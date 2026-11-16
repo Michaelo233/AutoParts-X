@@ -4,15 +4,25 @@ import type { Part, User } from '../types/userParts';
 import { userPartService } from '../services/userPartService';
 import { userPartRepository } from '../repositories/userPartRepository';
 
+// Initial user state for demonstration purposes
+// This is to set a default user in case the API call fails or returns no users.
 const initialUser: User = {
   userId: 1,
   userName: 'Michael',
   partsOwned: [],
 };
 
+// Utility function to extract error messages from unknown error types
+/* This function checks if the error is an instance of the Error class
+ and returns its message. If not, it returns a fallback message provided 
+ as an argument.*/
 const getErrorMessage = (error: unknown, fallback: string): string =>
   error instanceof Error ? error.message : fallback;
 
+// Custom React hook to manage user parts state and actions
+/* This hook encapsulates the logic for fetching users, managing the current
+ user, and handling part-related actions such as adding, removing, and toggling
+  sale status. It also manages loading and error states. */
 export function useUserParts() {
   const [currentUser, setCurrentUser] = useState<User>(initialUser);
   const [users, setUsers] = useState<User[]>([]);
@@ -22,10 +32,15 @@ export function useUserParts() {
   useEffect(() => {
     let ignore = false;
 
+    // Function to load users from the service and set the state accordingly
+    // This function fetches all users from the userPartService and updates the state.
+    // It also handles errors and sets the loading state.
     async function loadUsers() {
       try {
+        // Fetch all users from the service
         const loadedUsers = await userPartService.getAllUsers();
 
+        // If the component is still mounted, update the users and current user state
         if (!ignore) {
           setUsers(loadedUsers);
           setCurrentUser(
@@ -46,9 +61,13 @@ export function useUserParts() {
         }
       }
     }
-
+    
     void loadUsers();
 
+    // Subscribe to changes in the userPartRepository to keep the state in sync
+    // This subscription listens for changes in the userPartRepository and updates
+    // the users and current user state accordingly. It ensures that the component
+    // reflects the latest data from the repository.
     const unsubscribe = userPartRepository.subscribe(() => {
       if (ignore) return;
       const nextUsers = userPartRepository.getUsers();
@@ -61,12 +80,19 @@ export function useUserParts() {
       );
     });
 
+    // it returns a cleanup function that sets the ignore flag to true and unsubscribes
+    //  from the repository when the component unmounts or the effect is re-run.
+    //  This prevents state updates on an unmounted component, avoiding potential memory leaks or errors.
     return () => {
       ignore = true;
       unsubscribe();
     };
   }, []);
 
+  // Function to refresh the list of users and update the current user state
+  /* This function fetches the latest list of users from the userPartService
+  and updates the state accordingly. It also allows for selecting a specific
+  updated user as the current user if needed. */
   const refreshUsers = async (
     updatedUser: User,
     selectUpdatedUser = false
@@ -82,6 +108,10 @@ export function useUserParts() {
     );
   };
 
+  // Function to handle adding a new part to the current user
+  /* This function attempts to add a new part to the current user's partsOwned list.
+  It calls the userPartService to perform the addition and refreshes the users state
+  upon success. It also handles errors and updates the error state accordingly. */
   const handleAddPart = async (newPart: Part): Promise<boolean> => {
     setError(null);
 
@@ -99,6 +129,10 @@ export function useUserParts() {
     }
   };
 
+  // Function to handle removing a part from the current user
+  /* This function attempts to remove a part from the current user's partsOwned list.
+  It calls the userPartService to perform the removal and refreshes the users state
+  upon success. It also handles errors and updates the error state accordingly. */
   const handleRemovePart = async (
     userName: string,
     partIdToRemove: string
@@ -119,6 +153,10 @@ export function useUserParts() {
     }
   };
 
+  // Function to handle toggling the sale status of a part for the current user
+  /* This function attempts to toggle the sale status of a part for the current user.
+  It calls the userPartService to perform the toggle and refreshes the users state
+  upon success. It also handles errors and updates the error state accordingly. */
   const handleToggleForSale = async (
     userName: string,
     partId: string,
@@ -143,6 +181,10 @@ export function useUserParts() {
     }
   };
 
+  // Function to set the current user by their username
+  /* This function attempts to find a user by their username and set them as the current user.
+  It calls the userPartService to perform the lookup and updates the currentUser state upon success.
+  It also handles errors and updates the error state accordingly. */
   const setCurrentUserByName = async (
     userName: string
   ): Promise<boolean> => {
@@ -164,6 +206,7 @@ export function useUserParts() {
     }
   };
 
+  // Return the state and action handlers from the hook
   return {
     currentUser,
     users,
