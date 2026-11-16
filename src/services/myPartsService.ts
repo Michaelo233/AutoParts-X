@@ -4,7 +4,9 @@ import {
     generatePartId, generateAutoPartId,
 } from "../components/common/utils/generateID";
 
-
+// Service layer for managing user parts
+// This service provides methods to interact with the myPartsRepository for user and part management.
+// It includes methods to get user information, manage parts, and handle part-related actions.
 export const MyPartsService = {
     getUser: (userId: string): User | undefined => {
         return myPartsRepository.getUserById(userId);
