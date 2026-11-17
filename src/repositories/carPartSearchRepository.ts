@@ -1,7 +1,7 @@
 
 
-import { carPartList as userData } from "../data/carPartList";
-import type { Part } from "../types/userParts";
+import { carPartList as userData } from "../data/carPartList.js";
+import type { Part } from "../types/userParts.js";
 
 /**
  * Car Part Search Repository
