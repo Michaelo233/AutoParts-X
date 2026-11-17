@@ -1,4 +1,4 @@
-import { carPartSearchRepository } from "../repositories/carPartSearchRepository";
+import { carPartSearchRepository } from "../repositories/carPartSearchRepository.js";
 
 /**
  * Car Part Search Service
