@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import corsOptions from "../config/cors";
 import setupSwagger from "../config/swagger";
 import errorHandler from "./api/v1/middleware/errorHandler";
+import myPartsRoutes from "./api/v1/routes/myPartsRoutes";
+import userPartRoutes from "./api/v1/routes/userPartRoutes";
 
 // initialize express application
 const app: Express = express();
@@ -16,7 +18,7 @@ dotenv.config();
 app.use(morgan("combined"));
 
 // allow express to parse json
-app.use(express.json());
+app.use(express.json({ limit: "8mb" }));
 
 // add Cross-Origin Resource Sharing middleware
 // This will refuse requests from origins that do not fulfill corsOptions requirements
@@ -31,7 +33,8 @@ app.get("/",  (_req, res) => {
     res.send("Got response from backend!");
 });
 
-// use autopartsRoutes
+app.use("/api/parts", myPartsRoutes);
+app.use("/api/addPart", userPartRoutes);
 
 //errorhandler catches errors as last element in middleware chain
 // occurs when "next" is invoked

@@ -26,6 +26,7 @@ export default function AddAutoPartsForm({
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [isReadingImage, setIsReadingImage] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -38,12 +39,37 @@ export default function AddAutoPartsForm({
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
+      setImageUrl("");
       setError("Please upload a valid image.");
       return;
     }
 
-    setImageUrl(URL.createObjectURL(file));
-    setError("");
+    if (file.size > 5 * 1024 * 1024) {
+      setImageUrl("");
+      setError("Image must be 5 MB or smaller.");
+      return;
+    }
+
+    const reader = new FileReader();
+    setIsReadingImage(true);
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        setImageUrl("");
+        setError("Unable to read the selected image.");
+        setIsReadingImage(false);
+        return;
+      }
+
+      setImageUrl(reader.result);
+      setError("");
+      setIsReadingImage(false);
+    };
+    reader.onerror = () => {
+      setImageUrl("");
+      setError("Unable to read the selected image.");
+      setIsReadingImage(false);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (
@@ -52,6 +78,11 @@ export default function AddAutoPartsForm({
     event.preventDefault();
     setError("");
     setSuccessMessage("");
+
+    if (isReadingImage) {
+      setError("Please wait for the image to finish loading.");
+      return;
+    }
 
     const trimmedSeller = sellerName.trim();
     const numericPrice = Number(price);
@@ -270,8 +301,8 @@ export default function AddAutoPartsForm({
             </p>
           )}
 
-          <button type="submit">
-            Add Auto Part
+          <button type="submit" disabled={isReadingImage}>
+            {isReadingImage ? "Loading image..." : "Add Auto Part"}
           </button>
         </form>
       </section>

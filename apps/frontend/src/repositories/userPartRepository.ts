@@ -1,277 +1,192 @@
-import { carPartList as initialUsers } from '../data/carPartList';
-import type { Part, User } from '../types/UserParts';
+import type { Part, User } from "../types/UserParts";
 
-// Utility function to parse user IDs that may be in the format "U<number>"
-// This function extracts the numeric part of the user ID for comparison and sorting purposes.
-const parseUserNumber = (value: string | number): number => {
-  const match = /^U(\d+)$/i.exec(String(value));
-  return match ? Number(match[1]) : 0;
-};
+// API endpoint used to persist user and part data through the backend.
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+const endpoint = `${baseURL}/api/addPart`;
 
-// Initialize the users array by normalizing the initial user data
-// This ensures that all user and part properties are in the expected format and types.
-let users: User[] = initialUsers.map((user) => ({
-  ...user,
-  userId: String(user.userId),
-  partsOwned: user.partsOwned.map((part) => ({
-    ...part,
-    id: String(part.id),
-    partId: String(part.partId),
-    categoryId: part.categoryId ?? 'GENERAL',
-    partDescription: part.description ?? '',
-    partPrice: part.price ?? 0,
-    isForSale: part.isForSale ?? false,
-    isFavorite: part.isFavorite ?? false,
-    userId: String(user.userId),
-    userName: user.userName,
-  })),
-}));
+// Cached users let synchronous subscribers read the latest loaded server data.
+let users: User[] = [];
+const listeners = new Set<() => void>();
 
-// Utility function to clone a Part object
-// This function creates a shallow copy of a Part object to prevent direct mutations.
+// Clone parts so callers cannot mutate the repository cache directly.
 const clonePart = (part: Part): Part => ({ ...part });
 
-// Utility function to clone a User object
-// This function creates a shallow copy of a User object, including cloning its partsOwned array.
+// Clone a user and all owned parts before returning cached data.
 const cloneUser = (user: User): User => ({
   ...user,
   partsOwned: user.partsOwned.map(clonePart),
 });
 
-// Set of listeners to notify when the users data changes
-// This allows components or services to subscribe to changes in the user parts data.
-const listeners = new Set<() => void>();
-
-// Function to notify all subscribed listeners of changes to the users data
-// This function iterates through the set of listeners and invokes each one, allowing them to react
-//  to changes in the data.
-const notifyListeners = () => {
+// Notify subscribers after the cached server data changes.
+const notifyListeners = (): void => {
   listeners.forEach((listener) => listener());
 };
 
-// Utility function to normalize user names for consistent comparisons
-// This function trims whitespace from the user name to ensure consistent matching and storage.
-const normalizeUserName = (userName: string): string => userName.trim();
-
-// Utility function to find the index of a user by their normalized name
-// This function searches the users array for a user whose name matches the provided name (case-insensitive)
-const findUserIndexByName = (userName: string): number =>
-  users.findIndex(
-    (user) =>
-      user.userName.trim().toLowerCase() === normalizeUserName(userName).toLowerCase()
+// Add or replace one user in the cache using the server response.
+const cacheUser = (user: User): User => {
+  const index = users.findIndex(
+    (item) => String(item.userId) === String(user.userId)
   );
+  users =
+    index < 0
+      ? [...users, cloneUser(user)]
+      : users.map((item, itemIndex) =>
+          itemIndex === index ? cloneUser(user) : item
+        );
+  notifyListeners();
+  return cloneUser(user);
+};
 
-// Exported repository object that provides methods to access and manipulate user parts data
-// The userPartRepository object provides methods to retrieve users, subscribe to changes,
-//  get a user by name, create a new user, add or remove parts from a user, and update part details.
+// Replace the cache with the latest user list from the backend.
+const cacheUsers = (nextUsers: User[]): User[] => {
+  users = nextUsers.map(cloneUser);
+  notifyListeners();
+  return userPartRepository.getUsers();
+};
+
+// Parse successful JSON responses and surface HTTP errors to callers.
+async function readJSON<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message || `API error: ${response.status}`);
+  }
+
+  return (await response.json()) as T;
+}
+
 export const userPartRepository = {
+  // Return a cloned snapshot of users currently held in the local cache.
   getUsers: (): User[] => users.map(cloneUser),
 
-  // Method to subscribe to changes in the users data
-  // This allows external components or services to be notified when the users data changes.
+  // Fetch all users from the backend and refresh the local cache.
+  refreshUsers: async (): Promise<User[]> => {
+    const response = await fetch(`${endpoint}/users`);
+    return cacheUsers(await readJSON<User[]>(response));
+  },
+
+  // Subscribe to local cache changes, such as completed API mutations.
   subscribe: (listener: () => void): (() => void) => {
     listeners.add(listener);
     return () => listeners.delete(listener);
   },
 
-  // Method to get a user by their name
-  // This method searches for a user whose name matches the provided name (case-insensitive)
-  // and returns a cloned User object if found, or null if not found.
+  // Find a user by name in the currently cached server data.
   getUserByName: (userName: string): User | null => {
-    const normalizedName = userName.trim();
+    const normalizedName = userName.trim().toLowerCase();
     if (!normalizedName) return null;
 
     const user = users.find(
-      (item) => item.userName.trim().toLowerCase() === normalizedName.toLowerCase()
+      (item) => item.userName.trim().toLowerCase() === normalizedName
     );
-
     return user ? cloneUser(user) : null;
   },
 
-  // Method to get or create a user by their name
-  // This method attempts to find a user by name, and if not found, creates a new user with that name.
-  // It returns a cloned User object representing the found or newly created user.
-  getOrCreateUserByName: (userName: string): User => {
-    const normalizedName = userName.trim();
-    if (!normalizedName) {
-      throw new Error('User name is required.');
-    }
-
-    return userPartRepository.getUserByName(normalizedName) ?? userPartRepository.createUser(normalizedName);
-  },
-
-  // Method to create a new user with the specified name
-  // This method generates a new user ID, creates a new User object, adds it to the users array,
-  // and notifies listeners of the change. It returns a cloned User object representing the new user.
-  createUser: (userName: string): User => {
-    const normalizedName = userName.trim();
-    if (!normalizedName) {
-      throw new Error('User name is required.');
-    }
-
-    if (userPartRepository.getUserByName(normalizedName)) {
-      return userPartRepository.getUserByName(normalizedName)!;
-    }
-
-    const nextUserId =
-      users.reduce((maxId, user) => Math.max(maxId, parseUserNumber(user.userId)), 0) + 1;
-
-    const newUser: User = {
-      userId: `U${String(nextUserId).padStart(3, '0')}`,
-      userName: normalizedName,
-      partsOwned: [],
-    };
-
-    users = [...users, newUser];
-    notifyListeners();
-    return cloneUser(newUser);
-  },
-
-  // Method to add a part to a user's partsOwned list
-  // This method normalizes the part data, checks if the user exists (creating them if necessary),
-  // and adds the part to the user's partsOwned list if it doesn't already exist. It notifies listeners
-  // of the change and returns a cloned User object representing the updated user.
-  addPartToUser: (userName: string, part: Part): User => {
-    const normalizedUserName = normalizeUserName(userName);
-    let targetUser = userPartRepository.getUserByName(normalizedUserName);
-
-    if (!targetUser) {
-      targetUser = userPartRepository.createUser(normalizedUserName);
-    }
-
-    const normalizedPart: Part = {
-      ...part,
-      partId: part.partId || `PART_${Date.now()}`,
-      userId: targetUser.userId,
-      userName: targetUser.userName,
-      partDescription: part.partDescription || part.description || '',
-      partPrice: part.partPrice ?? part.price ?? 0,
-      isForSale: Boolean(part.isForSale),
-      isFavorite: Boolean(part.isFavorite),
-    };
-
-    users = users.map((user) => {
-      if (String(user.userId) !== String(targetUser!.userId)) {
-        return user;
-      }
-
-      const alreadyExists = user.partsOwned.some(
-        (existingPart) => String(existingPart.partId) === String(normalizedPart.partId)
-      );
-
-      if (alreadyExists) {
-        return user;
-      }
-
-      return {
-        ...user,
-        partsOwned: [normalizedPart, ...user.partsOwned],
-      };
-    });
-
-    notifyListeners();
-    return userPartRepository.getUserByName(targetUser.userName)!;
-  },
-
-  // Method to remove a part from a user's partsOwned list
-  // This method finds the user by name and removes the part with the specified ID from their partsOwned list.
-  // It notifies listeners of the change and returns a cloned User object representing the updated user.
-  removePartFromUser: (userName: string, partId: string): User | null => {
-    const userIndex = findUserIndexByName(userName);
-    if (userIndex === -1) return null;
-
-    const currentUser = users[userIndex];
-    if (!currentUser.partsOwned.some((part) => String(part.partId) === String(partId))) {
-      return null;
-    }
-
-    const updatedParts = currentUser.partsOwned.filter(
-      (part) => String(part.partId) !== String(partId)
+  // Fetch one user by name and add the returned record to the cache.
+  fetchUserByName: async (userName: string): Promise<User | null> => {
+    const response = await fetch(
+      `${endpoint}/users/by-name/${encodeURIComponent(userName.trim())}`
     );
-
-    users = users.map((user, index) =>
-      index === userIndex ? { ...user, partsOwned: updatedParts } : user
-    );
-
-    notifyListeners();
-    return cloneUser(users[userIndex]);
+    const user = await readJSON<User | null>(response);
+    return user ? cacheUser(user) : null;
   },
 
-  // Method to remove a part by its ID for a user
-  // This method iterates through all users and removes any part that matches the specified part ID.
-  // It notifies listeners of the change if any parts were removed and returns a boolean indicating
-  // whether any parts were removed.
-  removePartById: (partId: string): boolean => {
-    let removed = false;
+  // Ask the backend to find or create a user with the supplied name.
+  getOrCreateUserByName: async (userName: string): Promise<User> => {
+    const normalizedName = userName.trim();
+    if (!normalizedName) throw new Error("User name is required.");
 
-    users = users.map((user) => {
-      const nextParts = user.partsOwned.filter((part) => {
-        const matches = String(part.partId) === String(partId);
-        if (matches) removed = true;
-        return !matches;
-      });
-
-      return { ...user, partsOwned: nextParts };
+    const response = await fetch(`${endpoint}/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName: normalizedName }),
     });
-
-    if (removed) {
-      notifyListeners();
-    }
-
-    return removed;
+    return cacheUser(await readJSON<User>(response));
   },
 
-  // Method to update a part's details for a user
-  // This method finds the user by name and updates the part with the specified ID in their partsOwned list.
-  // It notifies listeners of the change and returns a cloned User object representing the updated user.
-  updatePart: (updatedPart: Part): Part | null => {
-    let savedPart: Part | null = null;
+  // Create a user using the backend's find-or-create operation.
+  createUser: async (userName: string): Promise<User> =>
+    userPartRepository.getOrCreateUserByName(userName),
+
+  // Add a part for a user and cache the updated user returned by the backend.
+  addPartToUser: async (userName: string, part: Part): Promise<User> => {
+    const response = await fetch(
+      `${endpoint}/users/${encodeURIComponent(userName.trim())}/parts`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(part),
+      }
+    );
+    return cacheUser(await readJSON<User>(response));
+  },
+
+  // Remove a part from one user and cache the updated user record.
+  removePartFromUser: async (
+    userName: string,
+    partId: string
+  ): Promise<User | null> => {
+    const response = await fetch(
+      `${endpoint}/users/${encodeURIComponent(userName.trim())}/parts/${encodeURIComponent(partId)}`,
+      { method: "DELETE" }
+    );
+    return cacheUser(await readJSON<User>(response));
+  },
+
+  // Remove a part by ID and remove it from every cached user's part list.
+  removePartById: async (partId: string): Promise<boolean> => {
+    const response = await fetch(
+      `${endpoint}/${encodeURIComponent(partId)}`,
+      { method: "DELETE" }
+    );
+    const result = await readJSON<{ removed: boolean }>(response);
+    if (!result.removed) return false;
 
     users = users.map((user) => ({
       ...user,
-      partsOwned: user.partsOwned.map((part) => {
-        if (part.id !== updatedPart.id) {
-          return part;
-        }
-
-        savedPart = {
-          ...part,
-          ...updatedPart,
-          id: part.id,
-          partId: part.partId,
-          userId: part.userId,
-          userName: part.userName,
-        };
-
-        return savedPart;
-      }),
+      partsOwned: user.partsOwned.filter(
+        (part) => String(part.partId) !== String(partId)
+      ),
     }));
-
-    return savedPart ? clonePart(savedPart as Part) : null;
+    notifyListeners();
+    return true;
   },
 
-  // Method to toggle the sale status of a part for a user
-  // This method finds the user by name and toggles the isForSale property of the part with the specified ID.
-  // It notifies listeners of the change and returns a cloned User object representing the updated user.
-  togglePartSaleStatus: (userName: string, partId: string, isForSale: boolean): User | null => {
-    const userIndex = findUserIndexByName(userName);
-    if (userIndex === -1) return null;
-    if (!users[userIndex].partsOwned.some((part) => String(part.partId) === String(partId))) {
-      return null;
-    }
+  // Update a part and replace the cached record with the backend response.
+  updatePart: async (updatedPart: Part): Promise<Part | null> => {
+    const response = await fetch(
+      `${endpoint}/${encodeURIComponent(updatedPart.id)}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedPart),
+      }
+    );
+    const savedPart = await readJSON<Part>(response);
 
-    users = users.map((user, index) => {
-      if (index !== userIndex) return user;
-
-      return {
-        ...user,
-        partsOwned: user.partsOwned.map((part) =>
-          String(part.partId) === String(partId) ? { ...part, isForSale } : part
-        ),
-      };
-    });
-
+    users = users.map((user) => ({
+      ...user,
+      partsOwned: user.partsOwned.map((part) =>
+        part.id === savedPart.id ? clonePart(savedPart) : part
+      ),
+    }));
     notifyListeners();
-    return cloneUser(users[userIndex]);
+    return clonePart(savedPart);
+  },
+
+  // Update a user's part sale status and cache the updated user.
+  togglePartSaleStatus: async (
+    userName: string,
+    partId: string,
+    isForSale: boolean
+  ): Promise<User | null> => {
+    const response = await fetch(
+      `${endpoint}/users/${encodeURIComponent(userName.trim())}/parts/${encodeURIComponent(partId)}/sale`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isForSale }),
+      }
+    );
+    return cacheUser(await readJSON<User>(response));
   },
 };
