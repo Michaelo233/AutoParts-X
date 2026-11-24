@@ -4,5 +4,5 @@ export type {
     NewPart,
     AddPartForm,
     AddPartFormProps,
-    SellToggle
-} from "../../../../shared/types/userParts";
+    SellToggle,
+} from "../../../../../../shared/types/UserParts";

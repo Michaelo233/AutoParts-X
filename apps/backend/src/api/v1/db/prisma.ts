@@ -1,18 +1,47 @@
 import "dotenv/config";
+
 import {
-    defineConfig,
-    env,
-} from "@prisma/prisma7/config";
+    PrismaPg,
+} from "@prisma/adapter-pg";
 
-export default defineConfig({
-    schema: "prisma/schema.prisma",
+import {
+    PrismaClient,
+} from "../../../../generated/prisma/client";
 
-    migrations: {
-        path: "prisma/migrations",
-        seed: "tsx prisma/seed.ts",
-    },
+let prismaClient: PrismaClient | undefined;
 
-    datasource: {
-        url: env("DATABASE_URL"),
-    },
-});
+export const getPrismaClient = (): PrismaClient => {
+    if (prismaClient) {
+        return prismaClient;
+    }
+
+    const connectionString =
+        process.env.DATABASE_URL;
+
+    if (!connectionString) {
+        throw new Error(
+            "DATABASE_URL is required to connect to PostgreSQL."
+        );
+    }
+
+    const adapter = new PrismaPg({
+        connectionString,
+    });
+
+    prismaClient = new PrismaClient({
+        adapter,
+    });
+
+    return prismaClient;
+};
+
+export const disconnectPrisma =
+    async (): Promise<void> => {
+        if (!prismaClient) {
+            return;
+        }
+
+        await prismaClient.$disconnect();
+
+        prismaClient = undefined;
+    };

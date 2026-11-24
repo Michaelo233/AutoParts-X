@@ -1,3 +1,3 @@
 export type {
-    AutoPartCategory
-} from "../../../../shared/types/AutoPartCategory";
+    AutoPartCategory,
+} from "../../../../../../shared/types/AutoPartCategory";

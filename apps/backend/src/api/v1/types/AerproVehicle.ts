@@ -1,3 +1,3 @@
 export type {
-    AerproVehicle
-} from "../../../../shared/types/AerproVehicle";
+    AerproVehicle,
+} from "../../../../../../shared/types/AerproVehicle";
