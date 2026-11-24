@@ -1,4 +1,4 @@
-import { carPartList as initialUsers } from '../data/carPartList';
+import { carPartList as initialUsers } from "../data/carPartList";
 import type { Part, User } from '../types/UserParts';
 
 // Utility function to parse user IDs that may be in the format "U<number>"
