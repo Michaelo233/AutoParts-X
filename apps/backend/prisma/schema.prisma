@@ -1,0 +1,61 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../generated/prisma"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  userId     String      @id
+  userName   String
+  listings   Listing[]
+  favourites Favourite[]
+}
+
+model Category {
+  categoryId   String @id
+  categoryName String
+  parts        Part[]
+}
+
+model Part {
+  partId     Int    @id @default(autoincrement())
+  partName   String
+  categoryId String
+
+  category Category  @relation(fields: [categoryId], references: [categoryId])
+  listings Listing[]
+
+  @@index([categoryId])
+}
+
+model Listing {
+  id          Int     @id @default(autoincrement())
+  userId      String
+  partId      Int
+  description String
+  price       Decimal @db.Decimal(10, 2)
+  partImage   String?
+  isForSale   Boolean @default(true)
+
+  user       User        @relation(fields: [userId], references: [userId])
+  part       Part        @relation(fields: [partId], references: [partId])
+  favourites Favourite[]
+
+  @@index([userId])
+  @@index([partId])
+}
+
+model Favourite {
+  userId    String
+  listingId Int
+
+  user    User    @relation(fields: [userId], references: [userId])
+  listing Listing @relation(fields: [listingId], references: [id])
+
+  @@id([userId, listingId])
+  @@index([listingId])
+}
