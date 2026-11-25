@@ -6,11 +6,20 @@ export interface ProductSearchQuery {
     sellerId?: string;
     minPrice?: number;
     maxPrice?: number;
+    sortBy?: ProductSortOption;
 }
 
 export interface ProductIdParams {
     productId: number;
 }
+// type for sorting options in product search
+export type ProductSortOption =
+    | "featured"
+    | "price-asc"
+    | "price-desc"
+    | "name-asc";
+
+
 /**
  * @swagger
  * components:
