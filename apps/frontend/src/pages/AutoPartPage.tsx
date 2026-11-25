@@ -1,26 +1,21 @@
-
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAutoPartCatalog } from "../context/AutoPartCatalogContext";
 import styles from "./AutoPartPage.module.css";
 
-/**
- * AutoPartPage Props
- * Receives the search term from Home.tsx.
- */
 interface AutoPartPageProps {
   searchTerm: string;
 }
 
-/**
- * AutoPartPage
- *
- * Displays and filters available auto parts.
- */
+type SortOption = "featured" | "price-asc" | "price-desc" | "name-asc";
+
 export default function AutoPartPage({
   searchTerm,
 }: AutoPartPageProps) {
   const { catalog, removePart, toggleFavourite } = useAutoPartCatalog();
 
+  const [sortBy, setSortBy] = useState<SortOption>("featured");
+
+  // Filter products
   const filteredParts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
@@ -53,6 +48,27 @@ export default function AutoPartPage({
     });
   }, [catalog, searchTerm]);
 
+  // Sort filtered products without modifying the original array
+  const sortedParts = useMemo(() => {
+    const parts = [...filteredParts];
+
+    switch (sortBy) {
+      case "price-asc":
+        return parts.sort((a, b) => a.price - b.price);
+
+      case "price-desc":
+        return parts.sort((a, b) => b.price - a.price);
+
+      case "name-asc":
+        return parts.sort((a, b) =>
+          a.partName.localeCompare(b.partName)
+        );
+
+      default:
+        return parts;
+    }
+  }, [filteredParts, sortBy]);
+
   return (
     <main className={styles.pageContainer}>
       <header className={styles.headerSection}>
@@ -61,20 +77,40 @@ export default function AutoPartPage({
         <h1 className={styles.sectionHeading}>
           Find the Right Part for Your Vehicle
         </h1>
-
-        {searchTerm.trim() && (
-          <p role="status">
-            Search results for: <strong>{searchTerm}</strong>
-            {" — "}
-            {filteredParts.length}{" "}
-            {filteredParts.length === 1
-              ? "part found"
-              : "parts found"}
-          </p>
-        )}
       </header>
 
-      {filteredParts.length === 0 ? (
+      {/* Results count and Sort by dropdown */}
+      <div className={styles.resultsToolbar}>
+        <p role="status">
+          {searchTerm.trim() && (
+            <>
+              Search results for: <strong>{searchTerm}</strong>
+              {" — "}
+            </>
+          )}
+
+          {filteredParts.length}{" "}
+          {filteredParts.length === 1 ? "part found" : "parts found"}
+        </p>
+
+        <label className={styles.sortControl}>
+          Sort by:
+          <select
+            value={sortBy}
+            onChange={(event) =>
+              setSortBy(event.target.value as SortOption)
+            }
+          >
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Part Name: A–Z</option>
+          </select>
+        </label>
+      </div>
+
+      {/* Display sorted products */}
+      {sortedParts.length === 0 ? (
         <p role="status">
           {searchTerm.trim()
             ? `No auto parts found for "${searchTerm}". Try another search.`
@@ -82,7 +118,7 @@ export default function AutoPartPage({
         </p>
       ) : (
         <section className={styles.cardGrid}>
-          {filteredParts.map((part) => (
+          {sortedParts.map((part) => (
             <article
               key={part.partId}
               className={styles.productCard}

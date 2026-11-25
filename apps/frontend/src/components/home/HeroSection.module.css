@@ -72,10 +72,26 @@
   margin-bottom: 2rem;
 }
 
-  .heroDescription {
+
+
+.heroDescription {
     margin-bottom: 1.5rem;
     font-size: 1rem;
-  }
+}
+
+.advancedSearchLink {
+  display: block;
+  width: fit-content;
+  margin: 10px 0 0 auto;
+  color: white;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.advancedSearchLink:hover {
+  color: #93c5fd;
+}
 
 @media (max-width: 600px) {
   .heroSection {

@@ -1,0 +1,24 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.actions button[type="reset"] {
+  background-color: white;
+  color: #333;
+  border: 1px solid #aaa;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions button[type="reset"]:hover {
+  background-color: #f2f2f2;
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

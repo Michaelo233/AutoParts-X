@@ -224,3 +224,69 @@
   border-color: #e53e3e;
   color: #e53e3e;
 }
+
+/* Results count and Sort by dropdown */
+.resultsToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 0;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.resultsToolbar p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+/* Sort by control */
+.sortControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 0.875rem;
+  color: #1a202c;
+  font-weight: 500;
+}
+
+.sortControl select {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sortControl select:hover {
+  border-color: #2563eb;
+}
+
+.sortControl select:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .resultsToolbar {
+    align-items: flex-start;
+  }
+
+  .sortControl {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sortControl select {
+    flex: 1;
+    min-width: 0;
+  }
+}

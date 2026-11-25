@@ -2,6 +2,7 @@ import styles from './HeroSection.module.css';
 import Search from '../common/search/Search';
 import { useState } from 'react';
 
+
 interface HeroSectionProps {
   searchTerm: string;
   onSearch: (value: string) => void;
@@ -34,10 +35,10 @@ function HeroSection({
                     </label>
                     <div className={styles.heroSearchContainer}>
                         <Search 
-                        Title="Search for auto parts..."
-                        searchValue={searchValue}
-                        handleSearchChange={setSearchValue}
-                        handleSubmit= {onSearch}
+                            Title="Search for auto parts..."
+                            searchValue={searchValue}
+                            handleSearchChange={setSearchValue}
+                            handleSubmit= {onSearch}
                         />
                     </div>
                 </div>
