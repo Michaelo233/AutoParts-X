@@ -94,4 +94,5 @@ productRoutes.get(
     productController.getProductById
 );
 
+
 export default productRoutes;
