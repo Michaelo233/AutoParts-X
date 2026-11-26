@@ -15,6 +15,23 @@ export const productService = {
     return productRepository.add(part, userName);
   },
 
+  async updateProductPrice(
+    id: string,
+    price: number
+  ): Promise<Part | undefined> {
+    const product = await productRepository.getById(id);
+
+    if (!product) {
+      return undefined;
+    }
+
+    return productRepository.update({
+      ...product,
+      partPrice: price,
+      price: price,
+    });
+  },
+
   async removePart(id: string): Promise<void> {
     await productRepository.remove(id);
   },

@@ -35,4 +35,26 @@ export const productController = {
       next(error);
     }
   },
+
+  async updateProductPrice(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const product = await productService.updateProductPrice(
+        String(req.params.id),
+        req.body.price
+      );
+
+      if (!product) {
+        res.status(404).json({ error: "Product not found." });
+        return;
+      }
+
+      res.status(200).json(product);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
