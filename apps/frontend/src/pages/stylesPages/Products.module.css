@@ -1,0 +1,48 @@
+.container {
+  width: 100%;
+  padding: 0 32px 72px;
+  box-sizing: border-box;
+  color: #3b82f6;
+  font-family: var(--sans);
+}
+
+.title {
+  margin: 4px 0 50px;
+  color: #3b82f6;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(390px, auto);
+  gap: 24px;
+  background: transparent;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #3b82f6;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 16px 48px;
+  }
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+  }
+}

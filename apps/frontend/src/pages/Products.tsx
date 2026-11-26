@@ -10,6 +10,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import ProductCard from "../components/parts/catalog/ProductCard";
+import styles from "./stylesPages/Products.module.css";
 
 function Product() {
   const { products, loading, removeProduct } = useProducts();
@@ -28,21 +29,25 @@ function Product() {
   }
 
   return (
-    <main>
-      <h1>Auto Parts</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Auto Parts</h1>
 
       {filteredProducts.length === 0 ? (
-        <p>No parts available for sale</p>
+        <p className={styles.emptyMessage}>
+          No parts available for sale
+        </p>
       ) : (
-        filteredProducts.map((part) => (
-          <ProductCard
-            key={part.id}
-            part={part}
-            onRemove={(id) => {
-              void removeProduct(id);
-            }}
-          />
-        ))
+        <div className={styles.grid}>
+          {filteredProducts.map((part) => (
+            <ProductCard
+              key={part.id}
+              part={part}
+              onRemove={(id) => {
+                void removeProduct(id);
+              }}
+            />
+          ))}
+        </div>
       )}
     </main>
   );
