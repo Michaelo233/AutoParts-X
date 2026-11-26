@@ -1,17 +1,34 @@
-
 import { userPartRepository } from "./userPartRepository";
 import type { Part } from "../types/UserParts";
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+const endpoint = `${baseURL}/api/products`;
+
 export const productRepository = {
   async getAll(): Promise<Part[]> {
-    return userPartRepository
-      .getUsers()
-      .flatMap((user) => user.partsOwned);
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      throw new Error("Unable to retrieve products.");
+    }
+
+    return response.json();
   },
 
   async getById(id: string): Promise<Part | undefined> {
-    const parts = await this.getAll();
-    return parts.find((part) => part.id === id);
+    const response = await fetch(
+      `${endpoint}/${encodeURIComponent(id)}`
+    );
+
+    if (response.status === 404) {
+      return undefined;
+    }
+
+    if (!response.ok) {
+      throw new Error("Unable to retrieve product.");
+    }
+
+    return response.json();
   },
 
   async add(part: Part, userName: string): Promise<Part> {
@@ -31,12 +48,10 @@ export const productRepository = {
     return addedPart;
   },
 
-  
   async update(part: Part): Promise<Part | undefined> {
     const updatedPart = userPartRepository.updatePart(part);
     return updatedPart ?? undefined;
   },
-
 
   async remove(id: string): Promise<void> {
     const users = userPartRepository.getUsers();
