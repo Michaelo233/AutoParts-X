@@ -1,4 +1,3 @@
-
 import type { Part } from "../types/UserParts";
 import { productRepository } from "../repositories/productRepository";
 
@@ -14,6 +13,16 @@ export const productService = {
 
   async addPart(part: Part, userName: string): Promise<Part> {
     return productRepository.add(part, userName);
+  },
+
+  async updateProductPrice(
+    part: Part,
+    price: number
+  ): Promise<Part | undefined> {
+    return productRepository.update({
+      ...part,
+      partPrice: price,
+    });
   },
 
   async removePart(id: string): Promise<void> {

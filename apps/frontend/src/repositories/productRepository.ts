@@ -49,8 +49,28 @@ export const productRepository = {
   },
 
   async update(part: Part): Promise<Part | undefined> {
-    const updatedPart = userPartRepository.updatePart(part);
-    return updatedPart ?? undefined;
+    const response = await fetch(
+      `${endpoint}/${encodeURIComponent(part.id)}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          price: part.partPrice,
+        }),
+      }
+    );
+
+    if (response.status === 404) {
+      return undefined;
+    }
+
+    if (!response.ok) {
+      throw new Error("Unable to update product price.");
+    }
+
+    return response.json();
   },
 
   async remove(id: string): Promise<void> {

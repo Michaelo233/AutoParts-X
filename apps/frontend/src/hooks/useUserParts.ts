@@ -1,8 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import type { Part, User } from '../types/UserParts';
 import { userPartService } from '../services/userPartService';
 import { userPartRepository } from '../repositories/userPartRepository';
+import { productService } from '../services/productService';
 
 // Initial user state for demonstration purposes
 // This is to set a default user in case the API call fails or returns no users.
@@ -22,7 +22,7 @@ const getErrorMessage = (error: unknown, fallback: string): string =>
 // Custom React hook to manage user parts state and actions
 /* This hook encapsulates the logic for fetching users, managing the current
  user, and handling part-related actions such as adding, removing, and toggling
-  sale status. It also manages loading and error states. */
+ sale status. It also manages loading and error states. */
 export function useUserParts() {
   const [currentUser, setCurrentUser] = useState<User>(initialUser);
   const [users, setUsers] = useState<User[]>([]);
@@ -61,7 +61,7 @@ export function useUserParts() {
         }
       }
     }
-    
+
     void loadUsers();
 
     // Subscribe to changes in the userPartRepository to keep the state in sync
@@ -81,8 +81,8 @@ export function useUserParts() {
     });
 
     // it returns a cleanup function that sets the ignore flag to true and unsubscribes
-    //  from the repository when the component unmounts or the effect is re-run.
-    //  This prevents state updates on an unmounted component, avoiding potential memory leaks or errors.
+    // from the repository when the component unmounts or the effect is re-run.
+    // This prevents state updates on an unmounted component, avoiding potential memory leaks or errors.
     return () => {
       ignore = true;
       unsubscribe();
@@ -181,6 +181,43 @@ export function useUserParts() {
     }
   };
 
+  // Sprint 4: Update product price through the backend API
+  const handleUpdatePrice = async (
+    part: Part,
+    price: number
+  ): Promise<boolean> => {
+    setError(null);
+
+    try {
+      const updatedPart = await productService.updateProductPrice(
+        part,
+        price
+      );
+
+      if (!updatedPart) {
+        setError('Product not found.');
+        return false;
+      }
+
+      const updatedUsers = await userPartService.getAllUsers();
+
+      setUsers(updatedUsers);
+
+      setCurrentUser((current) =>
+        updatedUsers.find(
+          (user) => user.userId === current.userId
+        ) ?? current
+      );
+
+      return true;
+    } catch (updateError) {
+      setError(
+        getErrorMessage(updateError, 'Unable to update price.')
+      );
+      return false;
+    }
+  };
+
   // Function to set the current user by their username
   /* This function attempts to find a user by their username and set them as the current user.
   It calls the userPartService to perform the lookup and updates the currentUser state upon success.
@@ -215,6 +252,7 @@ export function useUserParts() {
     handleAddPart,
     handleRemovePart,
     handleToggleForSale,
+    handleUpdatePrice,
     setCurrentUserByName,
   };
 }

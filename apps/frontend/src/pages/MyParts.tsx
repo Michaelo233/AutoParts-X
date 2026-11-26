@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { User } from '../types/UserParts';
+import type { Part, User } from '../types/UserParts';
 import styles from '../components/parts/my-parts/MyParts.module.css';
 import { PartCard } from '../components/parts/my-parts/PartCard';
 
@@ -17,6 +17,7 @@ interface MyPartsProps {
   users: User[];
   onRemovePart: (userName: string, partId: string) => Promise<boolean>;
   onToggleSale: (userName: string, partId: string, isForSale: boolean) => Promise<boolean>;
+  onUpdatePrice: (part: Part, price: number) => Promise<boolean>;
   error: string | null;
 }
 
@@ -27,6 +28,7 @@ export const MyParts: React.FC<MyPartsProps> = ({
   users,
   onRemovePart,
   onToggleSale,
+  onUpdatePrice,
   error,
 }) => {
   const [searchName, setSearchName] = useState('');
@@ -84,6 +86,7 @@ export const MyParts: React.FC<MyPartsProps> = ({
                   userName={displayedUser.userName}
                   onRemoveClick={onRemovePart}
                   onToggleSale={onToggleSale}
+                  onUpdatePrice={displayedUser.userId === user.userId ? onUpdatePrice : undefined}
                 />
               ))}
             </div>
