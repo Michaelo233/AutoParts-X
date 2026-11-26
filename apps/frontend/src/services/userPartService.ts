@@ -10,14 +10,14 @@ export const userPartService = {
   // This method calls the getUsers method of the userPartRepository and returns a promise that resolves
   //  to an array of User objects.
   async getAllUsers(): Promise<User[]> {
-    return userPartRepository.getUsers();
+    return userPartRepository.refreshUsers();
   },
 
   // Method to retrieve a user by their name
   // This method calls the getUserByName method of the userPartRepository and returns a promise that resolves
   //  to a User object if found, or null if not found.
   async getUserByName(userName: string): Promise<User | null> {
-    return userPartRepository.getUserByName(userName);
+    return userPartRepository.fetchUserByName(userName);
   },
 
   // Method to add a new user if they do not already exist
@@ -53,7 +53,7 @@ export const userPartService = {
   // This method finds the user by name and removes the part with the specified ID from their partsOwned list.
   // It notifies listeners of the change and returns a promise that resolves to a User object representing the updated user.
   async removePartFromUser(userName: string, partId: string): Promise<User> {
-    const updatedUser = userPartRepository.removePartFromUser(userName, partId);
+    const updatedUser = await userPartRepository.removePartFromUser(userName, partId);
     if (!updatedUser) {
       throw new Error('Could not remove part from user.');
     }
@@ -68,7 +68,11 @@ export const userPartService = {
     partId: string,
     isForSale: boolean
   ): Promise<User> {
-    const updatedUser = userPartRepository.togglePartSaleStatus(userName, partId, isForSale);
+    const updatedUser = await userPartRepository.togglePartSaleStatus(
+      userName,
+      partId,
+      isForSale
+    );
     if (!updatedUser) {
       throw new Error('Could not update part sale status.');
     }
@@ -78,8 +82,7 @@ export const userPartService = {
   // Method to flitter parts for sale
   // it returns an array of filtered parts for sale.
   async getVisibleMarketParts(): Promise<Part[]> {
-    return userPartRepository
-      .getUsers()
+    return (await userPartRepository.refreshUsers())
       .flatMap((user) => user.partsOwned)
       .filter((part) => part.isForSale === true);
   },

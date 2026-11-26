@@ -155,6 +155,10 @@ export function AutoPartCatalogProvider({
       setCatalog(mapOwnersToCatalog(userPartRepository.getUsers()));
     });
 
+    void userPartRepository.refreshUsers().catch((error: unknown) => {
+      console.error("Unable to load auto parts.", error);
+    });
+
     return unsubscribe;
   }, []);
 

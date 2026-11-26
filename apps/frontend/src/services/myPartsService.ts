@@ -8,20 +8,21 @@ import {
 // This service provides methods to interact with the myPartsRepository for user and part management.
 // It includes methods to get user information, manage parts, and handle part-related actions.
 export const MyPartsService = {
-    getUser: (userId: string): User | undefined => {
+    getUser: (userId: string): Promise<User | undefined> => {
         return myPartsRepository.getUserById(userId);
     },
 
-    getUserParts: (userId: string): Part[] => {
+    getUserParts: (userId: string): Promise<Part[]> => {
         return myPartsRepository.getPartsByUserId(userId);
     },
 
     addPart: (
         currentParts: Part[],
         newPart: NewPart
-    ): Part[] => {
+    ): Promise<Part[]> => {
+        return myPartsRepository.getAllParts().then(allPartsFromRepository => {
         const allParts = [
-            ...myPartsRepository.getAllParts(),
+            ...allPartsFromRepository,
             ...currentParts,
         ];
 
@@ -32,6 +33,7 @@ export const MyPartsService = {
         };
 
         return [...currentParts, completedPart];
+        });
     },
 
 

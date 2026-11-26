@@ -5,4 +5,4 @@ export type {
     AddPartForm,
     AddPartFormProps,
     SellToggle
-} from "../../../../shared/types/userParts";
+} from "../../../../../../shared/types/userParts";
