@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../../common/search/Search";
-import { useCarPartSearch } from "../../../hooks/useAutoPartSearch";
+import { useProductSearch } from "../../../hooks/useAutoPartSearch";
+import type { Part } from "../../../types/UserParts";
 
 function AllAutoParts() {
   const [searchValue, setSearchValue] = useState("");
-  const { results, searchParts } = useCarPartSearch();
+  const { results, searchParts } = useProductSearch();
   const navigate = useNavigate();
 
   const handleSearch = async (query: string) => {
@@ -25,7 +26,7 @@ function AllAutoParts() {
       />
 
       <section>
-        {results.map((part) => (
+        {results.map((part: Part) => (
           <article key={part.partId}>
             <h3>{part.partName}</h3>
             <p>{part.partDescription}</p>

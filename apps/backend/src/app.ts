@@ -1,4 +1,4 @@
-import express, {Express} from "express";
+import express, { Express } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -9,6 +9,7 @@ import errorHandler from "./api/v1/middleware/errorHandler";
 import myPartsRoutes from "./api/v1/routes/myPartsRoutes";
 import userPartRoutes from "./api/v1/routes/userPartRoutes";
 import allProductRoutes from "./api/v1/routes/allProductRoutes";
+import productRoutes from "./api/v1/routes/productRoutes";
 
 // initialize express application
 const app: Express = express();
@@ -30,16 +31,17 @@ app.use(cors(corsOptions));
 setupSwagger(app);
 
 // listen for requests on root and send simple text response
-app.get("/",  (_req, res) => {
+app.get("/", (_req, res) => {
     res.send("Got response from backend!");
 });
 
 app.use("/api/parts", myPartsRoutes);
 app.use("/api/addPart", userPartRoutes);
 app.use("/api/allProducts", allProductRoutes);
+app.use("/api/v1/products", productRoutes);
 
 //errorhandler catches errors as last element in middleware chain
 // occurs when "next" is invoked
-app.use(errorHandler); 
+app.use(errorHandler);
 
 export default app;
