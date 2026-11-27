@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MyPartsService } from "../services/myPartsService";
 import { myPartsRepository } from "../repositories/myPartsRepository";
@@ -39,11 +38,11 @@ describe("My Parts Service", () => {
     });
 
     // TEST 1
-    it("returns a user by ID", () => {
+    it("returns a user by ID", async () => {
         vi.mocked(myPartsRepository.getUserById)
-            .mockReturnValue(mockUser);
+            .mockResolvedValue(mockUser);
 
-        const result = MyPartsService.getUser("U001");
+        const result = await MyPartsService.getUser("U001");
 
         expect(result).toEqual(mockUser);
         expect(myPartsRepository.getUserById)
@@ -51,11 +50,11 @@ describe("My Parts Service", () => {
     });
 
     // TEST 2
-    it("returns undefined when the user does not exist", () => {
+    it("returns undefined when the user does not exist", async () => {
         vi.mocked(myPartsRepository.getUserById)
-            .mockReturnValue(undefined);
+            .mockResolvedValue(undefined);
 
-        const result = MyPartsService.getUser("U999");
+        const result = await MyPartsService.getUser("U999");
 
         expect(result).toBeUndefined();
     });
@@ -63,7 +62,7 @@ describe("My Parts Service", () => {
     // TEST 3
     it("returns all parts belonging to a user", () => {
         vi.mocked(myPartsRepository.getPartsByUserId)
-            .mockReturnValue([mockPart]);
+            .mockResolvedValue([mockPart]);
 
         const result = MyPartsService.getUserParts("U001");
 
@@ -75,7 +74,7 @@ describe("My Parts Service", () => {
     // TEST 4
     it("returns all auto parts from the Repository", () => {
         vi.mocked(myPartsRepository.getAllParts)
-            .mockReturnValue([mockPart]);
+            .mockResolvedValue([mockPart]);
 
         const result = myPartsRepository.getAllParts();
 
