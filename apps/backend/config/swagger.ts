@@ -12,8 +12,8 @@ const swaggerOptions: swaggerJSDoc.Options = {
 
         }
     },
-    // path to annotated files
-    apis: ["./src/app.ts"]
+    // Paths to annotated files
+    apis: ["./src/app.ts", "./src/api/v1/routes/*.ts"]
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
