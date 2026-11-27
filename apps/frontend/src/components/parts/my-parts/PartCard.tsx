@@ -7,6 +7,7 @@ interface PartCardProps {
   userName: string;
   onRemoveClick: (userName: string, partId: string) => void;
   onToggleSale: (userName: string, partId: string, isForSale: boolean) => void;
+  onUpdatePrice?: (part: Part, price: number) => Promise<boolean>;
 }
 
 export const PartCard: React.FC<PartCardProps> = ({
@@ -14,12 +15,32 @@ export const PartCard: React.FC<PartCardProps> = ({
   userName,
   onRemoveClick,
   onToggleSale,
+  onUpdatePrice,
 }) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleConfirmDelete = () => {
     onRemoveClick(userName, part.partId);
     setShowConfirm(false);
+  };
+
+  // Sprint 4: Update product price
+  const handleEditPrice = async () => {
+    const input = window.prompt(
+      'Enter the new price:',
+      part.partPrice.toFixed(2)
+    );
+
+    if (input === null) return;
+
+    const price = Number(input);
+
+    if (!Number.isFinite(price) || price <= 0) {
+      window.alert('Please enter a valid price.');
+      return;
+    }
+
+    await onUpdatePrice?.(part, price);
   };
 
   return (
@@ -58,11 +79,30 @@ export const PartCard: React.FC<PartCardProps> = ({
         </div>
       )}
 
-      <img src={part.partImage} alt={part.partName} className={styles.partImage} />
+      <img
+        src={part.partImage}
+        alt={part.partName}
+        className={styles.partImage}
+      />
 
       <div className={styles.cardDetails}>
-        <strong className={styles.partPrice}>${part.partPrice.toFixed(2)}</strong>
-        <p className={styles.partDescription}>{part.partDescription}</p>
+        <strong className={styles.partPrice}>
+          ${part.partPrice.toFixed(2)}
+        </strong>
+
+        {onUpdatePrice && (
+          <button
+            type="button"
+            className={styles.sellBtn}
+            onClick={handleEditPrice}
+          >
+            Update Price
+          </button>
+        )}
+
+        <p className={styles.partDescription}>
+          {part.partDescription}
+        </p>
       </div>
 
       <div className={styles.cardSellorNot}>
@@ -75,7 +115,7 @@ export const PartCard: React.FC<PartCardProps> = ({
         </button>
         <button
           type="button"
-          className={`${styles.SellBtn} ${part.isForSale === false ? styles.saleStatusActive : ''}`}
+          className={`${styles.sellBtn} ${part.isForSale === false ? styles.saleStatusActive : ''}`}
           onClick={() => onToggleSale(userName, part.partId, false)}
         >
           Not for sell
