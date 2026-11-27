@@ -2,4 +2,4 @@ export type {
     CatalogPart,
     CatalogGroup,
     NewCatalogPart
-} from "../../../../shared/types/catalog";
+} from "../../../../shared/types/Catalog";
