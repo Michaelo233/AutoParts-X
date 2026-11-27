@@ -8,7 +8,7 @@ import setupSwagger from "../config/swagger";
 import errorHandler from "./api/v1/middleware/errorHandler";
 import myPartsRoutes from "./api/v1/routes/myPartsRoutes";
 import userPartRoutes from "./api/v1/routes/userPartRoutes";
-import productRoutes from "./api/v1/routes/productRoutes";
+import allProductRoutes from "./api/v1/routes/allProductRoutes";
 
 // initialize express application
 const app: Express = express();
@@ -22,7 +22,7 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "8mb" }));
 
 // add Cross-Origin Resource Sharing middleware
-// This will refuse requests from origins that do not fulfill corsOptions requirements
+// This will refuse requests from origins that donot fulfill corsOptions requirements
 // see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS
 app.use(cors(corsOptions));
 
@@ -36,7 +36,7 @@ app.get("/",  (_req, res) => {
 
 app.use("/api/parts", myPartsRoutes);
 app.use("/api/addPart", userPartRoutes);
-app.use("/api/products", productRoutes);
+app.use("/api/allProducts", allProductRoutes);
 
 //errorhandler catches errors as last element in middleware chain
 // occurs when "next" is invoked

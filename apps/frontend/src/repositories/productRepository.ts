@@ -2,7 +2,7 @@ import { userPartRepository } from "./userPartRepository";
 import type { Part } from "../types/UserParts";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-const endpoint = `${baseURL}/api/products`;
+const endpoint = `${baseURL}/api/allProducts`;
 
 export const productRepository = {
   async getAll(): Promise<Part[]> {

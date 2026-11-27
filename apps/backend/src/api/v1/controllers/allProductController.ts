@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { productService } from "../services/productService";
+import { allProductService } from "../services/allProductService";
 
-export const productController = {
+export const allProductController = {
   async getProducts(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-      const products = await productService.getPartsForSale();
+      const products = await allProductService.getPartsForSale();
       res.status(200).json(products);
     } catch (error) {
       next(error);
@@ -21,7 +21,7 @@ export const productController = {
     next: NextFunction
   ): Promise<void> {
     try {
-      const product = await productService.getPartById(
+      const product = await allProductService.getPartById(
         String(req.params.id)
       );
 
@@ -42,7 +42,7 @@ export const productController = {
     next: NextFunction
   ): Promise<void> {
     try {
-      const product = await productService.updateProductPrice(
+      const product = await allProductService.updateProductPrice(
         String(req.params.id),
         req.body.price
       );

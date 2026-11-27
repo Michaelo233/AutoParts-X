@@ -1,7 +1,7 @@
 import type { Part } from "../types/UserParts";
 import { productRepository } from "../repositories/productRepository";
 
-export const productService = {
+export const allProductService = {
   async getPartsForSale(): Promise<Part[]> {
     const parts = await productRepository.getAll();
     return parts.filter((part) => part.isForSale === true);

@@ -1,30 +1,30 @@
 import { Router } from "express";
-import { productController } from "../controllers/productController";
+import { allProductController } from "../controllers/allProductController";
 import { validateRequest } from "../middleware/validate";
 import {
   getProductsSchema,
   productIdSchema,
   updateProductPriceSchema,
-} from "../validations/productValidation";
+} from "../validations/allProductValidation";
 
 const router = Router();
 
 router.get(
   "/",
   validateRequest(getProductsSchema),
-  productController.getProducts
+  allProductController.getProducts
 );
 
 router.get(
   "/:id",
   validateRequest(productIdSchema),
-  productController.getProductById
+  allProductController.getProductById
 );
 
 router.patch(
   "/:id",
   validateRequest(updateProductPriceSchema),
-  productController.updateProductPrice
+  allProductController.updateProductPrice
 );
 
 export default router;
