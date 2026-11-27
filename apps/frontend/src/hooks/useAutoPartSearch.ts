@@ -1,21 +1,21 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { productSearchService } from "../services/productSearchService";
 import type { ProductSearchFilters } from "../repositories/productSearchRepository";
 import type { Part } from "../types/UserParts";
 
-/**
- * Custom hook for searching and filtering products.
- * Manages search results, loading state, and errors.
- */
 export function useProductSearch() {
 
     const [results, setResults] = useState<Part[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const searchParts = async (
+    const requestId = useRef(0);
+
+    const searchParts = useCallback(async (
         query: string | ProductSearchFilters
     ): Promise<void> => {
+
+        const currentRequest = ++requestId.current;
 
         setLoading(true);
         setError(null);
@@ -24,22 +24,30 @@ export function useProductSearch() {
             const matchingParts =
                 await productSearchService.searchParts(query);
 
-            setResults(matchingParts);
+            if (currentRequest === requestId.current) {
+                setResults(matchingParts);
+            }
 
         } catch (error: unknown) {
 
-            setResults([]);
+            if (currentRequest === requestId.current) {
+                setResults([]);
 
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : "Unable to retrieve products."
-            );
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to retrieve products."
+                );
+            }
 
         } finally {
-            setLoading(false);
+
+            if (currentRequest === requestId.current) {
+                setLoading(false);
+            }
         }
-    };
+
+    }, []);
 
     return {
         results,

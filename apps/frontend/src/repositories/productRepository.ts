@@ -15,7 +15,7 @@ export const productRepository = {
   },
 
   async add(part: Part, userName: string): Promise<Part> {
-    const updatedUser = userPartRepository.addPartToUser(
+    const updatedUser = await userPartRepository.addPartToUser(
       userName,
       part
     );
@@ -28,12 +28,12 @@ export const productRepository = {
       throw new Error("Unable to add product.");
     }
 
-    return addedPart;
+    return addedPart ?? part;
   },
 
-  
+
   async update(part: Part): Promise<Part | undefined> {
-    const updatedPart = userPartRepository.updatePart(part);
+    const updatedPart = await userPartRepository.updatePart(part);
     return updatedPart ?? undefined;
   },
 
