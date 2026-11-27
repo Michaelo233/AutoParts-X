@@ -23,6 +23,7 @@ function App() {
     error,
     handleRemovePart,
     handleToggleForSale,
+    handleUpdatePrice,
   } = useUserParts();
 
   return (
@@ -58,6 +59,7 @@ function App() {
                     error={error}
                     onRemovePart={handleRemovePart}
                     onToggleSale={handleToggleForSale}
+                    onUpdatePrice={handleUpdatePrice}
                   />
                 }
               />
@@ -77,3 +79,4 @@ function App() {
 }
 
 export default App;
+

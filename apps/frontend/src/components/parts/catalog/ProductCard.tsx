@@ -20,27 +20,43 @@ function ProductCard({ part, onRemove }: ProductCardProps) {
 
   return (
     <div className={styles.productCard}>
+      <div className={styles.cardHeader}>
+        <h3 className={styles.partName}>{part.partName}</h3>
+      </div>
+
       {part.partImage?.trim() && (
-        <img src={part.partImage} alt={part.partName} />
+        <img
+          src={part.partImage}
+          alt={part.partName}
+          className={styles.partImage}
+        />
       )}
 
-      <h2>{part.partName}</h2>
-      <p>${part.partPrice}</p>
-      <p>{part.partDescription}</p>
+      <strong className={styles.partPrice}>
+        ${part.partPrice.toFixed(2)}
+      </strong>
 
-      <button
-        type="button"
-        onClick={() => navigate(`/products/${part.id}`)}
-      >
-        View Details
-      </button>
+      <p className={styles.partDescription}>
+        {part.partDescription}
+      </p>
 
-      <button
-  type="button"
-  onClick={() => onRemove(part.id)}
->
-  Remove
-</button>
+      <div className={styles.cardActions}>
+        <button
+          type="button"
+          className={styles.detailsBtn}
+          onClick={() => navigate(`/products/${part.id}`)}
+        >
+          View Details
+        </button>
+
+        <button
+          type="button"
+          className={styles.removeBtn}
+          onClick={() => onRemove(part.id)}
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 }
