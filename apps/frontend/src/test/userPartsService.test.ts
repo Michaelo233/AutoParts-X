@@ -60,11 +60,11 @@ describe("My Parts Service", () => {
     });
 
     // TEST 3
-    it("returns all parts belonging to a user", () => {
+    it("returns all parts belonging to a user", async () => {
         vi.mocked(myPartsRepository.getPartsByUserId)
             .mockResolvedValue([mockPart]);
 
-        const result = MyPartsService.getUserParts("U001");
+        const result = await MyPartsService.getUserParts("U001");
 
         expect(result).toEqual([mockPart]);
         expect(myPartsRepository.getPartsByUserId)
@@ -72,11 +72,11 @@ describe("My Parts Service", () => {
     });
 
     // TEST 4
-    it("returns all auto parts from the Repository", () => {
+    it("returns all auto parts from the Repository", async () => {
         vi.mocked(myPartsRepository.getAllParts)
             .mockResolvedValue([mockPart]);
 
-        const result = myPartsRepository.getAllParts();
+        const result = await myPartsRepository.getAllParts();
 
         expect(result).toEqual([mockPart]);
     });
@@ -97,12 +97,8 @@ describe("My Parts Service", () => {
         expect(result[0].id).toBe("P002");
     });
 
-    // TEST 6
     it("does not remove parts when the ID does not exist", () => {
-        const result = MyPartsService.removePart(
-            [mockPart],
-            "P999"
-        );
+        const result = MyPartsService.removePart([mockPart], "P999");
 
         expect(result).toEqual([mockPart]);
     });
