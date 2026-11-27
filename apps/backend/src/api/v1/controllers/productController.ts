@@ -1,7 +1,6 @@
 import type {
     Request,
-    Response,
-    NextFunction,
+    Response
 } from "express";
 
 import { productService } from "../services/productService";
@@ -20,8 +19,7 @@ export const productController = {
     // Retrieve products with optional search filters.
     async getProducts(
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<void> {
         try {
             const filters: ProductSearchQuery = {
@@ -51,15 +49,19 @@ export const productController = {
             );
 
         } catch (error: unknown) {
-            next(error);
+            res.status(500).json(
+                errorResponse(
+                    "An error occurred while retrieving products.",
+                    "INTERNAL_SERVER_ERROR"
+                )
+            );
         }
     },
 
     // Retrieve a product by its unique listing ID.
     async getProductById(
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ): Promise<void> {
         try {
             const productId = Number(req.params.productId);
@@ -86,7 +88,12 @@ export const productController = {
             );
 
         } catch (error: unknown) {
-            next(error);
+            res.status(500).json(
+                errorResponse(
+                    "An error occurred while retrieving the product.",
+                    "INTERNAL_SERVER_ERROR"
+                )
+            );
         }
     },
 };
