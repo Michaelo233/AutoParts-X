@@ -8,6 +8,7 @@ import setupSwagger from "../config/swagger";
 import errorHandler from "./api/v1/middleware/errorHandler";
 import myPartsRoutes from "./api/v1/routes/myPartsRoutes";
 import userPartRoutes from "./api/v1/routes/userPartRoutes";
+import productRoutes from "./api/v1/routes/productRoutes";
 
 // initialize express application
 const app: Express = express();
@@ -35,6 +36,7 @@ app.get("/",  (_req, res) => {
 
 app.use("/api/parts", myPartsRoutes);
 app.use("/api/addPart", userPartRoutes);
+app.use("/api/products", productRoutes);
 
 //errorhandler catches errors as last element in middleware chain
 // occurs when "next" is invoked
