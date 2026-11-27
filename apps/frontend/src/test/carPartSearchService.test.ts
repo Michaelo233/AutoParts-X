@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { carPartSearchService } from "../services/carPartSearchService";
+import { carPartSearchService } from "../services/productSearchService";
 
 describe("Car Part Search Service", () => {
 

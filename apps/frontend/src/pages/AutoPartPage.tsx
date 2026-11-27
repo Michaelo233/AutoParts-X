@@ -1,6 +1,5 @@
-
-import { useMemo } from "react";
-import { useAutoPartCatalog } from "../context/AutoPartCatalogContext";
+import { useEffect } from "react";
+import { useProductSearch } from "../hooks/useAutoPartSearch";
 import styles from "./AutoPartPage.module.css";
 
 /**
@@ -14,47 +13,28 @@ interface AutoPartPageProps {
 /**
  * AutoPartPage
  *
- * Displays and filters available auto parts.
+ * Retrieves and displays available auto parts
+ * from the backend API.
  */
 export default function AutoPartPage({
   searchTerm,
 }: AutoPartPageProps) {
-  const { catalog, removePart, toggleFavourite } = useAutoPartCatalog();
 
-  const filteredParts = useMemo(() => {
-    const query = searchTerm.trim().toLowerCase();
+  const {
+    results,
+    searchParts,
+    loading,
+    error,
+  } = useProductSearch();
 
-    const sellerExists = catalog.some(
-      (group) => group.Category.trim().toLowerCase() === query
-    );
-
-    return catalog.flatMap((group) => {
-      const sellerName = group.Category.trim();
-
-      return group.AutoPart
-        .filter((part) => {
-          if (!query) return true;
-
-          if (sellerExists) {
-            return sellerName.toLowerCase() === query;
-          }
-
-          return (
-            part.partName.toLowerCase().includes(query) ||
-            part.description.toLowerCase().includes(query) ||
-            part.categoryId.toLowerCase().includes(query) ||
-            sellerName.toLowerCase().includes(query)
-          );
-        })
-        .map((part) => ({
-          ...part,
-          sellerName,
-        }));
-    });
-  }, [catalog, searchTerm]);
+  // Retrieve products when the search term changes.
+  useEffect(() => {
+    void searchParts(searchTerm);
+  }, [searchTerm, searchParts]);
 
   return (
     <main className={styles.pageContainer}>
+
       <header className={styles.headerSection}>
         <p className={styles.eyebrow}>AUTO PARTS</p>
 
@@ -62,35 +42,55 @@ export default function AutoPartPage({
           Find the Right Part for Your Vehicle
         </h1>
 
-        {searchTerm.trim() && (
+        {searchTerm.trim() && !loading && !error && (
           <p role="status">
             Search results for: <strong>{searchTerm}</strong>
             {" — "}
-            {filteredParts.length}{" "}
-            {filteredParts.length === 1
+            {results.length}{" "}
+            {results.length === 1
               ? "part found"
               : "parts found"}
           </p>
         )}
       </header>
 
-      {filteredParts.length === 0 ? (
+      {/* Loading state */}
+      {loading && (
+        <p role="status">
+          Loading auto parts...
+        </p>
+      )}
+
+      {/* Error state */}
+      {!loading && error && (
+        <p role="alert">
+          {error}
+        </p>
+      )}
+
+      {/* Empty results */}
+      {!loading && !error && results.length === 0 && (
         <p role="status">
           {searchTerm.trim()
             ? `No auto parts found for "${searchTerm}". Try another search.`
             : "No auto parts are currently available."}
         </p>
-      ) : (
+      )}
+
+      {/* Product cards */}
+      {!loading && !error && results.length > 0 && (
         <section className={styles.cardGrid}>
-          {filteredParts.map((part) => (
+
+          {results.map((part) => (
             <article
-              key={part.partId}
+              key={part.id}
               className={styles.productCard}
             >
+
               <div className={styles.imageWrapper}>
-                {part.imageUrl && (
+                {part.partImage && (
                   <img
-                    src={part.imageUrl}
+                    src={part.partImage}
                     alt={part.partName}
                     className={styles.cardImage}
                   />
@@ -98,12 +98,15 @@ export default function AutoPartPage({
               </div>
 
               <div className={styles.cardContent}>
+
                 <div className={styles.categoryHeader}>
                   <span className={styles.categoryTag}>
-                    {part.sellerName}
+                    {part.userName ?? "Unknown seller"}
                   </span>
 
-                  <span className={styles.newBadge}>New</span>
+                  <span className={styles.newBadge}>
+                    New
+                  </span>
                 </div>
 
                 <h2 className={styles.cardTitle}>
@@ -111,43 +114,49 @@ export default function AutoPartPage({
                 </h2>
 
                 <p className={styles.compatibilityText}>
-                  {part.description}
+                  {part.partDescription}
                 </p>
 
                 <div className={styles.cardFooter}>
+
                   <span className={styles.price}>
-                    ${part.price.toFixed(2)}
+                    ${part.partPrice.toFixed(2)}
                   </span>
 
                   <div className={styles.buttonGroup}>
                     <button
                       type="button"
-                      onClick={() => toggleFavourite(part.partId)}
+                      disabled
                       aria-label={
-                        part.isFavourite
-                          ? "Remove from favourites"
-                          : "Add to favourites"
+                        part.isFavorite
+                          ? "Favourite"
+                          : "Not a favourite"
                       }
-                      aria-pressed={part.isFavourite}
+                      aria-pressed={part.isFavorite ?? false}
                     >
-                      {part.isFavourite ? "★" : "☆"}
+                      {part.isFavorite ? "★" : "☆"}
                     </button>
 
                     <button
                       type="button"
                       className={styles.deleteBtn}
-                      onClick={() => removePart(part.partId)}
+                      disabled
                       aria-label={`Delete ${part.partName}`}
                     >
                       🗑️
                     </button>
                   </div>
+
                 </div>
+
               </div>
+
             </article>
           ))}
+
         </section>
       )}
+
     </main>
   );
 }
